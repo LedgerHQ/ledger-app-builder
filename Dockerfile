@@ -50,7 +50,7 @@ RUN \
 
 ENV BOLOS_ENV=/compilers
 
-ENV PATH="/compilers/gcc-arm-none-eabi-5_3-2016q1/bin:/compilers/clang-arm-frompi/bin:${PATH}"
+ENV PATH="/compilers/gcc-arm-none-eabi-5_3-2016q1/bin:/compilers/clang-arm-fropi/bin:${PATH}"
 
 RUN git clone --branch nanos-160 https://github.com/LedgerHQ/nanos-secure-sdk.git sdk
 ENV BOLOS_SDK=/sdk
