@@ -3,9 +3,9 @@ ENV LANG C.UTF-8
 
 RUN apt-get update && apt-get upgrade -qy && \
   apt-get install -qy \
-    gcc-arm-linux-gnueabihf \
-    linux-libc-dev \
-    linux-libc-dev-armhf-cross \
+    clang \
+    gcc-multilib \
+    gcc-arm-none-eabi \
     libc6-dev-armhf-cross \
     cmake \
     git \
@@ -25,26 +25,14 @@ RUN \
   mkdir cmocka && \
   tar xf cmocka-1.1.5.tar.xz && \
   cd cmocka && \
-  cmake ../cmocka-1.1.5 -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc -DCMAKE_C_FLAGS=-mthumb -DWITH_STATIC_LIB=true -DCMAKE_INSTALL_PREFIX=/install && \
+  cmake ../cmocka-1.1.5 -DBUILD_SHARED_LIBS=OFF -DWITH_EXAMPLES=OFF -DCMAKE_C_COMPILER=arm-none-eabi-gcc -DCMAKE_C_FLAGS="--specs=nosys.specs" -DWITH_STATIC_LIB=true -DCMAKE_INSTALL_PREFIX=/install && \
   make install && \
   cd .. && \
   rm -rf cmoka/ cmocka-1.1.5/ cmocka-1.1.5.tar.xz SHA256SUMS
 
-RUN apt-get install -qy gcc-multilib g++-multilib && apt-get clean
-
-# GCC
-RUN \
-  wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/5_3-2016q1/gccarmnoneeabi532016q120160330linuxtar.bz2 -O gcc.tar.bz2 && \
-  tar xf gcc.tar.bz2 && \
-  mkdir /compilers && \
-  mv gcc-arm-none-eabi-5_3-2016q1 /compilers && \
-  rm -rf gcc.tar.bz2
-
-ENV BOLOS_ENV=/compilers
-
-ENV PATH="/compilers/gcc-arm-none-eabi-5_3-2016q1/bin:${PATH}"
-
+# Nano S SDK
 RUN git clone --branch nanos-160 https://github.com/LedgerHQ/nanos-secure-sdk.git sdk
+
 ENV BOLOS_SDK=/sdk
 
 CMD ["/bin/bash"]
