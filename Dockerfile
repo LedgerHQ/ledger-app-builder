@@ -1,22 +1,21 @@
 FROM python:3.8-slim
 ENV LANG C.UTF-8
 
-RUN apt-get update && apt-get upgrade -qy
-
-RUN apt-get install -qy \
-  gcc-arm-linux-gnueabihf \
-  linux-libc-dev \
-  linux-libc-dev-armhf-cross \
-  libc6-dev-armhf-cross \
-  cmake \
-  git \
-  libudev-dev \
-  libusb-1.0-0-dev \
-  python3-pip \
-  wget && \
+RUN apt-get update && apt-get upgrade -qy && \
+  apt-get install -qy \
+    gcc-arm-linux-gnueabihf \
+    linux-libc-dev \
+    linux-libc-dev-armhf-cross \
+    libc6-dev-armhf-cross \
+    cmake \
+    git \
+    libudev-dev \
+    libusb-1.0-0-dev \
+    python3-pip \
+    wget && \
   apt-get clean
 
-RUN pip3 install ledgerblue
+RUN pip3 install ledgerblue pytest
 
 # CMocka
 RUN \
@@ -33,14 +32,6 @@ RUN \
 
 RUN apt-get install -qy gcc-multilib g++-multilib && apt-get clean
 
-# Clang
-RUN \
-  mkdir /compilers && \
-  wget https://releases.llvm.org/7.0.0/clang+llvm-7.0.0-x86_64-linux-gnu-ubuntu-16.04.tar.xz -O clang+llvm.tar.xz && \
-  tar xf clang+llvm.tar.xz && \
-  mv clang+llvm-7.0.0-x86_64-linux-gnu-ubuntu-16.04 /compilers/clang-arm-fropi && \
-  rm -rf clang+llvm.tar.xz
-
 # GCC
 RUN \
   wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/5_3-2016q1/gccarmnoneeabi532016q120160330linuxtar.bz2 -O gcc.tar.bz2 && \
@@ -50,7 +41,7 @@ RUN \
 
 ENV BOLOS_ENV=/compilers
 
-ENV PATH="/compilers/gcc-arm-none-eabi-5_3-2016q1/bin:/compilers/clang-arm-fropi/bin:${PATH}"
+ENV PATH="/compilers/gcc-arm-none-eabi-5_3-2016q1/bin:${PATH}"
 
 RUN git clone --branch nanos-160 https://github.com/LedgerHQ/nanos-secure-sdk.git sdk
 ENV BOLOS_SDK=/sdk
