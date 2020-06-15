@@ -36,6 +36,7 @@ RUN apt-get install -qy gcc-multilib g++-multilib && apt-get clean
 RUN \
   wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/5_3-2016q1/gccarmnoneeabi532016q120160330linuxtar.bz2 -O gcc.tar.bz2 && \
   tar xf gcc.tar.bz2 && \
+  mkdir /compilers && \
   mv gcc-arm-none-eabi-5_3-2016q1 /compilers && \
   rm -rf gcc.tar.bz2
 
