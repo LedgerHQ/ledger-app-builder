@@ -25,5 +25,11 @@ $ sudo docker run --rm -ti -v "$(realpath .):/app" ledger-app-builder:1.6.0
 root@656be163fe84:/app# make
 
 $ podman run --rm -ti -v "$(realpath .):/app" ledger-app-builder:1.6.0
-root@1f4f60f535fa:/app# ls
+root@1f4f60f535fa:/app# make
+```
+
+The Docker image includes the [Clang Static Analyzer](https://clang-analyzer.llvm.org/), that can be invoked with:
+```sh
+podman run --rm -ti -v "$(realpath .):/app" ledger-app-builder:1.6.0 \
+    scan-build --use-cc=clang -analyze-headers -o /app/output-scan-build make
 ```

@@ -4,6 +4,7 @@ ENV LANG C.UTF-8
 RUN apt-get update && apt-get upgrade -qy && \
   apt-get install -qy \
     clang \
+    clang-tools \
     gcc-multilib \
     gcc-arm-none-eabi \
     libc6-dev-armhf-cross \
