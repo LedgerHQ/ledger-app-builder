@@ -28,7 +28,7 @@ RUN \
   mkdir cmocka && \
   tar xf cmocka-1.1.5.tar.xz && \
   cd cmocka && \
-  cmake ../cmocka-1.1.5 -DBUILD_SHARED_LIBS=OFF -DWITH_EXAMPLES=OFF -DCMAKE_C_COMPILER=arm-none-eabi-gcc -DCMAKE_C_FLAGS="--specs=nosys.specs" -DWITH_STATIC_LIB=true -DCMAKE_INSTALL_PREFIX=/install && \
+  cmake ../cmocka-1.1.5 -DCMAKE_INSTALL_PREFIX=/usr && \
   make install && \
   cd .. && \
   rm -rf cmoka/ cmocka-1.1.5/ cmocka-1.1.5.tar.xz SHA256SUMS
