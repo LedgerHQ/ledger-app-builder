@@ -13,7 +13,8 @@ RUN apt-get update && apt-get upgrade -qy && \
     libudev-dev \
     libusb-1.0-0-dev \
     python3-pip \
-    wget && \
+    wget \
+    lcov && \
   apt-get clean
 
 RUN pip3 install ledgerblue pytest
