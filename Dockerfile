@@ -33,9 +33,9 @@ RUN \
   rm -rf cmoka/ cmocka-1.1.5/ cmocka-1.1.5.tar.xz SHA256SUMS
 
 # Nano S SDK
-RUN git clone --branch nanos-160 https://github.com/LedgerHQ/nanos-secure-sdk.git sdk
+RUN cd /opt && git clone --branch nanos-1612 https://github.com/LedgerHQ/nanos-secure-sdk.git nanos-secure-sdk
 
-ENV BOLOS_SDK=/sdk
+ENV BOLOS_SDK=/opt/nanos-secure-sdk
 
 WORKDIR /app
 
