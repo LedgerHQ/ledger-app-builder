@@ -14,6 +14,7 @@ RUN apt-get update && apt-get upgrade -qy && \
     libusb-1.0-0-dev \
     python3-pip \
     wget \
+    curl \
     doxygen \
     lcov && \
   apt-get clean
