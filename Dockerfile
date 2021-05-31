@@ -21,17 +21,23 @@ RUN apt-get update && apt-get upgrade -qy && \
     apt-get clean
 
 # ARM Embedded Toolchain
-RUN wget -O arm-toolchain.tar.bz2 "https://developer.arm.com/-/media/Files/downloads/gnu-rm/9-2019q4/gcc-arm-none-eabi-9-2019-q4-major-x86_64-linux.tar.bz2?revision=108bd959-44bd-4619-9c19-26187abf5225&la=en&hash=E788CE92E5DFD64B2A8C246BBA91A249CB8E2D2D" && \
-    echo fe0029de4f4ec43cf7008944e34ff8cc arm-toolchain.tar.bz2 > /tmp/arm-toolchain.md5 && \
+# Integrity is checked using the MD5 checksum provided by ARM at https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads
+RUN wget -O arm-toolchain.tar.bz2 "https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2?revision=ca0cbf9c-9de2-491c-ac48-898b5bbc0443&la=en&hash=68760A8AE66026BCF99F05AC017A6A50C6FD832A" && \
+    echo 8312c4c91799885f222f663fc81f9a31 arm-toolchain.tar.bz2 > /tmp/arm-toolchain.md5 && \
     md5sum --check /tmp/arm-toolchain.md5 && rm /tmp/arm-toolchain.md5 && \
     tar xf arm-toolchain.tar.bz2 -C /opt && \
     rm arm-toolchain.tar.bz2
 
-ENV PATH=/opt/gcc-arm-none-eabi-9-2019-q4-major/bin:$PATH
+ENV PATH=/opt/gcc-arm-none-eabi-10-2020-q4-major/bin:$PATH
 
+# Python packages commonly used by apps
 RUN pip3 install ledgerblue pytest
 
-# Nano S SDK
+# Coverity Scan
+ADD cov-analysis-linux64-2020.09.tar.gz /opt
+ENV PATH=/opt/cov-analysis-linux64-2020.09/bin:$PATH
+
+# Latest Nano S SDK
 RUN cd /opt && git clone --branch 2.0.0-1 https://github.com/LedgerHQ/nanos-secure-sdk.git nanos-secure-sdk
 
 ENV BOLOS_SDK=/opt/nanos-secure-sdk
