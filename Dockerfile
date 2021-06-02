@@ -8,6 +8,7 @@ RUN apt-get update && apt-get upgrade -qy && \
         clang \
         clang-tools \
         cmake \
+        curl \
         git \
         libbsd-dev \
         libcmocka0 \
