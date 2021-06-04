@@ -14,6 +14,7 @@ RUN apt-get update && apt-get upgrade -qy && \
         libcmocka0 \
         libcmocka-dev \
         make \
+        protobuf-compiler \
         python3 \
         python3-pip \
         wget && \
