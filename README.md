@@ -6,7 +6,7 @@ This container image contains all dependencies to compile an application for the
 
 ### Standard Build
 
-To build the container image, several tools are available:
+Container can be build using standard tools:
 
 ```bash
 # Docker
@@ -17,11 +17,22 @@ podman build -t ledger-app-builder:2.0.0-1 .
 buildah bud -t ledger-app-builder:2.0.0-1 .
 ```
 
-### With Coverity Scan
+### App Scanner
 
 Image can embed the [Coverity Scan](https://scan.coverity.com/) build tool. It is an excellent static analysis tool, and it can be very useful to find bugs in Nano apps.
 
-The build tool must be downloaded before building the image. Archive can be downloaded from <https://scan.coverity.com/download>. Download is available to everyone, but it requires to create an account. After having registered, download Coverity Build Tool 2020.09 for Linux64 and place the downloaded archive in the directory where you cloned this repository. It will be automatically added to the image if is detected.
+The build tool must be downloaded before building the image. Archive can be downloaded from <https://scan.coverity.com/download>. Download is available to everyone, but it requires to create an account. After having registered, download Coverity Build Tool 2020.09 for Linux64 and place the downloaded archive in the `coverity` directory.
+
+Then, build container with:
+
+```bash
+# Docker
+sudo docker build -t ledger-app-scanner:2.0.0-1 .
+# Podman (from https://podman.io/)
+podman build -t ledger-app-scanner:2.0.0-1 .
+# Buildah (from https://buildah.io/)
+buildah bud -t ledger-app-scanner:2.0.0-1 .
+```
 
 ## Compile your app in the container
 

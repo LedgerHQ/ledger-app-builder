@@ -36,10 +36,6 @@ ENV PATH=/opt/gcc-arm-none-eabi-10-2020-q4-major/bin:$PATH
 # Python packages commonly used by apps
 RUN pip3 install ledgerblue pytest
 
-# Coverity Scan
-ADD .keepme cov-analysis-linux64-2020.09.tar.g[z] /opt/
-ENV PATH=/opt/cov-analysis-linux64-2020.09/bin:$PATH
-
 # Latest Nano S SDK
 RUN cd /opt && git clone --branch 2.0.0-1 https://github.com/LedgerHQ/nanos-secure-sdk.git nanos-secure-sdk
 
