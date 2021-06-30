@@ -38,8 +38,14 @@ RUN pip3 install ledgerblue pytest
 
 # Latest Nano S SDK
 RUN cd /opt && git clone --branch 2.0.0-1 https://github.com/LedgerHQ/nanos-secure-sdk.git nanos-secure-sdk
+ENV NANOS_SDK=/opt/nanos-secure-sdk
 
-ENV BOLOS_SDK=/opt/nanos-secure-sdk
+# Latest Nano X SDK
+RUN cd /opt && git clone --branch 1.3.0 https://github.com/LedgerHQ/nanox-secure-sdk.git nanox-secure-sdk
+ENV NANOX_SDK=/opt/nanox-secure-sdk
+
+# Default SDK
+ENV BOLOS_SDK=${NANOS_SDK}
 
 WORKDIR /app
 
