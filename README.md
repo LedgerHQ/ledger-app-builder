@@ -1,6 +1,6 @@
 # Ledger Application Builder
 
-This container image contains all dependencies to compile an application for the Nano S.
+This container image contains all dependencies to compile an application for Nano S/X.
 
 ## Build the container image
 
@@ -10,11 +10,11 @@ Container can be build using standard tools:
 
 ```bash
 # Docker
-sudo docker build -t ledger-app-builder:2.0.0-1 .
+sudo docker build -t ledger-app-builder:latest .
 # Podman (from https://podman.io/)
-podman build -t ledger-app-builder:2.0.0-1 .
+podman build -t ledger-app-builder:latest .
 # Buildah (from https://buildah.io/)
-buildah bud -t ledger-app-builder:2.0.0-1 .
+buildah bud -t ledger-app-builder:latest .
 ```
 
 ### App Scanner
@@ -27,20 +27,20 @@ Then, build container with:
 
 ```bash
 # Docker
-sudo docker build -t ledger-app-scanner:2.0.0-1 .
+sudo docker build -t ledger-app-scanner:latest .
 # Podman (from https://podman.io/)
-podman build -t ledger-app-scanner:2.0.0-1 .
+podman build -t ledger-app-scanner:latest .
 # Buildah (from https://buildah.io/)
-buildah bud -t ledger-app-scanner:2.0.0-1 .
+buildah bud -t ledger-app-scanner:latest .
 ```
 
 ## Compile your app in the container
 
-In the source folder of your Nano S application:
+In the source folder of your application, for Nano S:
 
 ```bash
 $ # docker can be replaced with podman or buildah without sudo
-$ sudo docker run --rm -ti -v "$(realpath .):/app" ledger-app-builder:2.0.0-1
+$ sudo docker run --rm -ti -v "$(realpath .):/app" ledger-app-builder:latest
 root@656be163fe84:/app# make
 ```
 
@@ -48,6 +48,16 @@ The Docker image includes the [Clang Static Analyzer](https://clang-analyzer.llv
 
 ```bash
 $ # docker can be replaced with podman or buildah without sudo
-$ sudo docker run --rm -ti -v "$(realpath .):/app" ledger-app-builder:2.0.0-1
+$ sudo docker run --rm -ti -v "$(realpath .):/app" ledger-app-builder:latest
 root@656be163fe84:/app# make scan-build
 ```
+
+For Nano X, specify the `BOLOS_SDK` environment variable before building your app:
+
+```bash
+$ # docker can be replaced with podman or buildah without sudo
+$ sudo docker run --rm -ti -v "$(realpath .):/app" ledger-app-builder:latest
+root@656be163fe84:/app# BOLOS_SDK=$NANOX_SDK make
+```
+
+
