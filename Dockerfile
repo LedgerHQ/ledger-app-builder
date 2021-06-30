@@ -7,6 +7,7 @@ RUN apt-get update && apt-get upgrade -qy && \
     apt-get install -qy \
         clang \
         clang-tools \
+        lld \
         cmake \
         curl \
         git \
