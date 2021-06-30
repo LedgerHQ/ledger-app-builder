@@ -13,6 +13,7 @@ RUN apt-get update && apt-get upgrade -qy && \
         libbsd-dev \
         libcmocka0 \
         libcmocka-dev \
+        lld \
         make \
         protobuf-compiler \
         python-is-python3 \
