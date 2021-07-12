@@ -38,7 +38,7 @@ ENV PATH=/opt/gcc-arm-none-eabi-10-2020-q4-major/bin:$PATH
 RUN pip3 install ledgerblue pytest
 
 # Latest Nano S SDK
-RUN cd /opt && git clone --branch 2.0.0-1 https://github.com/LedgerHQ/nanos-secure-sdk.git nanos-secure-sdk
+RUN cd /opt && git clone https://github.com/LedgerHQ/nanos-secure-sdk.git nanos-secure-sdk
 ENV NANOS_SDK=/opt/nanos-secure-sdk
 
 # Latest Nano X SDK
