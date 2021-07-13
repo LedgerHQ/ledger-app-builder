@@ -37,7 +37,7 @@ ENV PATH=/opt/gcc-arm-none-eabi-10-2020-q4-major/bin:/root/.cargo/bin:$PATH
 
 # Install rustup to manage rust toolchains
 RUN curl https://sh.rustup.rs -sSf | \
-    sh -s -- --default-toolchain nightly -y && \
+    sh -s -- --default-toolchain stable -y && \
     rustup target add thumbv6m-none-eabi
 
 # Python packages commonly used by apps
