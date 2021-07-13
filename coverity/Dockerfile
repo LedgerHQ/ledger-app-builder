@@ -1,4 +1,4 @@
-FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:2.0.0-1
+FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 
 # Coverity Scan
 ADD cov-analysis-linux64-2020.09.tar.gz /opt/
