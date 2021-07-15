@@ -32,7 +32,19 @@ RUN wget -O arm-toolchain.tar.bz2 "https://developer.arm.com/-/media/Files/downl
     tar xf arm-toolchain.tar.bz2 -C /opt && \
     rm arm-toolchain.tar.bz2
 
-ENV PATH=/opt/gcc-arm-none-eabi-10-2020-q4-major/bin:$PATH
+# Adding GCC to PATH and defining rustup home directory
+ENV PATH=/opt/gcc-arm-none-eabi-10-2020-q4-major/bin:$PATH \
+    RUSTUP_HOME=/opt/rustup
+
+# Install rustup to manage rust toolchains
+RUN curl https://sh.rustup.rs -sSf | \
+    sh -s -- --default-toolchain stable -y
+
+# Adding cargo tools and rustup to PATH
+ENV PATH=/root/.cargo/bin:${PATH}
+
+# Adding ARMV6M target to the default toolchain
+RUN rustup target add thumbv6m-none-eabi
 
 # Python packages commonly used by apps
 RUN pip3 install ledgerblue pytest
