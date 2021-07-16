@@ -32,16 +32,17 @@ RUN wget -O arm-toolchain.tar.bz2 "https://developer.arm.com/-/media/Files/downl
     tar xf arm-toolchain.tar.bz2 -C /opt && \
     rm arm-toolchain.tar.bz2
 
-# Adding GCC to PATH and defining rustup home directory
+# Adding GCC to PATH and defining rustup/cargo home directories
 ENV PATH=/opt/gcc-arm-none-eabi-10-2020-q4-major/bin:$PATH \
-    RUSTUP_HOME=/opt/rustup
+    RUSTUP_HOME=/opt/rustup \
+    CARGO_HOME=/opt/.cargo
 
 # Install rustup to manage rust toolchains
 RUN curl https://sh.rustup.rs -sSf | \
     sh -s -- --default-toolchain stable -y
 
-# Adding cargo tools and rustup to PATH
-ENV PATH=/root/.cargo/bin:${PATH}
+# Adding cargo binaries to PATH
+ENV PATH=${CARGO_HOME}/bin:${PATH}
 
 # Adding ARMV6M target to the default toolchain
 RUN rustup target add thumbv6m-none-eabi
