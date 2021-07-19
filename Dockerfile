@@ -18,7 +18,7 @@ RUN apt-get update && apt-get upgrade -qy && \
         protobuf-compiler \
         python-is-python3 \
         python3 \
-        python3-pip \
+        python3-pip && \
     apt-get autoclean -y && \
     apt-get autoremove -y && \
     apt-get clean
