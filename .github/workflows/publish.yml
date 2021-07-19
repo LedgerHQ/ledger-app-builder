@@ -1,0 +1,33 @@
+# Build the docker image and push it to GitHub Packages
+
+name: Ledger App Builder Publisher
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/publish.yml
+      - Dockerfile
+
+jobs:
+  build:
+    name: Build and push ledger-app-builder image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+
+    steps:
+    - name: Clone
+      uses: actions/checkout@v2
+
+    - name: Build and push ledger-app-builder to GitHub Packages
+      uses: docker/build-push-action@v1
+      with:
+        dockerfile: Dockerfile
+        repository: ledgerhq/ledger-app-builder
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        tag_with_sha: true
+        tags: latest
