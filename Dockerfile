@@ -9,7 +9,9 @@ RUN apt-get update && apt-get upgrade -qy && \
         clang-tools \
         cmake \
         curl \
+        doxygen \
         git \
+        lcov \
         libbsd-dev \
         libcmocka0 \
         libcmocka-dev \
