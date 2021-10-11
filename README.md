@@ -23,7 +23,7 @@ Image can embed the [Coverity Scan](https://scan.coverity.com/) build tool. It i
 
 The build tool must be downloaded before building the image. Archive can be downloaded from <https://scan.coverity.com/download>. Download is available to everyone, but it requires to create an account. After having registered, download Coverity Build Tool 2020.09 for Linux64 and place the downloaded archive in the `coverity` directory.
 
-Then, build container with:
+Then, build container from the `coverity/` directory with:
 
 ```bash
 # Docker
