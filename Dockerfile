@@ -27,14 +27,14 @@ RUN apt-get update && apt-get upgrade -qy && \
 
 # ARM Embedded Toolchain
 # Integrity is checked using the MD5 checksum provided by ARM at https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads
-RUN curl -sSfL -o arm-toolchain.tar.bz2 "https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2?revision=ca0cbf9c-9de2-491c-ac48-898b5bbc0443&la=en&hash=68760A8AE66026BCF99F05AC017A6A50C6FD832A" && \
-    echo 8312c4c91799885f222f663fc81f9a31 arm-toolchain.tar.bz2 > /tmp/arm-toolchain.md5 && \
+RUN curl -sSfL -o arm-toolchain.tar.bz2 "https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2" && \
+    echo 2383e4eb4ea23f248d33adc70dc3227e arm-toolchain.tar.bz2 > /tmp/arm-toolchain.md5 && \
     md5sum --check /tmp/arm-toolchain.md5 && rm /tmp/arm-toolchain.md5 && \
     tar xf arm-toolchain.tar.bz2 -C /opt && \
     rm arm-toolchain.tar.bz2
 
 # Adding GCC to PATH and defining rustup/cargo home directories
-ENV PATH=/opt/gcc-arm-none-eabi-10-2020-q4-major/bin:$PATH \
+ENV PATH=/opt/gcc-arm-none-eabi-10.3-2021.10/bin:$PATH \
     RUSTUP_HOME=/opt/rustup \
     CARGO_HOME=/opt/.cargo
 
