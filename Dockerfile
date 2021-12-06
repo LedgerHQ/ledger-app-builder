@@ -52,7 +52,7 @@ RUN rustup target add thumbv6m-none-eabi
 RUN pip3 install ledgerblue pytest
 
 # Latest Nano S SDK
-RUN cd /opt && git clone https://github.com/LedgerHQ/nanos-secure-sdk.git nanos-secure-sdk
+RUN cd /opt && git clone --branch 2.1.0 https://github.com/LedgerHQ/nanos-secure-sdk.git nanos-secure-sdk
 ENV NANOS_SDK=/opt/nanos-secure-sdk
 
 # Latest Nano X SDK
