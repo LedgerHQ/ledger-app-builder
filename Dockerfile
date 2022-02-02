@@ -65,4 +65,4 @@ ENV BOLOS_SDK=${NANOS_SDK}
 
 WORKDIR /app
 
-CMD ["/bin/bash"]
+CMD ["/usr/bin/env", "bash"]
