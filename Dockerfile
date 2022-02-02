@@ -7,6 +7,7 @@ RUN apt-get update && apt-get upgrade -qy && \
     apt-get install -qy \
         clang \
         clang-tools \
+        clang-format \
         cmake \
         curl \
         doxygen \
