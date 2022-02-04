@@ -7,6 +7,7 @@ RUN apt-get update && apt-get upgrade -qy && \
     apt-get install -qy \
         clang \
         clang-tools \
+        clang-format \
         cmake \
         curl \
         doxygen \
@@ -52,16 +53,16 @@ RUN rustup target add thumbv6m-none-eabi
 RUN pip3 install ledgerblue pytest
 
 # Latest Nano S SDK
-RUN cd /opt && git clone --branch 2.1.0 https://github.com/LedgerHQ/nanos-secure-sdk.git nanos-secure-sdk
 ENV NANOS_SDK=/opt/nanos-secure-sdk
+RUN git clone --branch 2.1.0 --depth 1 https://github.com/LedgerHQ/nanos-secure-sdk.git "${NANOS_SDK}"
 
 # Latest Nano X SDK
-RUN cd /opt && git clone --branch 2.0.0 https://github.com/LedgerHQ/nanox-secure-sdk.git nanox-secure-sdk
 ENV NANOX_SDK=/opt/nanox-secure-sdk
+RUN git clone --branch 2.0.2-1 --depth 1 https://github.com/LedgerHQ/nanox-secure-sdk.git "${NANOX_SDK}"
 
 # Default SDK
 ENV BOLOS_SDK=${NANOS_SDK}
 
 WORKDIR /app
 
-CMD ["/bin/bash"]
+CMD ["/usr/bin/env", "bash"]
