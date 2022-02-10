@@ -58,7 +58,7 @@ RUN git clone --branch 2.1.0 --depth 1 https://github.com/LedgerHQ/nanos-secure-
 
 # Latest Nano X SDK
 ENV NANOX_SDK=/opt/nanox-secure-sdk
-RUN git clone --branch 2.0.2-1 --depth 1 https://github.com/LedgerHQ/nanox-secure-sdk.git "${NANOX_SDK}"
+RUN git clone --branch 2.0.2-2 --depth 1 https://github.com/LedgerHQ/nanox-secure-sdk.git "${NANOX_SDK}"
 
 # Default SDK
 ENV BOLOS_SDK=${NANOS_SDK}
