@@ -60,4 +60,9 @@ $ sudo docker run --rm -ti -v "$(realpath .):/app" ledger-app-builder:latest
 root@656be163fe84:/app# BOLOS_SDK=$NANOX_SDK make
 ```
 
+For Nano S+, specify the `BOLOS_SDK` environment variable before building your app:
 
+```bash
+$ # docker can be replaced with podman or buildah without sudo
+$ sudo docker run --rm -ti -v "$(realpath .):/app" ledger-app-builder:latest
+root@656be163fe84:/app# BOLOS_SDK=$NANOSP_SDK make
