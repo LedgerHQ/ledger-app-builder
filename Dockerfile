@@ -3,11 +3,13 @@ ENV LANG C.UTF-8
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+ARG LLVM_VERSION=12
+
 RUN apt-get update && apt-get upgrade -qy && \
     apt-get install -qy \
-        clang \
-        clang-tools \
-        clang-format \
+        clang-$LLVM_VERSION \
+        clang-tools-$LLVM_VERSION \
+        clang-format-$LLVM_VERSION \
         cmake \
         curl \
         doxygen \
@@ -16,7 +18,7 @@ RUN apt-get update && apt-get upgrade -qy && \
         libbsd-dev \
         libcmocka0 \
         libcmocka-dev \
-        lld \
+        lld-$LLVM_VERSION \
         make \
         protobuf-compiler \
         python-is-python3 \
@@ -25,6 +27,10 @@ RUN apt-get update && apt-get upgrade -qy && \
     apt-get autoclean -y && \
     apt-get autoremove -y && \
     apt-get clean
+
+# Create generic clang & lld symbolic links to their installed version
+RUN cd /usr/bin && \
+    find . -name "*-"$LLVM_VERSION | sed "s/^\(.*\)\(-"$LLVM_VERSION"\)$/ln -s \1\2 \1/" | sh
 
 # ARM Embedded Toolchain
 # Integrity is checked using the MD5 checksum provided by ARM at https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads
@@ -62,7 +68,7 @@ RUN git clone --branch 2.0.2-2 --depth 1 https://github.com/LedgerHQ/nanox-secur
 
 # Latest Nano S+ SDK
 ENV NANOSP_SDK=/opt/nanosplus-secure-sdk
-RUN git clone --branch 1.0.0 --depth 1 https://github.com/LedgerHQ/nanosplus-secure-sdk.git "${NANOSP_SDK}"
+RUN git clone --branch 1.0.2 --depth 1 https://github.com/LedgerHQ/nanosplus-secure-sdk.git "${NANOSP_SDK}"
 
 # Default SDK
 ENV BOLOS_SDK=${NANOS_SDK}
