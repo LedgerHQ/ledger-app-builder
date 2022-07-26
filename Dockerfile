@@ -1,9 +1,9 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 ENV LANG C.UTF-8
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ARG LLVM_VERSION=12
+ARG LLVM_VERSION=14
 
 RUN apt-get update && apt-get upgrade -qy && \
     apt-get install -qy \
