@@ -31,3 +31,15 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
         tag_with_sha: true
         tags: latest
+
+    - name: Build and push ledger-app-scanner to GitHub Packages
+      uses: docker/build-push-action@v1
+      with:
+        context: ./coverity/
+        dockerfile: ./coverity/Dockerfile
+        repository: ledgerhq/ledger-app-builder/ledger-app-scanner
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        tag_with_sha: true
+        tags: latest
