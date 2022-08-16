@@ -1,52 +1,31 @@
-FROM ubuntu:20.04
+FROM alpine:3.15
 ENV LANG C.UTF-8
 
-ARG DEBIAN_FRONTEND=noninteractive
-
-ARG LLVM_VERSION=12
-
-RUN apt-get update && apt-get upgrade -qy && \
-    apt-get install -qy \
-        clang-$LLVM_VERSION \
-        clang-tools-$LLVM_VERSION \
-        clang-format-$LLVM_VERSION \
+RUN apk update
+RUN apk upgrade
+RUN apk add \
+        clang \
+        clang-extra-tools \
+        clang-analyzer \
+        lld \
         cmake \
-        curl \
+        make \
         doxygen \
         git \
-        lcov \
-        libbsd-dev \
-        libcmocka0 \
-        libcmocka-dev \
-        lld-$LLVM_VERSION \
-        make \
-        protobuf-compiler \
-        python-is-python3 \
         python3 \
-        python3-pip && \
-    apt-get autoclean -y && \
-    apt-get autoremove -y && \
-    apt-get clean
+        py3-pip \
+        bash
 
-# Create generic clang & lld symbolic links to their installed version
-RUN cd /usr/bin && \
-    find . -name "*-"$LLVM_VERSION | sed "s/^\(.*\)\(-"$LLVM_VERSION"\)$/ln -s \1\2 \1/" | sh
+RUN apk add \
+        gcc-arm-none-eabi \
+        newlib-arm-none-eabi
 
-# ARM Embedded Toolchain
-# Integrity is checked using the MD5 checksum provided by ARM at https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads
-RUN curl -sSfL -o arm-toolchain.tar.bz2 "https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2" && \
-    echo 2383e4eb4ea23f248d33adc70dc3227e arm-toolchain.tar.bz2 > /tmp/arm-toolchain.md5 && \
-    md5sum --check /tmp/arm-toolchain.md5 && rm /tmp/arm-toolchain.md5 && \
-    tar xf arm-toolchain.tar.bz2 -C /opt && \
-    rm arm-toolchain.tar.bz2
-
-# Adding GCC to PATH and defining rustup/cargo home directories
-ENV PATH=/opt/gcc-arm-none-eabi-10.3-2021.10/bin:$PATH \
-    RUSTUP_HOME=/opt/rustup \
+# Define rustup/cargo home directories
+ENV RUSTUP_HOME=/opt/rustup \
     CARGO_HOME=/opt/.cargo
 
 # Install rustup to manage rust toolchains
-RUN curl https://sh.rustup.rs -sSf | \
+RUN wget -O - https://sh.rustup.rs | \
     sh -s -- --default-toolchain stable -y
 
 # Adding cargo binaries to PATH
@@ -55,8 +34,20 @@ ENV PATH=${CARGO_HOME}/bin:${PATH}
 # Adding ARMV6M target to the default toolchain
 RUN rustup target add thumbv6m-none-eabi
 
-# Python packages commonly used by apps
-RUN pip3 install ledgerblue pytest
+# These packages contain shared libraries which will be needed at runtime
+RUN apk add \
+        libjpeg \
+        zlib \
+        eudev \
+        libusb
+
+# Python packages building dependencies, can be removed afterwards
+ARG PYTHON_BUILD_DEPS=python3-dev,musl-dev,libusb-dev,eudev-dev,linux-headers,zlib-dev,jpeg-dev
+
+RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
+
+# Python package to load app onto device
+RUN pip3 install ledgerblue
 
 # Latest Nano S SDK
 ENV NANOS_SDK=/opt/nanos-secure-sdk
@@ -73,6 +64,11 @@ RUN git clone --branch 1.0.3 --depth 1 https://github.com/LedgerHQ/nanosplus-sec
 # Default SDK
 ENV BOLOS_SDK=${NANOS_SDK}
 
+# Cleanup
+RUN apk del $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
+
 WORKDIR /app
+
+RUN git config --global --add safe.directory /app
 
 CMD ["/usr/bin/env", "bash"]
