@@ -14,9 +14,7 @@ RUN apk add \
         git \
         python3 \
         py3-pip \
-        bash
-
-RUN apk add \
+        bash \
         gcc-arm-none-eabi \
         newlib-arm-none-eabi
 
@@ -24,9 +22,9 @@ RUN apk add \
 ENV RUSTUP_HOME=/opt/rustup \
     CARGO_HOME=/opt/.cargo
 
-# Install rustup to manage rust toolchains
-RUN wget -O - https://sh.rustup.rs | \
-    sh -s -- --default-toolchain stable -y
+RUN apk add rustup
+
+RUN rustup-init --default-toolchain stable -y
 
 # Adding cargo binaries to PATH
 ENV PATH=${CARGO_HOME}/bin:${PATH}
@@ -64,7 +62,7 @@ RUN git clone --branch 1.0.3 --depth 1 https://github.com/LedgerHQ/nanosplus-sec
 # Default SDK
 ENV BOLOS_SDK=${NANOS_SDK}
 
-# Cleanup
+# Cleanup, remove packages that aren't needed anymore
 RUN apk del $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
 
 WORKDIR /app
