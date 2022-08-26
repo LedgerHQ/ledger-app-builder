@@ -18,6 +18,9 @@ RUN apk add \
         gcc-arm-none-eabi \
         newlib-arm-none-eabi
 
+# So that it still supports things incorrectly pointing to python
+RUN ln -s python3 $(dirname $(which python3))/python
+
 # These packages contain shared libraries which will be needed at runtime
 RUN apk add \
         libjpeg \
