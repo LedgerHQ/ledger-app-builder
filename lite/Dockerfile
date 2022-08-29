@@ -16,7 +16,8 @@ RUN apk add \
         py3-pip \
         bash \
         gcc-arm-none-eabi \
-        newlib-arm-none-eabi
+        newlib-arm-none-eabi \
+        protoc
 
 # So that it still supports things incorrectly pointing to python
 RUN ln -s python3 $(dirname $(which python3))/python
