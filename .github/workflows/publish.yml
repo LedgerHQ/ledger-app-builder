@@ -76,7 +76,7 @@ jobs:
     name: App Builder
     runs-on: ubuntu-latest
     needs: [mods_list, builder_lite]
-    if: always() && (needs.builder_lite.result != 'skipped' || contains(needs.mods_list.outputs.modified_files, 'Dockerfile'))
+    if: always() && (needs.builder_lite.result == 'success' || (needs.builder_lite.result == 'skipped' && contains(needs.mods_list.outputs.modified_files, 'Dockerfile')))
     permissions:
       packages: write
     env:
