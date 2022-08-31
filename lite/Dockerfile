@@ -4,33 +4,33 @@ ENV LANG C.UTF-8
 RUN apk update
 RUN apk upgrade
 RUN apk add \
-        clang \
-        clang-extra-tools \
-        clang-analyzer \
-        lld \
-        cmake \
-        make \
-        doxygen \
-        git \
-        python3 \
-        py3-pip \
         bash \
+        clang \
+        clang-analyzer \
+        clang-extra-tools \
+        cmake \
+        doxygen \
         gcc-arm-none-eabi \
+        git \
+        lld \
+        make \
         newlib-arm-none-eabi \
-        protoc
+        protoc \
+        py3-pip \
+        python3
 
 # So that it still supports things incorrectly pointing to python
 RUN ln -s python3 $(dirname $(which python3))/python
 
 # These packages contain shared libraries which will be needed at runtime
 RUN apk add \
-        libjpeg \
-        zlib \
         eudev \
-        libusb
+        libjpeg \
+        libusb \
+        zlib
 
 # Python packages building dependencies, can be removed afterwards
-ARG PYTHON_BUILD_DEPS=python3-dev,musl-dev,libusb-dev,eudev-dev,linux-headers,zlib-dev,jpeg-dev
+ARG PYTHON_BUILD_DEPS=eudev-dev,jpeg-dev,libusb-dev,linux-headers,musl-dev,python3-dev,zlib-dev
 
 RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
 
