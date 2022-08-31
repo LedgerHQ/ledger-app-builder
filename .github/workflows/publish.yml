@@ -3,6 +3,7 @@
 name: Ledger App Builder Publisher
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
