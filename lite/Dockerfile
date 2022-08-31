@@ -37,20 +37,22 @@ RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
 # Python package to load app onto device
 RUN pip3 install ledgerblue
 
+ARG GIT_SERVER=https://github.com/LedgerHQ
+
 # Latest Nano S SDK
 ENV NANOS_SDK=/opt/nanos-secure-sdk
-RUN git clone --branch 2.1.0 --depth 1 https://github.com/LedgerHQ/nanos-secure-sdk.git "${NANOS_SDK}"
+RUN git clone --branch 2.1.0 --depth 1 "$GIT_SERVER/nanos-secure-sdk.git" "$NANOS_SDK"
 
 # Latest Nano X SDK
 ENV NANOX_SDK=/opt/nanox-secure-sdk
-RUN git clone --branch 2.0.2-2 --depth 1 https://github.com/LedgerHQ/nanox-secure-sdk.git "${NANOX_SDK}"
+RUN git clone --branch 2.0.2-2 --depth 1 "$GIT_SERVER/nanox-secure-sdk.git" "$NANOX_SDK"
 
 # Latest Nano S+ SDK
 ENV NANOSP_SDK=/opt/nanosplus-secure-sdk
-RUN git clone --branch 1.0.3 --depth 1 https://github.com/LedgerHQ/nanosplus-secure-sdk.git "${NANOSP_SDK}"
+RUN git clone --branch 1.0.3 --depth 1 "$GIT_SERVER/nanosplus-secure-sdk.git" "$NANOSP_SDK"
 
 # Default SDK
-ENV BOLOS_SDK=${NANOS_SDK}
+ENV BOLOS_SDK=$NANOS_SDK
 
 # Cleanup, remove packages that aren't needed anymore
 RUN apk del $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
