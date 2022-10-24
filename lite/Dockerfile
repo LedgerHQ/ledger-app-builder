@@ -52,7 +52,7 @@ RUN git clone --branch 2.0.2-2 --depth 1 "$GIT_SERVER/nanox-secure-sdk.git" "$NA
 
 # Latest Nano S+ SDK
 ENV NANOSP_SDK=/opt/nanosplus-secure-sdk
-RUN git clone --branch 1.0.3 --depth 1 "$GIT_SERVER/nanosplus-secure-sdk.git" "$NANOSP_SDK"
+RUN git clone --branch 1.0.4 --depth 1 "$GIT_SERVER/nanosplus-secure-sdk.git" "$NANOSP_SDK"
 
 # Default SDK
 ENV BOLOS_SDK=$NANOS_SDK
