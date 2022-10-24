@@ -1,34 +1,118 @@
-# Build the docker image and push it to GitHub Packages
+# Build the docker images and push them to GitHub Packages
 
-name: Ledger App Builder Publisher
+name: Publish Docker images
 
 on:
   workflow_dispatch:
   push:
     branches:
       - master
-    paths:
-      - .github/workflows/publish.yml
-      - Dockerfile
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_PATH: ${{ github.repository }}
+  BUILD_PLATFORMS: linux/amd64,linux/arm64
 
 jobs:
-  build:
-    name: Build and push ledger-app-builder image
+  mods_list:
+    name: Get modified files
     runs-on: ubuntu-latest
+    steps:
+      - name: Clone
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get changes
+        id: get-changes
+        uses: tj-actions/changed-files@v33
+    outputs:
+      modified_files: ${{ steps.get-changes.outputs.modified_files }}
+
+  builder_lite:
+    name: App Builder Lite
+    runs-on: ubuntu-latest
+    needs: mods_list
+    if: contains(needs.mods_list.outputs.modified_files, 'lite/Dockerfile')
     permissions:
       packages: write
+    env:
+      IMAGE_NAME: ${{ github.event.repository.name }}-lite
 
     steps:
-    - name: Clone
-      uses: actions/checkout@v2
+      - name: Clone
+        uses: actions/checkout@v3
 
-    - name: Build and push ledger-app-builder to GitHub Packages
-      uses: docker/build-push-action@v1
-      with:
-        dockerfile: Dockerfile
-        repository: ledgerhq/ledger-app-builder/ledger-app-builder
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-        tag_with_sha: true
-        tags: latest
+      - name: Login to registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_PATH }}/${{ env.IMAGE_NAME }}
+
+      - name: Set-up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set-up Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and push container
+        uses: docker/build-push-action@v3
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_PATH }}/${{ env.IMAGE_NAME }}
+        with:
+          file: lite/Dockerfile
+          platforms: ${{ env.BUILD_PLATFORMS }}
+          tags: ${{ env.IMAGE }}:${{ github.sha }},${{ env.IMAGE }}:latest
+          labels: ${{ steps.meta.outputs.labels }}
+          push: true
+
+  builder:
+    name: App Builder
+    runs-on: ubuntu-latest
+    needs: [mods_list, builder_lite]
+    if: always() && (needs.builder_lite.result == 'success' || (needs.builder_lite.result == 'skipped' && contains(needs.mods_list.outputs.modified_files, 'Dockerfile')))
+    permissions:
+      packages: write
+    env:
+      IMAGE_NAME: ${{ github.event.repository.name }}
+
+    steps:
+      - name: Clone
+        uses: actions/checkout@v3
+
+      - name: Login to registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_PATH }}/${{ env.IMAGE_NAME }}
+
+      - name: Set-up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set-up Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and push container
+        uses: docker/build-push-action@v3
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_PATH }}/${{ env.IMAGE_NAME }}
+        with:
+          file: Dockerfile
+          platforms: ${{ env.BUILD_PLATFORMS }}
+          tags: ${{ env.IMAGE }}:${{ github.sha }},${{ env.IMAGE }}:latest
+          labels: ${{ steps.meta.outputs.labels }}
+          push: true
