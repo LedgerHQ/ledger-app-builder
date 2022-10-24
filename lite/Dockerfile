@@ -20,7 +20,7 @@ RUN apk add \
         python3
 
 # lcov is only present in the testing repository of the edge branch
-RUN apk add lcov --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing
+RUN apk add --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing lcov
 
 # So that it still supports things incorrectly pointing to python
 RUN ln -s python3 $(dirname $(which python3))/python

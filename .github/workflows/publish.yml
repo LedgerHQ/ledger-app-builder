@@ -10,7 +10,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_PATH: ${{ github.repository }}
+  REPO_PATH: ${{ github.repository }}
   BUILD_PLATFORMS: linux/amd64,linux/arm64
 
 jobs:
@@ -27,7 +27,7 @@ jobs:
         id: get-changes
         uses: tj-actions/changed-files@v33
     outputs:
-      modified_files: ${{ steps.get-changes.outputs.modified_files }}
+      modified_files: ${{ steps.get-changes.outputs.all_modified_files }}
 
   builder_lite:
     name: App Builder Lite
@@ -37,7 +37,7 @@ jobs:
     permissions:
       packages: write
     env:
-      IMAGE_NAME: ${{ github.event.repository.name }}-lite
+      REPO_NAME: ${{ github.event.repository.name }}
 
     steps:
       - name: Clone
@@ -50,11 +50,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Make full image name
+        run: |
+          echo "IMAGE=${REGISTRY}/${REPO_PATH,,}/${REPO_NAME,,}-lite" >>${GITHUB_ENV}
+
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_PATH }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.IMAGE }}
 
       - name: Set-up QEMU
         uses: docker/setup-qemu-action@v2
@@ -64,8 +68,6 @@ jobs:
 
       - name: Build and push container
         uses: docker/build-push-action@v3
-        env:
-          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_PATH }}/${{ env.IMAGE_NAME }}
         with:
           file: lite/Dockerfile
           platforms: ${{ env.BUILD_PLATFORMS }}
@@ -81,7 +83,7 @@ jobs:
     permissions:
       packages: write
     env:
-      IMAGE_NAME: ${{ github.event.repository.name }}
+      REPO_NAME: ${{ github.event.repository.name }}
 
     steps:
       - name: Clone
@@ -94,11 +96,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Make full image name
+        run: |
+          echo "IMAGE=${REGISTRY}/${REPO_PATH,,}/${REPO_NAME,,}" >>${GITHUB_ENV}
+
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_PATH }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.IMAGE }}
 
       - name: Set-up QEMU
         uses: docker/setup-qemu-action@v2
@@ -108,8 +114,6 @@ jobs:
 
       - name: Build and push container
         uses: docker/build-push-action@v3
-        env:
-          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_PATH }}/${{ env.IMAGE_NAME }}
         with:
           file: Dockerfile
           platforms: ${{ env.BUILD_PLATFORMS }}
