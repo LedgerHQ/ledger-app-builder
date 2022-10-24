@@ -27,7 +27,7 @@ jobs:
         id: get-changes
         uses: tj-actions/changed-files@v33
     outputs:
-      modified_files: ${{ steps.get-changes.outputs.modified_files }}
+      modified_files: ${{ steps.get-changes.outputs.all_modified_files }}
 
   builder_lite:
     name: App Builder Lite
