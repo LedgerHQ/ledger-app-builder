@@ -9,11 +9,13 @@ RUN apk add \
         clang-analyzer \
         clang-extra-tools \
         cmake \
+        cmocka-dev \
         doxygen \
         gcc-arm-none-eabi \
         git \
         lld \
         make \
+        musl-dev \
         newlib-arm-none-eabi \
         protoc \
         py3-pip \
@@ -33,7 +35,7 @@ RUN apk add \
         zlib
 
 # Python packages building dependencies, can be removed afterwards
-ARG PYTHON_BUILD_DEPS=eudev-dev,jpeg-dev,libusb-dev,linux-headers,musl-dev,python3-dev,zlib-dev
+ARG PYTHON_BUILD_DEPS=eudev-dev,jpeg-dev,libusb-dev,linux-headers,python3-dev,zlib-dev
 
 RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
 
