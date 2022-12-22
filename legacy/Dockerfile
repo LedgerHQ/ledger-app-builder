@@ -8,16 +8,9 @@ ARG LLVM_VERSION=12
 RUN apt-get update && apt-get upgrade -qy
 RUN apt-get install -qy \
         clang-$LLVM_VERSION \
-        clang-tools-$LLVM_VERSION \
-        clang-format-$LLVM_VERSION \
         cmake \
         curl \
-        doxygen \
         git \
-        lcov \
-        libbsd-dev \
-        libcmocka0 \
-        libcmocka-dev \
         lld-$LLVM_VERSION \
         make \
         protobuf-compiler \
