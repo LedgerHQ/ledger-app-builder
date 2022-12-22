@@ -125,7 +125,7 @@ jobs:
     name: App Builder
     runs-on: ubuntu-latest
     needs: [mods_list, builder_lite]
-    if: always() && (needs.builder_lite.result == 'success' || (needs.builder_lite.result == 'skipped' && contains(needs.mods_list.outputs.modified_files, 'Dockerfile')))
+    if: always() && (needs.builder_lite.result == 'success' || (needs.builder_lite.result == 'skipped' && contains(needs.mods_list.outputs.modified_files, 'full/Dockerfile')))
     permissions:
       packages: write
     env:
@@ -161,7 +161,7 @@ jobs:
       - name: Build and push container
         uses: docker/build-push-action@v3
         with:
-          file: Dockerfile
+          file: full/Dockerfile
           platforms: ${{ env.BUILD_PLATFORMS }}
           tags: ${{ env.IMAGE }}:${{ github.sha }},${{ env.IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
