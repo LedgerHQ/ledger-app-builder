@@ -40,7 +40,7 @@ ARG PYTHON_BUILD_DEPS=eudev-dev,jpeg-dev,libusb-dev,linux-headers,python3-dev,zl
 RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
 
 # Python package to load app onto device
-RUN pip3 install ledgerblue
+RUN pip3 install ledgerblue tomli-w
 
 ARG GIT_SERVER=https://github.com/LedgerHQ
 
