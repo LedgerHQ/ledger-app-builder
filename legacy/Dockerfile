@@ -65,6 +65,15 @@ RUN git clone --branch 2.0.2-2 --depth 1 "$GIT_SERVER/nanox-secure-sdk.git" "$NA
 ENV NANOSP_SDK=/opt/nanosplus-secure-sdk
 RUN git clone --branch 1.0.4 --depth 1 "$GIT_SERVER/nanosplus-secure-sdk.git" "$NANOSP_SDK"
 
+# Unified SDK
+ENV LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
+RUN git clone "$GIT_SERVER/ledger-secure-sdk.git" "$LEDGER_SECURE_SDK"
+
+# Latest Stax SDK (OS stax_1.0.0-rc8 => based on API_LEVEL 3 => clone on SDK tag v3.0.0)
+ENV STAX_SDK=/opt/stax-secure-sdk
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v3.0.0
+RUN echo stax > $STAX_SDK/.target
+
 # Default SDK
 ENV BOLOS_SDK=${NANOS_SDK}
 
