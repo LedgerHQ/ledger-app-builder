@@ -79,6 +79,8 @@ ENV BOLOS_SDK=${NANOS_SDK}
 
 WORKDIR /app
 
-RUN git config --global --add safe.directory /app
+# Work around the git security to be able to get informations from repositories
+# even if the container is not run with root UID/GID
+RUN git config --system --add safe.directory "*"
 
 CMD ["/usr/bin/env", "bash"]
