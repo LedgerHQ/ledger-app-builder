@@ -78,8 +78,8 @@ jobs:
   builder_legacy:
     name: App Builder Legacy
     runs-on: ubuntu-latest
-    needs: mods_list
-    if: contains(needs.mods_list.outputs.modified_files, 'legacy/Dockerfile')
+    needs: [mods_list, builder_lite]
+    if: always() && (needs.builder_lite.result == 'success' || (needs.builder_lite.result == 'skipped' && contains(needs.mods_list.outputs.modified_files, 'legacy/Dockerfile')))
     permissions:
       packages: write
     env:

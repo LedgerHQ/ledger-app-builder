@@ -1,3 +1,5 @@
+FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest AS LITE_BUILDER
+
 FROM ubuntu:22.04
 ENV LANG C.UTF-8
 
@@ -51,28 +53,13 @@ RUN rustup target add thumbv6m-none-eabi
 # Python package to load app onto device
 RUN pip3 install ledgerblue
 
-ARG GIT_SERVER=https://github.com/LedgerHQ
-
-# Latest Nano S SDK
 ENV NANOS_SDK=/opt/nanos-secure-sdk
-RUN git clone --branch 2.1.0 --depth 1 "$GIT_SERVER/nanos-secure-sdk.git" "$NANOS_SDK"
-
-# Latest Nano X SDK
 ENV NANOX_SDK=/opt/nanox-secure-sdk
-RUN git clone --branch 2.0.2-2 --depth 1 "$GIT_SERVER/nanox-secure-sdk.git" "$NANOX_SDK"
-
-# Latest Nano S+ SDK
 ENV NANOSP_SDK=/opt/nanosplus-secure-sdk
-RUN git clone --branch 1.0.4 --depth 1 "$GIT_SERVER/nanosplus-secure-sdk.git" "$NANOSP_SDK"
-
-# Unified SDK
-ENV LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
-RUN git clone "$GIT_SERVER/ledger-secure-sdk.git" "$LEDGER_SECURE_SDK"
-
-# Latest Stax SDK (OS stax_1.0.0-rc8 => based on API_LEVEL 3 => clone on SDK tag v3.0.0)
 ENV STAX_SDK=/opt/stax-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v3.0.0
-RUN echo stax > $STAX_SDK/.target
+
+# Copy the SDKs from the lite container
+COPY --from=LITE_BUILDER /opt/ /opt/
 
 # Default SDK
 ENV BOLOS_SDK=${NANOS_SDK}
