@@ -1,23 +1,25 @@
 # Ledger Application Builder
 
-These container images contain all dependencies to compile an application for Nano S/S+/X.
+These container images contain all dependencies to compile an application for Ledger devices
 
 The three images are stored in the following directories:
 
-- `lite` is based on `Alpine` and is the lightest of the app-builder docker images. It contains enough to compile `C`-only applications. It does **not** contain the `glibc`, so tools/analyzers using it won't work.
+- `lite` is based on `Alpine` and is the lightest of the app-builder docker images. It contains the sufficient tools to build and load applications in the `C` language. It does **not** contain the `glibc`, so tools/analyzers using it won't work.
 - `full` is the default image. It derives from `lite` and contains tools allowing `Rust` compilation.
 - `legacy` contains all needed tools to compile `C` and `Rust` applications. This image is quite heavy, but based on Ubuntu 22.04, so it is a good pick for tools using the `glibc`, such as `SonarQube` or `CodeQL`.
 
 ## Using Ledger images
 
+To use or build these container images, first install Docker on you computer.
+
 The images corresponding to the previous Dockerfiles are built and pushed on [ghcr.io](ghcr.io) every time the SDK is updated.
 They can be pulled via these commands:
 
 ```bash
-# pull the lite image, built from `lite/Dockerfile`
-$ sudo docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 # pull the default, full image, built from `full/Dockerfile`
 $ sudo docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+# pull the lite image, built from `lite/Dockerfile`
+$ sudo docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 # pull the legacy image, built from `legacy/Dockerfile`
 $ sudo docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-legacy:latest
 ```
@@ -27,33 +29,32 @@ $ sudo docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-legacy
 In the source folder of your application, for Nano S:
 
 ```bash
-$ # docker can be replaced with podman or buildah without sudo
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 root@656be163fe84:/app# BOLOS_SDK=$NANOS_SDK make
 ```
 
-The Docker image includes the [Clang Static Analyzer](https://clang-analyzer.llvm.org/), which can be invoked with:
+The `BOLOS_SDK` variable is used to specify the target SDK, allowing to compile the application for other device. You could compile for Nano X or
+Nano S+ with the following commands:
 
 ```bash
-$ # docker can be replaced with podman or buildah without sudo
-$ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
-root@656be163fe84:/app# BOLOS_SDK=$NANOS_SDK make scan-build
-```
-
-For Nano X, specify the `BOLOS_SDK` environment variable before building your app with the pre-defined `$NANOX_SDK` variable:
-
-```bash
-$ # docker can be replaced with podman or buildah without sudo
+# Nano X compilation
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 root@656be163fe84:/app# BOLOS_SDK=$NANOX_SDK make
 ```
 
-For Nano S+, specify the `BOLOS_SDK` environment variable before building your app with the pre-defined `$NANOSP_SDK` variable:
-
 ```bash
-$ # docker can be replaced with podman or buildah without sudo
+# Nano S+ compilation
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 root@656be163fe84:/app# BOLOS_SDK=$NANOSP_SDK make
+```
+
+### Code static analysis
+
+The Docker images include the [Clang Static Analyzer](https://clang-analyzer.llvm.org/), which can be invoked with:
+
+```bash
+$ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+root@656be163fe84:/app# BOLOS_SDK=$NANOS_SDK make scan-build
 ```
 
 ## Load the app on a physical device
@@ -71,17 +72,15 @@ root@656be163fe84:/app# BOLOS_SDK=$NANOS_SDK make load
 
 ## Build the container image
 
+If the provided images does not suit your needs or you want to tinker with them, you can build these images yourself.
+
+
 ### Standard Build
 
-Container can be build using standard tools:
+Containers can be built using `Docker`:
 
 ```bash
-# Docker
 $ (cd full && sudo docker build -t ledger-app-builder:latest .)
-# Podman (from https://podman.io/)
-$ (cd full && podman build -t ledger-app-builder:latest .)
-# Buildah (from https://buildah.io/)
-$ (cd full && buildah bud -t ledger-app-builder:latest .)
 ```
 
 ### App Scanner
@@ -93,10 +92,5 @@ The build tool must be downloaded before building the image. Archive can be down
 Then, build container from the `coverity/` directory with:
 
 ```bash
-# Docker
 $ (cd full && sudo docker build -t ledger-app-scanner:latest .)
-# Podman (from https://podman.io/)
-$ (cd full && podman build -t ledger-app-scanner:latest .)
-# Buildah (from https://buildah.io/)
-$ (cd full && buildah bud -t ledger-app-scanner:latest .)
 ```
