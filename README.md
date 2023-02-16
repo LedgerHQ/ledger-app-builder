@@ -30,25 +30,25 @@ The `BOLOS_SDK` variable is used to specify the target SDK, allowing to compile 
 
 In the source folder of your application, you can compile with the following commands:
 
-For Nano S
+* For Nano S
 ```bash
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 root@656be163fe84:/app# BOLOS_SDK=$NANOS_SDK make
 ```
 
-For Nano X
+* For Nano X
 ```bash
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 root@656be163fe84:/app# BOLOS_SDK=$NANOX_SDK make
 ```
 
-For Nano S+
+* For Nano S+
 ```bash
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 root@656be163fe84:/app# BOLOS_SDK=$NANOSP_SDK make
 ```
 
-For Stax
+* For Stax
 ```bash
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 root@656be163fe84:/app# BOLOS_SDK=$STAX_SDK make
@@ -65,11 +65,10 @@ root@656be163fe84:/app# BOLOS_SDK=$NANOS_SDK make scan-build
 
 ## Load the app on a physical device
 
-:warning: Only Nano S and Nano S+ devices allow application side-loading. This section will not work with a Nano X.
+:warning: Only Nano S, Nano S+ and Stax devices allow application side-loading. This section will not work with a Nano X.
 
 To load the app from the container, you will need additional docker arguments in order to allow Docker to access your USB port.
-Your physical device must be connected, unlocked and the screen showing the dashboard (not inside an application).
-Use the following docker command:
+Your physical device must be connected, unlocked and the screen showing the dashboard (not inside an application). Same as for compilation, `BOLOS_SDK` variable is used to specify the target device. Use the following docker command to load the app (here for Nano S device) :
 
 ```bash
 $ sudo docker run --rm -ti  -v "$(realpath .):/app" --privileged -v "/dev/bus/usb:/dev/bus/usb" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
