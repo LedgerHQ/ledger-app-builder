@@ -26,26 +26,32 @@ $ sudo docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-legacy
 
 ## Compile your app in the container
 
-In the source folder of your application, for Nano S:
+The `BOLOS_SDK` variable is used to specify the target SDK, allowing to compile the application for each Ledger device. 
 
+In the source folder of your application, you can compile with the following commands:
+
+For Nano S
 ```bash
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 root@656be163fe84:/app# BOLOS_SDK=$NANOS_SDK make
 ```
 
-The `BOLOS_SDK` variable is used to specify the target SDK, allowing to compile the application for other device. You could compile for Nano X or
-Nano S+ with the following commands:
-
+For Nano X
 ```bash
-# Nano X compilation
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 root@656be163fe84:/app# BOLOS_SDK=$NANOX_SDK make
 ```
 
+For Nano S+
 ```bash
-# Nano S+ compilation
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 root@656be163fe84:/app# BOLOS_SDK=$NANOSP_SDK make
+```
+
+For Stax
+```bash
+$ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+root@656be163fe84:/app# BOLOS_SDK=$STAX_SDK make
 ```
 
 ### Code static analysis
