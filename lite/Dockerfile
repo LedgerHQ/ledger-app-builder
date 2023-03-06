@@ -37,7 +37,13 @@ RUN apk add \
 # Python packages building dependencies, can be removed afterwards
 ARG PYTHON_BUILD_DEPS=eudev-dev,jpeg-dev,libusb-dev,linux-headers,python3-dev,zlib-dev
 
-RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
+# Python packages building dependencies, can be removed afterwards
+RUN apk add -t python_build_deps eudev-dev \
+                                 jpeg-dev \
+                                 libusb-dev \
+                                 linux-headers \
+                                 python3-dev \
+                                 zlib-dev
 
 # Python package to load app onto device
 RUN pip3 install ledgerblue tomli-w
@@ -72,7 +78,7 @@ RUN echo stax > $STAX_SDK/.target
 ENV BOLOS_SDK=$NANOS_SDK
 
 # Cleanup, remove packages that aren't needed anymore
-RUN apk del $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
+RUN apk del python_build_deps
 
 WORKDIR /app
 
