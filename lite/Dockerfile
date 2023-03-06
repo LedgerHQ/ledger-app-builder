@@ -28,10 +28,8 @@ RUN ln -s python3 $(dirname $(which python3))/python
 
 # These packages contain shared libraries which will be needed at runtime
 RUN apk add \
-        eudev \
         libjpeg \
-        libusb \
-        zlib
+        libusb
 
 # Install newlib without all its dependencies
 ARG PKG_NAME=newlib-arm-none-eabi
