@@ -43,6 +43,7 @@ RUN apk add -t python_build_deps eudev-dev \
                                  libusb-dev \
                                  linux-headers \
                                  python3-dev \
+                                 py3-wheel \
                                  zlib-dev
 
 # Python package to load app onto device
