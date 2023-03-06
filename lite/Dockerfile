@@ -5,18 +5,17 @@ RUN apk update
 
 RUN apk add \
         bash \
+        binutils-arm-none-eabi \
         clang \
         clang-analyzer \
         clang-extra-tools \
         cmake \
         cmocka-dev \
         doxygen \
-        gcc-arm-none-eabi \
         git \
         lld \
         make \
         musl-dev \
-        newlib-arm-none-eabi \
         protoc \
         py3-pip \
         python3
@@ -34,11 +33,16 @@ RUN apk add \
         libusb \
         zlib
 
-# Python packages building dependencies, can be removed afterwards
-ARG PYTHON_BUILD_DEPS=eudev-dev,jpeg-dev,libusb-dev,linux-headers,python3-dev,zlib-dev
+# Install newlib without all its dependencies
+ARG PKG_NAME=newlib-arm-none-eabi
+RUN cd /tmp && \
+    apk fetch $PKG_NAME && \
+    tar xf $PKG_NAME-*.apk -C / usr && \
+    rm -f $PKG_NAME-*.apk
 
 # Python packages building dependencies, can be removed afterwards
 RUN apk add -t python_build_deps eudev-dev \
+                                 gcc \
                                  jpeg-dev \
                                  libusb-dev \
                                  linux-headers \
