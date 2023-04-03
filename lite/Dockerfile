@@ -18,8 +18,12 @@ RUN apk add \
         musl-dev \
         newlib-arm-none-eabi \
         protoc \
-        py3-pip \
         python3
+
+# Upgrade pip and install wheel
+RUN python3 -m ensurepip --upgrade \
+    && pip3 install --upgrade pip \
+    && pip3 install wheel
 
 # lcov is only present in the testing repository of the edge branch
 RUN apk add --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing lcov
