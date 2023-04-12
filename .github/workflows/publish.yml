@@ -106,17 +106,10 @@ jobs:
         with:
           images: ${{ env.IMAGE }}
 
-      - name: Set-up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set-up Buildx
-        uses: docker/setup-buildx-action@v2
-
       - name: Build and push container
         uses: docker/build-push-action@v3
         with:
           file: legacy/Dockerfile
-          platforms: ${{ env.BUILD_PLATFORMS }}
           tags: ${{ env.IMAGE }}:${{ github.sha }},${{ env.IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
           push: true
