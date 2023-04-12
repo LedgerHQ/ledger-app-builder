@@ -1,11 +1,9 @@
-
 FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 
-RUN apk add python3 \
+RUN apk add libusb \
             py3-qt5 \
-            tesseract-ocr \
             qemu-arm \
-            libusb
+            tesseract-ocr
 
 ARG QEMU_BIN=qemu-arm
 
@@ -13,7 +11,7 @@ ARG QEMU_BIN=qemu-arm
 RUN ln -s "$QEMU_BIN" $(dirname $(which "$QEMU_BIN"))/$QEMU_BIN-static
 
 # Python packages building dependencies, can be removed afterwards
-ARG PYTHON_BUILD_DEPS=python3-dev,musl-dev
+ARG PYTHON_BUILD_DEPS=musl-dev,python3-dev
 
 # Install the building dependencies.
 RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
@@ -23,6 +21,3 @@ RUN pip3 install --extra-index-url https://test.pypi.org/simple/ ragger[tests,al
 
 # Cleanup, remove packages that aren't needed anymore
 RUN apk del $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
-
-# Dependency for app-boilerplate python functional tests
-RUN pip3 install pysha3

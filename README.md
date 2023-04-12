@@ -81,11 +81,10 @@ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u):$(id -g) -v "/t
 
 **Windows (with PowerShell)**
 
-Assuming you already have a running X server like [VcXsrv](https://sourceforge.net/projects/vcxsrv/).
+Assuming you already have a running X server like [VcXsrv](https://sourceforge.net/projects/vcxsrv/) configured to accept client connections.
 
 ```bash
-$fullPath = Resolve-Path .
-docker run --rm -ti -v "${fullPath}:/app" -e DISPLAY="host.docker.internal:0" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-dev-tools:latest
+docker run --rm -ti -v "$(Get-Location):/app" -e DISPLAY="host.docker.internal:0" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-dev-tools:latest
 ```
 
 **macOS**
@@ -96,12 +95,17 @@ Assuming you already have a running X server like [XQuartz](https://www.xquartz.
 sudo docker run --rm -ti -v "$(pwd -P):/app" --user $(id -u):$(id -g) -v "/tmp/.X11-unix:/tmp/.X11-unix" -e DISPLAY="host.docker.internal:0" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-dev-tools:latest
 ```
 
-Then you can test your app :
+Then you can test your app either with the Speculos emulator :
 
 ```bash
 # Run your app on Speculos
 root@656be163fe84:/app# speculos build/nanos/bin/app.elf --model nanos
-# Run ragger functional tests (assuming you have some implemented)
+```
+
+Or you can run your Ragger functional tests if you have implemented them :
+
+```bash
+# Run ragger functional tests
 root@656be163fe84:/app# pytest tests/ --tb=short -v --device nanos --display
 ```
 
