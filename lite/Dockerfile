@@ -20,7 +20,7 @@ RUN apk add \
         protoc \
         python3
 
-# Upgrade pip and install wheel
+# Install pip and wheel
 RUN python3 -m ensurepip --upgrade \
     && pip3 install --upgrade pip \
     && pip3 install wheel
