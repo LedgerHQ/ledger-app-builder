@@ -11,7 +11,7 @@ ARG QEMU_BIN=qemu-arm
 RUN ln -s "$QEMU_BIN" $(dirname $(which "$QEMU_BIN"))/$QEMU_BIN-static
 
 # Python packages building dependencies, can be removed afterwards
-ARG PYTHON_BUILD_DEPS=musl-dev,python3-dev
+ARG PYTHON_BUILD_DEPS=libffi-dev,musl-dev,python3-dev
 
 # Install the building dependencies.
 RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
