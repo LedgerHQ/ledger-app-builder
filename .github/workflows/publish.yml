@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - master
+  pull_request:
 
 env:
   REGISTRY: ghcr.io
@@ -73,7 +74,7 @@ jobs:
           platforms: ${{ env.BUILD_PLATFORMS }}
           tags: ${{ env.IMAGE }}:${{ github.sha }},${{ env.IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
-          push: true
+          push: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'workflow_dispatch' }}
 
   builder_legacy:
     name: App Builder Legacy
@@ -112,7 +113,7 @@ jobs:
           file: legacy/Dockerfile
           tags: ${{ env.IMAGE }}:${{ github.sha }},${{ env.IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
-          push: true
+          push: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'workflow_dispatch' }}
 
   builder:
     name: App Builder
@@ -158,7 +159,7 @@ jobs:
           platforms: ${{ env.BUILD_PLATFORMS }}
           tags: ${{ env.IMAGE }}:${{ github.sha }},${{ env.IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
-          push: true
+          push: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'workflow_dispatch' }}
 
   dev_tools:
     name: App Developer Tools
@@ -204,4 +205,4 @@ jobs:
           platforms: ${{ env.BUILD_PLATFORMS }}
           tags: ${{ env.IMAGE }}:${{ github.sha }},${{ env.IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
-          push: true
+          push: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/master') || github.event_name == 'workflow_dispatch' }}
