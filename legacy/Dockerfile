@@ -50,6 +50,9 @@ ENV PATH=${CARGO_HOME}/bin:${PATH}
 # Adding ARMV6M target to the default toolchain
 RUN rustup target add thumbv6m-none-eabi
 
+# Adding rust-src component
+RUN rustup component add rust-src
+
 # Python package to load app onto device
 RUN pip3 install ledgerblue
 
