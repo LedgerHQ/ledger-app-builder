@@ -9,7 +9,7 @@ RUN apk add rustup
 # Adding cargo binaries to PATH
 ENV PATH=${CARGO_HOME}/bin:${PATH}
 
-# Installing rustup and setting the default toolchain to the 1.70.0 stable channel.
+# Installing rustup and setting the default toolchain to the 1.67.0 stable channel.
 RUN rustup-init --default-toolchain 1.67.0 -y
 
 # Installing nightly channel version 1.67.0 as well.
