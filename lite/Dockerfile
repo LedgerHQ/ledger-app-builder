@@ -28,6 +28,9 @@ RUN python3 -m ensurepip --upgrade \
 # lcov is only present in the testing repository of the edge branch
 RUN apk add --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing lcov
 
+# This package is required by lcov
+RUN apk add gzip
+
 # So that it still supports things incorrectly pointing to python
 RUN ln -s python3 $(dirname $(which python3))/python
 
