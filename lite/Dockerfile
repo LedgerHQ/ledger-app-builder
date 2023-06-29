@@ -60,9 +60,9 @@ RUN git clone --branch v2.1.0-9 --depth 1 "$GIT_SERVER/nanos-secure-sdk.git" "$N
 ENV LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
 RUN git clone "$GIT_SERVER/ledger-secure-sdk.git" "$LEDGER_SECURE_SDK"
 
-# Latest Nano X SDK (OS nanox_2.2.1 => based on API_LEVEL 5 => clone on SDK tag v5.4.0)
+# Latest Nano X SDK (OS nanox_2.2.1 => based on API_LEVEL 5 => clone on SDK tag v5.4.1)
 ENV NANOX_SDK=/opt/nanox-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK" v5.4.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK" v5.4.1
 RUN echo nanox > $NANOX_SDK/.target
 
 # Latest Nano S+ SDK (OS nanos+_1.1.0 => based on API_LEVEL 1 => clone on SDK tag v1.6.0)
