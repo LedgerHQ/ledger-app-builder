@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.3] - 2023-07-07
+
+### Changed
+    - Add fonts to devtools image so that fonts in Qt apps are properly displayed.
+
 ## [3.2.2] - 2023-06-29
 
 ### Changed

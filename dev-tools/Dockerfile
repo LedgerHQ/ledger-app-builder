@@ -1,6 +1,8 @@
 FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 
 RUN apk add libusb \
+            ttf-dejavu \
+            fontconfig \
             py3-qt5 \
             qemu-arm \
             jq \
