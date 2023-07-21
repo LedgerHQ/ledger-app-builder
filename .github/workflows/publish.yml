@@ -37,12 +37,22 @@ jobs:
       
       - name: Check already existing image
         run: |
-          GHCR_TOKEN=$(echo ${{ secrets.GITHUB_TOKEN }} | base64)
-          TAGS=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}/tags/list)
-          TAG_TO_FIND=${{ steps.get-current-version.outputs.current_version }}
-          RESULT=$(echo "$TAGS" | jq --arg tag "$TAG_TO_FIND" '.tags | map(select(. == $tag))')
+          GHCR_TOKEN=$(echo ${{ secrets.GITHUB_TOKEN }} | base64)        
           
-          if [[ "${RESULT}" != "[]" ]]; then
+          # Get tags of all images from GHCR
+          TAGS_FULL=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}/tags/list)
+          TAGS_LITE=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}-lite/tags/list)
+          TAGS_LEGACY=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}-legacy/tags/list)
+          TAGS_DEV_TOOLS=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/ledger-app-dev-tools/tags/list)
+          
+          # Concatenate all tags from json fields in one string without brackets
+          ALL_TAGS=$(echo $TAGS_FULL $TAGS_LITE $TAGS_LEGACY $TAGS_DEV_TOOLS | jq -s '.[0].tags + .[1].tags + .[2].tags + .[3].tags' | tr -d '[]')
+          
+          # Get the tag to find
+          TAG_TO_FIND=${{ steps.get-current-version.outputs.current_version }}
+          
+          # Check if the tag to find is already present in the list of tags
+          if [[ "$ALL_TAGS" == *"$TAG_TO_FIND"* ]]; then
             echo "An image tagged with the latest changelog version already exists on GHCR. Please update the changelog."
             exit 1
           else
