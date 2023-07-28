@@ -49,6 +49,9 @@ RUN apk add -t python_build_deps eudev-dev \
                                  python3-dev \
                                  zlib-dev
 
+# temporary, until a fixed version of hidapi is released (with https://github.com/trezor/cython-hidapi/commit/749da69)
+RUN pip3 install 'Cython<3'
+
 # Python package to load app onto device
 RUN pip3 install ledgerblue tomli-w
 
