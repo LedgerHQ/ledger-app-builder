@@ -42,9 +42,15 @@ RUN apk add \
         zlib
 
 # Python packages building dependencies, can be removed afterwards
-ARG PYTHON_BUILD_DEPS=eudev-dev,jpeg-dev,libusb-dev,linux-headers,python3-dev,zlib-dev
+RUN apk add -t python_build_deps eudev-dev \
+                                 jpeg-dev \
+                                 libusb-dev \
+                                 linux-headers \
+                                 python3-dev \
+                                 zlib-dev
 
-RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
+# temporary, until a fixed version of hidapi is released (with https://github.com/trezor/cython-hidapi/commit/749da69)
+RUN pip3 install 'Cython<3'
 
 # Python package to load app onto device
 RUN pip3 install ledgerblue tomli-w
@@ -60,26 +66,26 @@ RUN git clone --branch v2.1.0-9 --depth 1 "$GIT_SERVER/nanos-secure-sdk.git" "$N
 ENV LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
 RUN git clone "$GIT_SERVER/ledger-secure-sdk.git" "$LEDGER_SECURE_SDK"
 
-# Latest Nano X SDK (OS nanox_2.2.1 => based on API_LEVEL 5 => clone on SDK tag v5.4.1)
+# Latest Nano X SDK (OS nanox_2.2.2 => based on API_LEVEL 5)
 ENV NANOX_SDK=/opt/nanox-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK" v5.4.1
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK" v5.4.2
 RUN echo nanox > $NANOX_SDK/.target
 
-# Latest Nano S+ SDK (OS nanos+_1.1.0 => based on API_LEVEL 1 => clone on SDK tag v1.6.0)
+# Latest Nano S+ SDK (OS nanos+_1.1.0 => based on API_LEVEL 1)
 ENV NANOSP_SDK=/opt/nanosplus-secure-sdk
 RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOSP_SDK" v1.6.0
 RUN echo nanos2 > $NANOSP_SDK/.target
 
-# Latest Stax SDK (OS stax_1.2.1 => based on API_LEVEL 11 => clone on SDK tag v11.1.0)
+# Latest Stax SDK (OS stax_1.3.0-rc1 => based on API_LEVEL 12)
 ENV STAX_SDK=/opt/stax-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v11.1.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v12.1.0
 RUN echo stax > $STAX_SDK/.target
 
 # Default SDK
 ENV BOLOS_SDK=$NANOS_SDK
 
 # Cleanup, remove packages that aren't needed anymore
-RUN apk del $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
+RUN apk del python_build_deps
 
 WORKDIR /app
 
