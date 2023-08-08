@@ -7,7 +7,8 @@ RUN apk add libusb \
             qemu-arm \
             jq \
             curl \
-            tesseract-ocr
+            tesseract-ocr \
+            mesa-dri-gallium
 
 ARG QEMU_BIN=qemu-arm
 
