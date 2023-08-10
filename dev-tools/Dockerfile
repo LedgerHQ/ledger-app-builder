@@ -15,14 +15,11 @@ ARG QEMU_BIN=qemu-arm
 # -static version is not available in Alpine repositories
 RUN ln -s "$QEMU_BIN" $(dirname $(which "$QEMU_BIN"))/$QEMU_BIN-static
 
-# Python packages building dependencies, can be removed afterwards
-ARG PYTHON_BUILD_DEPS=libffi-dev,python3-dev
+# Python packages building dependencies
+ARG PYTHON_BUILD_DEPS=libffi-dev,python3-dev,py3-virtualenv
 
 # Install the building dependencies.
 RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
 
 # Install test tools (Ragger framework, Speculos emulator, Ledgerblue...)
 RUN pip3 install ragger[tests,all_backends]
-
-# Cleanup, remove packages that aren't needed anymore
-RUN apk del $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')

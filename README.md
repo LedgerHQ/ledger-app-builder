@@ -29,32 +29,32 @@ $ sudo docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-legacy
 
 ## Compile your app in the container
 
-The `BOLOS_SDK` variable is used to specify the target SDK, allowing to compile the application for each Ledger device. 
+The `BOLOS_SDK` variable is used to specify the target SDK, allowing to compile the application for each Ledger device.
 
 In the source folder of your application, you can compile with the following commands:
 
 * For Nano S
 ```bash
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
-root@656be163fe84:/app# BOLOS_SDK=$NANOS_SDK make
+bash$ BOLOS_SDK=$NANOS_SDK make
 ```
 
 * For Nano X
 ```bash
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
-root@656be163fe84:/app# BOLOS_SDK=$NANOX_SDK make
+bash$ BOLOS_SDK=$NANOX_SDK make
 ```
 
 * For Nano S+
 ```bash
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
-root@656be163fe84:/app# BOLOS_SDK=$NANOSP_SDK make
+bash$ BOLOS_SDK=$NANOSP_SDK make
 ```
 
 * For Stax
 ```bash
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
-root@656be163fe84:/app# BOLOS_SDK=$STAX_SDK make
+bash$ BOLOS_SDK=$STAX_SDK make
 ```
 
 ### Code static analysis
@@ -63,7 +63,7 @@ The Docker images include the [Clang Static Analyzer](https://clang-analyzer.llv
 
 ```bash
 $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
-root@656be163fe84:/app# BOLOS_SDK=$NANOS_SDK make scan-build
+bash$ BOLOS_SDK=$NANOS_SDK make scan-build
 ```
 
 ## App testing
@@ -99,14 +99,19 @@ Then you can test your app either with the Speculos emulator :
 
 ```bash
 # Run your app on Speculos
-root@656be163fe84:/app# speculos build/nanos/bin/app.elf --model nanos
+bash$ speculos build/nanos/bin/app.elf --model nanos
 ```
 
 Or you can run your Ragger functional tests if you have implemented them :
 
 ```bash
+# Creating a virtualenv so that the non-root user can install Python dependencies
+bash$ python -m virtualenv venv --system-site-package
+bash$ source ./venv/bin/activate
+# Install tests dependencies
+(venv) bash$ pip install -r tests/requirements.txt
 # Run ragger functional tests
-root@656be163fe84:/app# pytest tests/ --tb=short -v --device nanos --display
+(venv) bash$ python -m pytest tests/ --tb=short -v --device nanos --display
 ```
 
 ## Load the app on a physical device
@@ -118,7 +123,7 @@ Your physical device must be connected, unlocked and the screen showing the dash
 
 ```bash
 $ sudo docker run --rm -ti  -v "$(realpath .):/app" --privileged -v "/dev/bus/usb:/dev/bus/usb" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
-root@656be163fe84:/app# BOLOS_SDK=$NANOS_SDK make load
+bash$ BOLOS_SDK=$NANOS_SDK make load
 ```
 
 ## Build the container image
