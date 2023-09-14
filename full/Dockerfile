@@ -1,5 +1,8 @@
 FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 
+# Add curl for Rust buildchain
+RUN apk add curl
+
 # Define rustup/cargo home directories
 ENV RUSTUP_HOME=/opt/rustup \
     CARGO_HOME=/opt/.cargo
