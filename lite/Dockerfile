@@ -3,6 +3,13 @@ ENV LANG C.UTF-8
 
 RUN apk update
 RUN apk upgrade
+
+# Adding LLVM-15 APT repository and installing it
+# LLVM-15 is only present starting from the v3.17 Alpine version
+RUN apk add --repository=http://dl-cdn.alpinelinux.org/alpine/v3.17/main llvm15
+RUN ln -s /usr/lib/llvm15/bin/llvm-objcopy /usr/bin/llvm-objcopy-15
+RUN ln -s /usr/lib/llvm15/bin/llvm-nm /usr/bin/llvm-nm-15
+
 RUN apk add \
         bash \
         clang \

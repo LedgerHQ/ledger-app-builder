@@ -15,6 +15,9 @@ RUN apt-get install -qy \
         clang-$LLVM_VERSION \
         cmake \
         curl \
+        wget \
+        gpg-agent \
+        software-properties-common \
         git \
         lld-$LLVM_VERSION \
         make \
@@ -61,6 +64,12 @@ RUN rustup component add rust-src --toolchain $RUST_NIGHTLY_VERSION
 
 # Add cargo ledger (needs a version of Rust >= 1.70)
 RUN cargo install --locked --git=https://github.com/LedgerHQ/cargo-ledger.git --rev 1.1.0 cargo-ledger
+
+# Adding LLVM-15 APT repository and installing it
+RUN wget --no-check-certificate -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+RUN add-apt-repository -y "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main"
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends llvm-15
 
 # Python package to load app onto device
 RUN pip3 install ledgerblue
