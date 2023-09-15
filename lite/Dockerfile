@@ -3,6 +3,13 @@ ENV LANG C.UTF-8
 
 RUN apk update
 RUN apk upgrade
+
+# Adding LLVM-15 APT repository and installing it
+# LLVM-15 is only present starting from the v3.17 Alpine version
+RUN apk add --repository=http://dl-cdn.alpinelinux.org/alpine/v3.17/main llvm15
+RUN ln -s /usr/lib/llvm15/bin/llvm-objcopy /usr/bin/llvm-objcopy-15
+RUN ln -s /usr/lib/llvm15/bin/llvm-nm /usr/bin/llvm-nm-15
+
 RUN apk add \
         bash \
         clang \
@@ -76,9 +83,9 @@ ENV NANOSP_SDK=/opt/nanosplus-secure-sdk
 RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOSP_SDK" v1.8.0
 RUN echo nanos2 > $NANOSP_SDK/.target
 
-# Latest Stax SDK (OS stax_1.3.0-rc3 => based on API_LEVEL 12)
+# Latest Stax SDK (OS stax_1.3.0-rc4 => based on API_LEVEL 13)
 ENV STAX_SDK=/opt/stax-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v12.3.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v13.0.0
 RUN echo stax > $STAX_SDK/.target
 
 # Default SDK
