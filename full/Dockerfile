@@ -15,17 +15,17 @@ RUN apk add rustup
 # Adding cargo binaries to PATH
 ENV PATH=${CARGO_HOME}/bin:${PATH}
 
-# Installing rustup and setting the default toolchain to the RUST_STABLE_VERSION stable channel.
-RUN rustup-init --default-toolchain $RUST_STABLE_VERSION -y
+# Installing rustup and setting the default toolchain to the RUST_NIGHTLY_VERSION nightly channel.
+RUN rustup-init --default-toolchain $RUST_NIGHTLY_VERSION -y
 
-# Installing nightly channel version RUST_NIGHTLY_VERSION as well.
-RUN rustup install $RUST_NIGHTLY_VERSION
+# Installing stable channel version RUST_STABLE_VERSION as well (for cargo-ledger installation).
+RUN rustup install $RUST_STABLE_VERSION
 
-# Adding ARMV6M target to the installed toolchains
+# Adding ARMV6M target to the installed nightly toolchain
 RUN rustup target add thumbv6m-none-eabi --toolchain $RUST_NIGHTLY_VERSION
 
 # Adding rust-src component to nightly channel
 RUN rustup component add rust-src --toolchain $RUST_NIGHTLY_VERSION
 
 # Add cargo ledger (needs a version of Rust >= 1.70)
-RUN cargo install --locked --git=https://github.com/LedgerHQ/cargo-ledger.git --rev 1.1.0 cargo-ledger
+RUN cargo +$RUST_STABLE_VERSION install --locked --git=https://github.com/LedgerHQ/cargo-ledger.git --rev 1.1.0 cargo-ledger
