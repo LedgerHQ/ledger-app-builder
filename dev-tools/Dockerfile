@@ -6,7 +6,6 @@ RUN apk add libusb \
             py3-qt5 \
             qemu-arm \
             jq \
-            curl \
             tesseract-ocr \
             mesa-dri-gallium
 
