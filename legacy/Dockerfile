@@ -65,6 +65,9 @@ RUN rustup component add rust-src --toolchain $RUST_NIGHTLY_VERSION
 # Add cargo ledger (needs a version of Rust >= 1.70)
 RUN cargo +$RUST_STABLE_VERSION install --locked --git=https://github.com/LedgerHQ/cargo-ledger.git --rev 1.1.0 cargo-ledger
 
+# Setup cargo ledger (install JSON target files)
+RUN cargo ledger setup
+
 # Adding LLVM-15 APT repository and installing it
 RUN wget --no-check-certificate -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 RUN add-apt-repository -y "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main"

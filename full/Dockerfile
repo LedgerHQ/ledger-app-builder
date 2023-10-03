@@ -4,7 +4,7 @@ ARG RUST_STABLE_VERSION=1.72.0
 ARG RUST_NIGHTLY_VERSION=nightly-2022-12-02
 
 # Add curl for Rust buildchain
-RUN apk add curl
+RUN apk add --update-cache --upgrade curl
 
 # Define rustup/cargo home directories
 ENV RUSTUP_HOME=/opt/rustup \
@@ -29,3 +29,6 @@ RUN rustup component add rust-src --toolchain $RUST_NIGHTLY_VERSION
 
 # Add cargo ledger (needs a version of Rust >= 1.70)
 RUN cargo +$RUST_STABLE_VERSION install --locked --git=https://github.com/LedgerHQ/cargo-ledger.git --rev 1.1.0 cargo-ledger
+
+# Setup cargo ledger (install JSON target files)
+RUN cargo ledger setup
