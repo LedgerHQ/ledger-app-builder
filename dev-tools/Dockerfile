@@ -5,7 +5,6 @@ RUN apk add libusb \
             fontconfig \
             py3-qt5 \
             qemu-arm \
-            jq \
             tesseract-ocr \
             mesa-dri-gallium
 
