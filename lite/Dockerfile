@@ -20,6 +20,7 @@ RUN apk add \
         doxygen \
         gcc-arm-none-eabi \
         git \
+        jq \
         lld \
         make \
         musl-dev \
