@@ -1,4 +1,5 @@
-FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+# FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+FROM ledger-app-builder:lite
 
 ARG RUST_STABLE_VERSION=1.72.0
 ARG RUST_NIGHTLY_VERSION=nightly-2022-12-02
