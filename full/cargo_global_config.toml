@@ -1,6 +1,4 @@
 [unstable]
-build-std = ["core"]
-build-std-features = ["compiler-builtins-mem"]
 # Prevent bindgen tool to fail on Alpine (with '[host]' section)
 # see https://ledger.slack.com/archives/C04SY25SREX/p1698055418107969
 host-config = true
