@@ -32,3 +32,6 @@ RUN cargo +$RUST_STABLE_VERSION install --locked --git=https://github.com/Ledger
 
 # Setup cargo ledger (install JSON target files)
 RUN cargo ledger setup
+
+# Add a global Cargo config file (includes mandatory unstable features used to build our apps) 
+ADD ./full/cargo_global_config.toml $CARGO_HOME/config.toml
