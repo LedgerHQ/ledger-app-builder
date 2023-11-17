@@ -28,7 +28,7 @@ RUN rustup target add thumbv6m-none-eabi --toolchain $RUST_NIGHTLY_VERSION
 RUN rustup component add rust-src --toolchain $RUST_NIGHTLY_VERSION
 
 # Add cargo ledger (needs a version of Rust >= 1.70)
-RUN cargo +$RUST_STABLE_VERSION install --locked --git=https://github.com/LedgerHQ/cargo-ledger.git --rev 1.1.0 cargo-ledger
+RUN cargo +$RUST_STABLE_VERSION install --locked --git=https://github.com/LedgerHQ/cargo-ledger.git --rev 1.1.1 cargo-ledger
 
 # Setup cargo ledger (install JSON target files)
 RUN cargo ledger setup

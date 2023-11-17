@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
     - Update NanoX target to last prod OS - no API_LEVEL change
+    - Bump cargo ledger version to 1.1.1
 
 ## [3.9.0] - 2023-10-25
 
