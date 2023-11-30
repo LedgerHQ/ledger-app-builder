@@ -21,3 +21,11 @@ RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
 
 # Install test tools (Ragger framework, Speculos emulator, Ledgerblue...)
 RUN pip3 install ragger[tests,all_backends]
+
+# Add dummy Cargo.toml to allow cargo fetch
+# Useful when spawning a container to reduce the build time
+ADD ./dev-tools/Cargo.toml ./Cargo.toml
+# Fetch all dependencies
+RUN cargo fetch
+# Remove dummy Cargo.toml, we don't need it anymore
+RUN rm ./Cargo.toml

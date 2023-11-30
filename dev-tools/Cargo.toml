@@ -1,0 +1,14 @@
+[package]
+name = "Dummy"
+version = "1.0.0"
+authors = ["Ledger"]
+edition = "2021"
+
+[dependencies]
+ledger_device_sdk = "1.*"
+ledger_device_ui_sdk = "1.*"
+ledger_secure_sdk_sys = "1.*"
+include_gif = "1.*"
+
+[lib]
+path = "/dev/null"
