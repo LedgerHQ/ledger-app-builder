@@ -68,7 +68,7 @@ ARG GIT_SERVER=https://github.com/LedgerHQ
 # Latest Nano S SDK
 # Will switch to the unified SDK for next OS release.
 ENV NANOS_SDK=/opt/nanos-secure-sdk
-RUN git clone --branch v2.1.0-13 --depth 1 "$GIT_SERVER/nanos-secure-sdk.git" "$NANOS_SDK"
+RUN git clone --branch v2.1.0-14 --depth 1 "$GIT_SERVER/nanos-secure-sdk.git" "$NANOS_SDK"
 
 # Unified SDK
 ENV LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
