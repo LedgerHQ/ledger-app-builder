@@ -68,7 +68,7 @@ ARG GIT_SERVER=https://github.com/LedgerHQ
 # Latest Nano S SDK
 # Will switch to the unified SDK for next OS release.
 ENV NANOS_SDK=/opt/nanos-secure-sdk
-RUN git clone --branch v2.1.0-12 --depth 1 "$GIT_SERVER/nanos-secure-sdk.git" "$NANOS_SDK"
+RUN git clone --branch v2.1.0-13 --depth 1 "$GIT_SERVER/nanos-secure-sdk.git" "$NANOS_SDK"
 
 # Unified SDK
 ENV LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
@@ -76,17 +76,17 @@ RUN git clone "$GIT_SERVER/ledger-secure-sdk.git" "$LEDGER_SECURE_SDK"
 
 # Latest Nano X SDK (OS nanox_2.2.3 => based on API_LEVEL 5)
 ENV NANOX_SDK=/opt/nanox-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK" v5.7.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK" v5.8.0
 RUN echo nanox > $NANOX_SDK/.target
 
 # Latest Nano S+ SDK (OS nanos+_1.1.0 => based on API_LEVEL 1)
 ENV NANOSP_SDK=/opt/nanosplus-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOSP_SDK" v1.9.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOSP_SDK" v1.10.0
 RUN echo nanos2 > $NANOSP_SDK/.target
 
-# Latest Stax SDK (OS stax_1.3.0 => based on API_LEVEL 13)
+# Latest Stax SDK (OS stax_1.4.0-rc1 => based on API_LEVEL 14)
 ENV STAX_SDK=/opt/stax-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v13.1.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v14.1.0
 RUN echo stax > $STAX_SDK/.target
 
 # Default SDK
