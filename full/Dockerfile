@@ -32,13 +32,13 @@ RUN apk add -t python_build_deps python3-dev \
                                  libffi-dev
 
 # Install ledgerctl, which is used by cargo ledger for loading or dumping an APDU app file.
-RUN pip3 install git+https://github.com/LedgerHQ/ledgerctl
+RUN pip3 install ledgerwallet
 
 # Cleanup, remove packages that aren't needed anymore
 RUN apk del python_build_deps
 
 # Add cargo ledger (needs a version of Rust >= 1.70)
-RUN cargo +$RUST_STABLE_VERSION install --locked --git=https://github.com/LedgerHQ/cargo-ledger.git --rev 1.1.1 cargo-ledger
+RUN cargo +$RUST_STABLE_VERSION install cargo-ledger
 
 # Setup cargo ledger (install JSON target files)
 RUN cargo ledger setup
