@@ -70,7 +70,7 @@ jobs:
 
       - name: Get changes
         id: get-changes
-        uses: tj-actions/changed-files@v33
+        uses: tj-actions/changed-files@v41
     outputs:
       modified_files: ${{ steps.get-changes.outputs.all_modified_files }}
 
