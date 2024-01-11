@@ -7,8 +7,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 ARG LLVM_VERSION=12
 
-ARG RUST_STABLE_VERSION=1.72.0
-ARG RUST_NIGHTLY_VERSION=nightly-2023-12-20
+ARG RUST_STABLE_VERSION=1.75.0
+ARG RUST_NIGHTLY_VERSION=nightly-2023-11-10
 
 RUN apt-get update && apt-get upgrade -qy
 RUN apt-get install -qy \
