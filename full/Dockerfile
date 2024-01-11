@@ -38,7 +38,7 @@ RUN pip3 install ledgerwallet==0.4.0
 RUN apk del python_build_deps
 
 # Add cargo ledger (needs a version of Rust >= 1.70)
-RUN cargo +$RUST_STABLE_VERSION install --version 1.2.1 cargo-ledger
+RUN cargo +$RUST_STABLE_VERSION install --version 1.2.2 cargo-ledger
 
 # Setup cargo ledger (install JSON target files)
 RUN cargo ledger setup
