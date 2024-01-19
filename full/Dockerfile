@@ -1,7 +1,7 @@
 FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 
-ARG RUST_STABLE_VERSION=1.72.0
-ARG RUST_NIGHTLY_VERSION=nightly-2022-12-02
+ARG RUST_STABLE_VERSION=1.75.0
+ARG RUST_NIGHTLY_VERSION=nightly-2023-11-10
 
 # Add curl for Rust buildchain
 RUN apk add --update-cache --upgrade curl

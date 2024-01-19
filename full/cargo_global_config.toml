@@ -3,10 +3,7 @@
 # see https://ledger.slack.com/archives/C04SY25SREX/p1698055418107969
 host-config = true
 target-applies-to-host = true
-sparse-registry = true
 
 [host]
 rustflags = ["-Ctarget-feature=-crt-static"]
 
-[registries.crates-io]
-protocol = "sparse"
