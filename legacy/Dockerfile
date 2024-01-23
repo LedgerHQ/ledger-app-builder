@@ -10,6 +10,10 @@ ARG LLVM_VERSION=12
 ARG RUST_STABLE_VERSION=1.75.0
 ARG RUST_NIGHTLY_VERSION=nightly-2023-11-10
 
+ENV RUST_STABLE=$RUST_STABLE_VERSION
+ENV RUST_NIGHTLY=$RUST_NIGHTLY_VERSION
+
+
 RUN apt-get update && apt-get upgrade -qy
 RUN apt-get install -qy \
         clang-$LLVM_VERSION \
@@ -59,27 +63,29 @@ ENV PATH=/opt/gcc-arm-none-eabi-${TOOLCHAIN_VERSION}/bin:$PATH \
 # Adding cargo binaries to PATH
 ENV PATH=${CARGO_HOME}/bin:${PATH}
 
-# Installing rustup to manage rust toolchainsand setting the default toolchain to the RUST_NIGHTLY_VERSION nightly channel.
+# Installing rustup to manage rust toolchains and setting the default toolchain to the RUST_STABLE_VERSION stable channel.
 RUN curl https://sh.rustup.rs -sSf | \
-    sh -s -- --default-toolchain $RUST_NIGHTLY_VERSION -y
+    sh -s -- --default-toolchain $RUST_STABLE_VERSION -y
 
-# Installing stable channel version RUST_STABLE_VERSION as well (for cargo-ledger installation).
-RUN rustup install $RUST_STABLE_VERSION
+# Installing nightly channel version RUST_NIGHTLY_VERSION
+RUN rustup install $RUST_NIGHTLY_VERSION
 
-# Adding ARMV6M target to the installed nightly toolchain
+# Adding ARMV6M target to the installed stable toolchain
+RUN rustup target add thumbv6m-none-eabi --toolchain $RUST_STABLE_VERSION
 RUN rustup target add thumbv6m-none-eabi --toolchain $RUST_NIGHTLY_VERSION
 
-# Adding rust-src component to nightly channel
+# Adding rust-src component to nightly and stable channels
 RUN rustup component add rust-src --toolchain $RUST_NIGHTLY_VERSION
+RUN rustup component add rust-src --toolchain $RUST_STABLE_VERSION
 
 # Add ledgerwallet python package used by cargo ledger to generate the app APDU file
 RUN pip3 install ledgerwallet==0.4.0
 
-# Add cargo ledger (needs a version of Rust >= 1.70)
-RUN cargo +$RUST_STABLE_VERSION install --version 1.2.3 cargo-ledger
+# Add cargo ledger
+RUN cargo +$RUST_STABLE_VERSION install --version 1.2.4 cargo-ledger
 
 # Setup cargo ledger (install JSON target files)
-RUN cargo ledger setup
+RUN cargo +$RUST_NIGHTLY_VERSION ledger setup
 
 # Adding LLVM-15 APT repository and installing it
 RUN wget --no-check-certificate -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
