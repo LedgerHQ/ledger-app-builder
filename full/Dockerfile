@@ -3,6 +3,9 @@ FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 ARG RUST_STABLE_VERSION=1.75.0
 ARG RUST_NIGHTLY_VERSION=nightly-2023-11-10
 
+ENV RUST_STABLE=$RUST_STABLE_VERSION
+ENV RUST_NIGHTLY=$RUST_NIGHTLY_VERSION
+
 # Add curl for Rust buildchain
 RUN apk add --update-cache --upgrade curl
 
@@ -15,17 +18,19 @@ RUN apk add rustup
 # Adding cargo binaries to PATH
 ENV PATH=${CARGO_HOME}/bin:${PATH}
 
-# Installing rustup and setting the default toolchain to the RUST_NIGHTLY_VERSION nightly channel.
-RUN rustup-init --default-toolchain $RUST_NIGHTLY_VERSION -y
+# Installing rustup and setting the default toolchain to the RUST_STABLE_VERSION channel.
+RUN rustup-init --default-toolchain $RUST_STABLE_VERSION -y
 
-# Installing stable channel version RUST_STABLE_VERSION as well (for cargo-ledger installation).
-RUN rustup install $RUST_STABLE_VERSION
+# Installing nightly channel version RUST_NIGHTLY_VERSION (for Rust applications).
+RUN rustup install $RUST_NIGHTLY_VERSION
 
-# Adding ARMV6M target to the installed nightly toolchain
+# Adding ARMV6M target to the installed stable and nightly toolchains
+RUN rustup target add thumbv6m-none-eabi --toolchain $RUST_STABLE_VERSION
 RUN rustup target add thumbv6m-none-eabi --toolchain $RUST_NIGHTLY_VERSION
 
-# Adding rust-src component to nightly channel
+# Adding rust-src component to nightly and stable channels
 RUN rustup component add rust-src --toolchain $RUST_NIGHTLY_VERSION
+RUN rustup component add rust-src --toolchain $RUST_STABLE_VERSION
 
 # Python packages building dependencies, can be removed afterwards
 RUN apk add -t python_build_deps python3-dev \
@@ -37,11 +42,11 @@ RUN pip3 install ledgerwallet==0.4.0
 # Cleanup, remove packages that aren't needed anymore
 RUN apk del python_build_deps
 
-# Add cargo ledger (needs a version of Rust >= 1.70)
-RUN cargo +$RUST_STABLE_VERSION install --version 1.2.3 cargo-ledger
+# Add cargo ledger
+RUN cargo +$RUST_STABLE_VERSION install --version 1.2.4 cargo-ledger
 
-# Setup cargo ledger (install JSON target files)
-RUN cargo ledger setup
+# Setup cargo ledger (install JSON target files) for nightly
+RUN cargo +$RUST_NIGHTLY_VERSION ledger setup
 
 # Add a global Cargo config file (includes mandatory unstable features used to build our apps) 
 ADD ./full/cargo_global_config.toml $CARGO_HOME/config.toml
