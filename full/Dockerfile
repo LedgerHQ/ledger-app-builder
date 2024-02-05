@@ -43,9 +43,9 @@ RUN pip3 install ledgerwallet==0.4.0
 RUN apk del python_build_deps
 
 # Add cargo ledger
-RUN cargo +$RUST_STABLE_VERSION install --version 1.2.4 cargo-ledger
+RUN cargo +$RUST_STABLE_VERSION install --version 1.3.0 cargo-ledger
 
-# Setup cargo ledger (install JSON target files) for nightly
+# Setup cargo ledger (install JSON target files and custom link script) for nightly
 RUN cargo +$RUST_NIGHTLY_VERSION ledger setup
 
 # Add a global Cargo config file (includes mandatory unstable features used to build our apps) 
