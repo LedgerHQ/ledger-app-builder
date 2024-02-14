@@ -20,4 +20,4 @@ ARG PYTHON_BUILD_DEPS=libffi-dev,python3-dev,py3-virtualenv
 RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
 
 # Install test tools (Ragger framework, Speculos emulator, Ledgerblue...)
-RUN pip3 install ragger[tests,all_backends]
+RUN pip3 install ragger[tests,all_backends]==1.14.3 
