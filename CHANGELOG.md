@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.16.1] - 2024-02-09
 
 ### Changed
-    - Deploy new dev-tools image to get latest ragger version.
+    - [dev-tools] : specify latest version of ragger.
 
 ## [3.16.0] - 2024-02-08
 
