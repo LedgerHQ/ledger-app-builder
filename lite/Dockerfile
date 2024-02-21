@@ -84,9 +84,9 @@ ENV NANOSP_SDK=/opt/nanosplus-secure-sdk
 RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOSP_SDK" v5.9.0
 RUN echo nanos2 > $NANOSP_SDK/.target
 
-# Latest Stax SDK (OS stax_1.4.0-rc1 => based on API_LEVEL 14)
+# Latest Stax SDK (OS stax_1.4.0-rc2 => based on API_LEVEL 15)
 ENV STAX_SDK=/opt/stax-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v14.2.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v15.1.0
 RUN echo stax > $STAX_SDK/.target
 
 # Default SDK
