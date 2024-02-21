@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.17.0] - 2024-02-21
+
+### Changed
+    - Bump Stax SDK version to target stax_1.4.0-rc2
+    - Bump SDK version with last patchs
+    - dev-tools: Bump ragger version to 1.14.4
+
 ## [3.16.1] - 2024-02-09
 
 ### Changed
