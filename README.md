@@ -18,13 +18,13 @@ They can be pulled via these commands:
 
 ```bash
 # pull the default, full image, built from `full/Dockerfile`
-$ sudo docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+$ docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 # pull the lite image, built from `lite/Dockerfile`
-$ sudo docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+$ docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 # pull the dev-tools image, built from `dev-tools/Dockerfile`
-$ sudo docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-dev-tools:latest
+$ docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-dev-tools:latest
 # pull the legacy image, built from `legacy/Dockerfile`
-$ sudo docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-legacy:latest
+$ docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-legacy:latest
 ```
 
 ## Compile your app in the container
