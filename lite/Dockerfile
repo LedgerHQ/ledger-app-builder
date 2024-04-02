@@ -89,6 +89,11 @@ ENV STAX_SDK=/opt/stax-secure-sdk
 RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v15.2.0
 RUN echo stax > $STAX_SDK/.target
 
+# Latest Flex SDK (OS stax_1.4.0-rc3 => based on API_LEVEL 18)
+ENV FLEX_SDK=/opt/flex-secure-sdk
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$FLEX_SDK" v18.0.1
+RUN echo flex > $FLEX_SDK/.target
+
 # Default SDK
 ENV BOLOS_SDK=$NANOS_SDK
 
