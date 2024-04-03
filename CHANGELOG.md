@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
     - Flex target
 
+### Changed
+    - dev-tools: Bump ragger version to 1.16+
+
 ## [3.18.0] - 2024-03-27
 
 ### Changed
