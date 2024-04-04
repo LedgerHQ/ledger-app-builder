@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.19.0] - 2024-04-03
+
+### Added
+    - Flex target
+
+### Changed
+    - dev-tools: Bump ragger version to 1.16+
+
 ## [3.18.0] - 2024-03-27
 
 ### Changed
@@ -60,7 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.12.1] - 2024-01-11
 
 ### Changed
-    - Update cargo-ledger 
+    - Update cargo-ledger
 
 ## [3.12.0] - 2024-01-10
 
@@ -110,7 +118,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.9.0] - 2023-10-25
 
 ### Added
-    - Add a Cargo config global file in full image 
+    - Add a Cargo config global file in full image
 
 ## [3.8.0] - 2023-10-09
 

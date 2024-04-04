@@ -57,6 +57,12 @@ $ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g
 bash$ BOLOS_SDK=$STAX_SDK make
 ```
 
+* For Flex
+```bash
+$ sudo docker run --rm -ti -v "$(realpath .):/app" --user $(id -u $USER):$(id -g $USER) ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+bash$ BOLOS_SDK=$FLEX_SDK make
+```
+
 ### Code static analysis
 
 The Docker images include the [Clang Static Analyzer](https://clang-analyzer.llvm.org/), which can be invoked with:
@@ -116,7 +122,7 @@ bash$ source ./venv/bin/activate
 
 ## Load the app on a physical device
 
-:warning: Only Nano S, Nano S+ and Stax devices allow application side-loading. This section will not work with a Nano X.
+:warning: Only Nano S, Nano S+, Stax and Flex devices allow application side-loading. This section will not work with a Nano X.
 
 To load the app from the container, you will need additional docker arguments in order to allow Docker to access your USB port.
 Your physical device must be connected, unlocked and the screen showing the dashboard (not inside an application). Same as for compilation, `BOLOS_SDK` variable is used to specify the target device. Use the following docker command to load the app (here for Nano S device) :
