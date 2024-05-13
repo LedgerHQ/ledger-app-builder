@@ -34,7 +34,7 @@ RUN python3 -m ensurepip --upgrade \
     && pip3 install wheel
 
 # lcov is only present in the testing repository of the edge branch
-RUN apk add --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing lcov
+RUN apk add --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community lcov
 
 # This package is required by lcov
 RUN apk add gzip
