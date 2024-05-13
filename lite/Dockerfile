@@ -34,7 +34,7 @@ RUN python3 -m ensurepip --upgrade \
     && pip3 install wheel
 
 # lcov is only present in the testing repository of the edge branch
-RUN apk add --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing lcov
+RUN apk add --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community lcov
 
 # This package is required by lcov
 RUN apk add gzip
@@ -65,14 +65,14 @@ RUN pip3 install ledgerblue tomli-w
 
 ARG GIT_SERVER=https://github.com/LedgerHQ
 
-# Latest Nano S SDK
-# Will switch to the unified SDK for next OS release.
-ENV NANOS_SDK=/opt/nanos-secure-sdk
-RUN git clone --branch v2.1.0-19 --depth 1 "$GIT_SERVER/nanos-secure-sdk.git" "$NANOS_SDK"
-
 # Unified SDK
 ENV LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
 RUN git clone "$GIT_SERVER/ledger-secure-sdk.git" "$LEDGER_SECURE_SDK"
+
+# Latest Nano S SDK (OS nanos_2.1.0 => based on API_LEVEL LNS)
+ENV NANOS_SDK=/opt/nanos-secure-sdk
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOS_SDK" lns-2.1.0-v20.0
+RUN echo nanos > $NANOS_SDK/.target
 
 # Latest Nano X SDK (OS nanox_2.2.3 => based on API_LEVEL 5)
 ENV NANOX_SDK=/opt/nanox-secure-sdk
