@@ -73,27 +73,27 @@ RUN git clone "$GIT_SERVER/ledger-secure-sdk.git" "$LEDGER_SECURE_SDK"
 
 # Latest Nano S SDK (OS nanos_2.1.0 => based on API_LEVEL LNS)
 ENV NANOS_SDK=/opt/nanos-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOS_SDK" lns-2.1.0-v20.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOS_SDK" lns-2.1.0-v21.0
 RUN echo nanos > $NANOS_SDK/.target
 
 # Latest Nano X SDK (OS nanox_2.2.3 => based on API_LEVEL 5)
 ENV NANOX_SDK=/opt/nanox-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK" v5.11.1
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK" v5.12.0
 RUN echo nanox > $NANOX_SDK/.target
 
 # Latest Nano S+ SDK (OS nanos+_1.1.1 => based on API_LEVEL 5)
 ENV NANOSP_SDK=/opt/nanosplus-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOSP_SDK" v5.11.1
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOSP_SDK" v5.12.0
 RUN echo nanos2 > $NANOSP_SDK/.target
 
 # Latest Stax SDK (OS stax_1.4.0-rc2 => based on API_LEVEL 15)
 ENV STAX_SDK=/opt/stax-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v15.4.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v15.5.0
 RUN echo stax > $STAX_SDK/.target
 
-# Latest Flex SDK (OS flex_0.2.0-rc2 => based on API_LEVEL 18)
+# Latest Flex SDK (OS flex_1.0.0-rc1 => based on API_LEVEL 19)
 ENV FLEX_SDK=/opt/flex-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$FLEX_SDK" v18.3.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$FLEX_SDK" v19.0.0
 RUN echo flex > $FLEX_SDK/.target
 
 # Default SDK
