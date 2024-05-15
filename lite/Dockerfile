@@ -33,10 +33,12 @@ RUN python3 -m ensurepip --upgrade \
     && pip3 install --upgrade pip \
     && pip3 install wheel
 
-# lcov is only present in the testing repository of the edge branch
-RUN apk add --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community lcov
+# lcov is only present in the community repository of the edge branch but its perl-json-xs
+# dependency won't work on 3.15 so install it (from the 3.15 repo) first
+RUN apk add perl-json-xs && \
+    apk add --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community lcov
 
-# This package is required by lcov
+# This package is required by lcov (but somehow not listed as such in the Alpine package)
 RUN apk add gzip
 
 # So that it still supports things incorrectly pointing to python
