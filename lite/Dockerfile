@@ -63,7 +63,7 @@ RUN apk add -t python_build_deps eudev-dev \
 RUN pip3 install 'Cython<3'
 
 # Python package to load app onto device
-RUN pip3 install ledgerblue tomli-w
+RUN pip3 install "ledgerblue==0.1.54" tomli-w
 
 ARG GIT_SERVER=https://github.com/LedgerHQ
 

@@ -5,11 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.24.0] - 2024-05-21
+
+### Changed
+    - lite: Bump Ledgerblue version to 0.1.54
+
 ## [3.23.0] - 2024-05-15
 
 ### Changed
     - Bump all devices SDK version
-    - dev-tools: Bump ragger version to 1.19.0 and Speculos to 0.9.1 (enabling Flex swipe)
+    - dev-tools: Bump Ragger version to 1.19.0 and Speculos to 0.9.1 (enabling Flex swipe)
 
 ## [3.22.1] - 2024-05-15
 
@@ -30,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
     - Bump Flex SDK version
-    - dev-tools: Bump ragger version to 1.18.0 (enabling Flex testing) and Speculos to 0.8.6
+    - dev-tools: Bump Ragger version to 1.18.0 (enabling Flex testing) and Speculos to 0.8.6
 
 ## [3.19.0] - 2024-04-03
 
@@ -38,25 +43,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Flex target
 
 ### Changed
-    - dev-tools: Bump ragger version to 1.16+
+    - dev-tools: Bump Ragger version to 1.16+
 
 ## [3.18.0] - 2024-03-27
 
 ### Changed
     - Bump SDK versions with last patchs
-    - dev-tools: Bump ragger version to 1.16.0
+    - dev-tools: Bump Ragger version to 1.16.0
 
 ## [3.17.0] - 2024-02-21
 
 ### Changed
     - Bump Stax SDK version to target stax_1.4.0-rc2
     - Bump SDK version with last patchs
-    - dev-tools: Bump ragger version to 1.14.4
+    - dev-tools: Bump Ragger version to 1.14.4
 
 ## [3.16.1] - 2024-02-09
 
 ### Changed
-    - [dev-tools] : specify latest version of ragger.
+    - [dev-tools] : specify latest version of Ragger.
 
 ## [3.16.0] - 2024-02-08
 
@@ -105,7 +110,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.11.1] - 2024-01-03
 
 ### Changed
-    - Bump tj-actions/changed-files from 33 to 41 in /.github/workflows
+    - Bump tj-actions/changed-files from 33 to 41 in .github/workflows
 
 ## [3.11.0] - 2023-12-11
 
@@ -205,7 +210,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.2.6] - 2023-08-02
 
 ### Changed
-    - Use directly pypi.org instead of test.pypi.org for ragger
+    - Use directly pypi.org instead of test.pypi.org for Ragger
 
 ## [3.2.5] - 2023-07-28
 
