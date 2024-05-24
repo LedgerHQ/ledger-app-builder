@@ -100,6 +100,7 @@ ENV NANOS_SDK=/opt/nanos-secure-sdk
 ENV NANOX_SDK=/opt/nanox-secure-sdk
 ENV NANOSP_SDK=/opt/nanosplus-secure-sdk
 ENV STAX_SDK=/opt/stax-secure-sdk
+ENV FLEX_SDK=/opt/flex-secure-sdk
 
 # Copy the SDKs from the lite container
 COPY --from=LITE_BUILDER /opt/ /opt/
