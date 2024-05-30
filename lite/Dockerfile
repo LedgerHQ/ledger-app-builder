@@ -76,14 +76,14 @@ ENV NANOS_SDK=/opt/nanos-secure-sdk
 RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOS_SDK" lns-2.1.0-v21.0
 RUN echo nanos > $NANOS_SDK/.target
 
-# Latest Nano X SDK (OS nanox_2.2.3 => based on API_LEVEL 5)
+# Latest Nano X SDK (OS nanox_2.3.0 => based on API_LEVEL 18)
 ENV NANOX_SDK=/opt/nanox-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK" v5.12.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK" v18.4.0
 RUN echo nanox > $NANOX_SDK/.target
 
-# Latest Nano S+ SDK (OS nanos+_1.1.1 => based on API_LEVEL 5)
+# Latest Nano S+ SDK (OS nanos+_1.2.0 => based on API_LEVEL 18)
 ENV NANOSP_SDK=/opt/nanosplus-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOSP_SDK" v5.12.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOSP_SDK" v18.4.0
 RUN echo nanos2 > $NANOSP_SDK/.target
 
 # Latest Stax SDK (OS stax_1.4.0-rc2 => based on API_LEVEL 15)
