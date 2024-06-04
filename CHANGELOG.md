@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.24.3] - 2024-06-04
+
+### Changed
+    - full: Bump cargo-ledger version to 1.4.1
+
 ## [3.24.2] - 2024-05-27
 
 ### Changed
