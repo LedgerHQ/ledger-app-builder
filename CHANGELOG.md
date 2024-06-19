@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.25.2] - 2024-06-19
 
 ### Changed
-    - Bump Speculos version
+    - Bump Speculos and Ragger versions
 
 ## [3.25.1] - 2024-06-14
 
