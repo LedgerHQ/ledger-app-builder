@@ -88,12 +88,12 @@ RUN echo nanos2 > $NANOSP_SDK/.target
 
 # Latest Stax SDK (OS stax_1.5.0 => based on API_LEVEL 21)
 ENV STAX_SDK=/opt/stax-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v21.1.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v21.2.0
 RUN echo stax > $STAX_SDK/.target
 
 # Latest Flex SDK (OS flex_1.1.0 => based on API_LEVEL 21)
 ENV FLEX_SDK=/opt/flex-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$FLEX_SDK" v21.1.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$FLEX_SDK" v21.2.0
 RUN echo flex > $FLEX_SDK/.target
 
 # Default SDK
