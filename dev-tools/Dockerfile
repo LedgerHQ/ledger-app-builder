@@ -19,5 +19,11 @@ ARG PYTHON_BUILD_DEPS=libffi-dev,python3-dev,py3-virtualenv
 # Install the building dependencies.
 RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
 
+# Install packahes to allow Guideline Enforcer to run
+RUN apk add imagemagick grep
+
 # Install test tools (Ragger framework, Speculos emulator, Ledgerblue...)
-RUN pip3 install --no-cache-dir "ragger[tests,all_backends]==1.23.0" "speculos==0.9.7"
+RUN pip3 install --no-cache-dir "ragger[tests,all_backends]==1.24.0" "speculos==0.10.0"
+
+# Add the enforcer script
+ADD ./dev-tools/enforcer.sh /opt/enforcer.sh
