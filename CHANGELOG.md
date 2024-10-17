@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
     - Bump Speculos & Ragger versions
+    - Bump Flex and Stax SDK versions
 
 ## [3.37.0] - 2024-09-30
 
