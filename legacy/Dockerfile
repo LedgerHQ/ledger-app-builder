@@ -1,7 +1,7 @@
 FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest AS LITE_BUILDER
 
 FROM ubuntu:22.04
-ENV LANG C.UTF-8
+ENV LANG=C.UTF-8
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -39,7 +39,7 @@ RUN cd /usr/bin && \
 
 # ARM Embedded Toolchain
 # Integrity is checked using the MD5 checksum provided by ARM at https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads
-ENV TOOLCHAIN_VERSION 10.3-2021.10
+ENV TOOLCHAIN_VERSION=10.3-2021.10
 RUN case $(uname -m) in \
         x86_64 | amd64) \
             ARCH=x86_64 \

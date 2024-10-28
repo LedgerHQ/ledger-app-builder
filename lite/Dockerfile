@@ -1,5 +1,5 @@
 FROM alpine:3.15
-ENV LANG C.UTF-8
+ENV LANG=C.UTF-8
 
 RUN apk update
 RUN apk upgrade
