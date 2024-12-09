@@ -37,7 +37,7 @@ RUN apk add -t python_build_deps python3-dev \
                                  libffi-dev
 
 # Install ledgerctl, which is used by cargo ledger for loading or dumping an APDU app file.
-RUN pip3 install ledgerwallet==0.5.2
+RUN pip3 install --no-cache-dir ledgerwallet==0.5.2
 
 # Cleanup, remove packages that aren't needed anymore
 RUN apk del python_build_deps
