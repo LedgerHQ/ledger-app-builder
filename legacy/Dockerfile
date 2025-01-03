@@ -7,8 +7,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 ARG LLVM_VERSION=12
 
-ARG RUST_STABLE_VERSION=1.75.0
-ARG RUST_NIGHTLY_VERSION=nightly-2023-11-10
+ARG RUST_STABLE_VERSION=1.83.0
+ARG RUST_NIGHTLY_VERSION=nightly-2024-11-22
 
 ENV RUST_STABLE=$RUST_STABLE_VERSION
 ENV RUST_NIGHTLY=$RUST_NIGHTLY_VERSION
@@ -79,10 +79,10 @@ RUN rustup component add rust-src --toolchain $RUST_NIGHTLY_VERSION
 RUN rustup component add rust-src --toolchain $RUST_STABLE_VERSION
 
 # Add ledgerwallet python package used by cargo ledger to generate the app APDU file
-RUN pip3 install ledgerwallet==0.4.0
+RUN pip3 install ledgerwallet==0.6.0
 
 # Add cargo ledger
-RUN cargo +$RUST_STABLE_VERSION install --version 1.3.0 cargo-ledger
+RUN cargo +$RUST_STABLE_VERSION install --version 1.6.0 cargo-ledger
 
 # Setup cargo ledger (install JSON target files and custom link script)
 RUN cargo +$RUST_NIGHTLY_VERSION ledger setup

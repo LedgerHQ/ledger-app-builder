@@ -1,7 +1,7 @@
 FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 
-ARG RUST_STABLE_VERSION=1.75.0
-ARG RUST_NIGHTLY_VERSION=nightly-2023-11-10
+ARG RUST_STABLE_VERSION=1.83.0
+ARG RUST_NIGHTLY_VERSION=nightly-2024-11-22
 
 ENV RUST_STABLE=$RUST_STABLE_VERSION
 ENV RUST_NIGHTLY=$RUST_NIGHTLY_VERSION
@@ -37,13 +37,13 @@ RUN apk add -t python_build_deps python3-dev \
                                  libffi-dev
 
 # Install ledgerctl, which is used by cargo ledger for loading or dumping an APDU app file.
-RUN pip3 install --no-cache-dir ledgerwallet==0.5.2
+RUN pip3 install --no-cache-dir ledgerwallet==0.6.0
 
 # Cleanup, remove packages that aren't needed anymore
 RUN apk del python_build_deps
 
 # Add cargo ledger
-RUN cargo +$RUST_STABLE_VERSION install --version 1.5.1 cargo-ledger
+RUN cargo +$RUST_STABLE_VERSION install --version 1.6.0 cargo-ledger
 
 # Setup cargo ledger (install JSON target files and custom link script) for nightly
 RUN cargo +$RUST_NIGHTLY_VERSION ledger setup
