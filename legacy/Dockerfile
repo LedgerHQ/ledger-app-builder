@@ -79,7 +79,7 @@ RUN rustup component add rust-src --toolchain $RUST_NIGHTLY_VERSION
 RUN rustup component add rust-src --toolchain $RUST_STABLE_VERSION
 
 # Add ledgerwallet python package used by cargo ledger to generate the app APDU file
-RUN pip3 install ledgerwallet==0.4.0
+RUN pip3 install ledgerwallet==0.6.0
 
 # Add cargo ledger
 RUN cargo +$RUST_STABLE_VERSION install --version 1.6.0 cargo-ledger
