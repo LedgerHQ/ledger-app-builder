@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
     - Update API_LEVEL_22 to v22.3.0 and API_LEVEL_LNS to lns-2.1.0-v23.0
+    - Bump cargo-ledger in full and legacy
 
 ## [3.50.0] - 2025-02-03
 

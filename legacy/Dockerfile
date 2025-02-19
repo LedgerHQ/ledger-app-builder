@@ -82,10 +82,10 @@ RUN rustup component add rust-src --toolchain $RUST_STABLE_VERSION
 RUN pip3 install ledgerwallet==0.5.2
 
 # Add cargo ledger
-RUN cargo +$RUST_STABLE_VERSION install --version 1.6.0 cargo-ledger
+RUN cargo +$RUST_STABLE_VERSION install --version 1.7.0 cargo-ledger
 
 # Setup cargo ledger (install JSON target files and custom link script)
-RUN cargo +$RUST_NIGHTLY_VERSION ledger setup
+RUN cargo ledger setup
 
 # Adding LLVM-15 APT repository and installing it
 RUN wget --no-check-certificate -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
