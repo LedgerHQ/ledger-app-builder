@@ -23,7 +23,7 @@ RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
 RUN apk add imagemagick grep
 
 # Install test tools (Ragger framework, Speculos emulator, Ledgerblue...)
-RUN pip3 install --no-cache-dir "ragger[tests,all_backends]==1.27.0" "speculos==0.14.0"
+RUN pip3 install --no-cache-dir "ragger[tests,all_backends]==1.27.0" "speculos==0.15.0"
 
 # Add the enforcer script
 ADD ./dev-tools/enforcer.sh /opt/enforcer.sh
