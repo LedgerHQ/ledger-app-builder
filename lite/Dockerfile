@@ -78,22 +78,22 @@ RUN echo nanos > $NANOS_SDK/.target
 
 # Latest Nano X SDK based on API_LEVEL 22
 ENV NANOX_SDK=/opt/nanox-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK" v22.6.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK" v22.7.0
 RUN echo nanox > $NANOX_SDK/.target
 
 # Latest Nano S+ SDK based on API_LEVEL 22
 ENV NANOSP_SDK=/opt/nanosplus-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOSP_SDK" v22.6.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOSP_SDK" v22.7.0
 RUN echo nanos2 > $NANOSP_SDK/.target
 
 # Latest Stax SDK based on API_LEVEL 22
 ENV STAX_SDK=/opt/stax-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v22.6.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" v22.7.0
 RUN echo stax > $STAX_SDK/.target
 
 # Latest Flex SDK based on API_LEVEL 22
 ENV FLEX_SDK=/opt/flex-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$FLEX_SDK" v22.6.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$FLEX_SDK" v22.7.0
 RUN echo flex > $FLEX_SDK/.target
 
 # Default SDK
