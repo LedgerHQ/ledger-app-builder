@@ -5,6 +5,7 @@ RUN apt install -y --no-install-recommends \
         jq \
         libgl1 \
         libpython3-dev \
+        pkg-config \
         python3-pyqt5 \
         python3-venv \
         qemu-user-static
