@@ -29,7 +29,7 @@ RUN git clone "https://github.com/LedgerHQ/ledger-secure-sdk.git" "$LEDGER_SECUR
 
 # Latest Nano S SDK (OS nanos_2.1.0 => based on API_LEVEL LNS)
 ENV NANOS_SDK=/opt/nanos-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOS_SDK" lns-2.1.0-v23.0
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOS_SDK" lns-2.1.0-v23.1
 RUN echo nanos > $NANOS_SDK/.target
 
 # Latest Nano X SDK based on API_LEVEL 22
