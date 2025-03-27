@@ -2,12 +2,11 @@
 
 These container images contain all dependencies to compile an application for Ledger devices
 
-The four images are stored in the following directories:
+The images are stored in the following directories:
 
-- `lite` is based on `Alpine` and is the lightest of the app-builder docker images. It contains the sufficient tools to build and load applications in the `C` language. It does **not** contain the `glibc`, so tools/analyzers using it won't work.
+- `lite` is based on `debian-slim` and is the lightest of the app-builder docker images. It contains the sufficient tools to build and load applications in the `C` language.
 - `full` is the default image. It derives from `lite` and contains tools allowing `Rust` compilation.
 - `dev-tools` is based on the `full` image and contains more tools for testing : the [Ragger](https://github.com/LedgerHQ/ragger) test framework and the [Speculos](https://github.com/LedgerHQ/speculos) emulator. Mostly useful for macOS and Windows users who want to quickly setup a more complete development environment.
-- `legacy` contains all needed tools to compile `C` and `Rust` applications. This image is quite heavy, but based on Ubuntu 22.04, so it is a good pick for tools using the `glibc`, such as `SonarQube` or `CodeQL`.
 
 ## Using Ledger images
 
@@ -23,8 +22,6 @@ $ docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 $ docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 # pull the dev-tools image, built from `dev-tools/Dockerfile`
 $ docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-dev-tools:latest
-# pull the legacy image, built from `legacy/Dockerfile`
-$ docker pull ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-legacy:latest
 ```
 
 ## Compile your app in the container

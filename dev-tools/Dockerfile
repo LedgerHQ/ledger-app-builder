@@ -1,29 +1,26 @@
 FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 
-RUN apk add libusb \
-            ttf-dejavu \
-            fontconfig \
-            py3-qt5 \
-            qemu-arm \
-            tesseract-ocr \
-            mesa-dri-gallium
+RUN apt install -y --no-install-recommends \
+        imagemagick \
+        jq \
+        libgl1 \
+        libpython3-dev \
+        python3-pyqt5 \
+        python3-venv \
+        qemu-user-static
 
-ARG QEMU_BIN=qemu-arm
-
-# -static version is not available in Alpine repositories
-RUN ln -s "$QEMU_BIN" $(dirname $(which "$QEMU_BIN"))/$QEMU_BIN-static
-
-# Python packages building dependencies
-ARG PYTHON_BUILD_DEPS=libffi-dev,python3-dev,py3-virtualenv
-
-# Install the building dependencies.
-RUN apk add $(echo -n "$PYTHON_BUILD_DEPS" | tr , ' ')
-
-# Install packahes to allow Guideline Enforcer to run
-RUN apk add imagemagick grep
+RUN apt install -y --no-install-recommends \
+        libxcb-icccm4 \
+        libxcb-image0 \
+        libxcb-keysyms1 \
+        libxcb-render-util0 \
+        libxcb-shape0 \
+        libxcb-xinerama0 \
+        libxcb-xkb1 \
+        libxkbcommon-x11-0
 
 # Install test tools (Ragger framework, Speculos emulator, Ledgerblue...)
-RUN pip3 install --no-cache-dir "ragger[tests,all_backends]==1.30.0" "speculos==0.18.0"
+RUN pip3 install --break-system-packages --no-cache-dir "speculos==0.18.0"
 
 # Add the enforcer script
 ADD ./dev-tools/enforcer.sh /opt/enforcer.sh
