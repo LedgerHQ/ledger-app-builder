@@ -2,7 +2,6 @@ FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 
 RUN apt install -y --no-install-recommends \
         imagemagick \
-        jq \
         libgl1 \
         libpython3-dev \
         pkg-config \
