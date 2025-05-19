@@ -16,6 +16,7 @@ RUN apt install -y --no-install-recommends \
         lld \
         llvm \
         make \
+        ninja-build \
         protobuf-compiler \
         python3 \
         python3-pip
