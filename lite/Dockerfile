@@ -22,7 +22,7 @@ RUN apt install -y --no-install-recommends \
         python3-pip
 
 # Python package to load app onto device
-RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.54" tomli-w
+RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.54" tomli-w ledgered
 
 # Unified SDK
 ARG LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
