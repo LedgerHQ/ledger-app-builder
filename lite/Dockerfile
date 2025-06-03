@@ -10,6 +10,7 @@ RUN apt install -y --no-install-recommends \
         doxygen \
         gcc-arm-none-eabi \
         git \
+        jq \
         libcmocka-dev \
         lcov \
         libnewlib-arm-none-eabi \
