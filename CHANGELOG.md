@@ -5,10 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.8.0] - 2025-xx-xx
+## [4.8.0] - 2025-07-03
 
 ### Changed
-    - Moved jq installation from `full` image to `lite`
+    - Moved `jq` installation from `full` image to `lite` image
+    - Bump API_LEVEL_22 to v22.14.0 (different NBGL fixes and improvements, new KeyUsage values for LedgerPKI)
+    - Default SDK is now NanoS+
+
+### Added
+    - `picolib` to `lite` image
 
 ## [4.7.0] - 2025-06-02
 
