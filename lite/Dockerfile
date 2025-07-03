@@ -56,7 +56,7 @@ RUN git -C "$LEDGER_SECURE_SDK" worktree add "$FLEX_SDK" v22.13.0
 RUN echo flex > $FLEX_SDK/.target
 
 # Default SDK
-ENV BOLOS_SDK=$NANOS_SDK
+ENV BOLOS_SDK=$NANOSP_SDK
 
 WORKDIR /app
 
