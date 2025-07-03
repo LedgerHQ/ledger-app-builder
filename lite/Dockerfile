@@ -14,6 +14,7 @@ RUN apt install -y --no-install-recommends \
         libcmocka-dev \
         lcov \
         libnewlib-arm-none-eabi \
+        picolibc-arm-none-eabi \
         lld \
         llvm \
         make \
