@@ -55,6 +55,11 @@ ENV FLEX_SDK=/opt/flex-secure-sdk
 RUN git -C "$LEDGER_SECURE_SDK" worktree add "$FLEX_SDK" v22.14.0
 RUN echo flex > $FLEX_SDK/.target
 
+# Latest Apex SDK based on API_LEVEL 25
+ENV APEX_SDK=/opt/apex-secure-sdk
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$APEX_SDK" API_LEVEL_25
+RUN echo apex_p > $APEX_SDK/.target
+
 # Default SDK
 ENV BOLOS_SDK=$NANOSP_SDK
 
