@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
     - Add semver python package (required for deployment pipeline)
+    - Bump speculos version to 0.25.5
 
 ## [4.14.0] - 2025-09-04
 
