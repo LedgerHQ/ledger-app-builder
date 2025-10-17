@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
     - Bump speculos version to 0.25.8
+    - Bump API_LEVEL_24 to v24.7.0
+    - Bump API_LEVEL_25 to v25.6.0
 
 ## [4.18.0] - 2025-10-03
 
