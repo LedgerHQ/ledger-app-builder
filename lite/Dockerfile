@@ -21,10 +21,11 @@ RUN apt install -y --no-install-recommends \
         ninja-build \
         protobuf-compiler \
         python3 \
-        python3-pip
+        python3-pip \
+        curl
 
 # Python package to load app onto device
-RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.54" tomli-w ledgered semver
+RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.54" tomli-w ledgered semver "ledgerwallet==0.5.3"
 
 # Unified SDK
 ARG LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
@@ -68,3 +69,8 @@ WORKDIR /app
 # Work around the git security to be able to get informations from repositories
 # even if the container is not run with root UID/GID
 RUN git config --system --add safe.directory "*"
+
+# Create a custom user with UID 1234 and GID 1234
+RUN groupadd -g 1234 customgroup && \
+    useradd -m -u 1234 -g customgroup customuser
+USER customuser

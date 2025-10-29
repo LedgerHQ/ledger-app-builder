@@ -3,12 +3,9 @@ FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 ENV RUST_STABLE=1.83.0
 ENV RUST_NIGHTLY=nightly-2024-12-01
 
-# Add curl for Rust buildchain
-RUN apt install -y --no-install-recommends curl
-
 # Define rustup/cargo home directories
-ENV RUSTUP_HOME=/opt/rustup
-ENV CARGO_HOME=/opt/.cargo
+ENV RUSTUP_HOME=/home/customuser/.rustup
+ENV CARGO_HOME=/home/customuser/.cargo
 
 # Adding cargo binaries to PATH
 ENV PATH=${PATH}:${CARGO_HOME}/bin
@@ -26,9 +23,6 @@ RUN rustup target add thumbv6m-none-eabi --toolchain $RUST_NIGHTLY
 # Adding rust-src component to nightly and stable channels
 RUN rustup component add rust-src --toolchain $RUST_NIGHTLY
 RUN rustup component add rust-src --toolchain $RUST_STABLE
-
-# Install ledgerctl, which is used by cargo ledger for loading or dumping an APDU app file.
-RUN pip3 install --break-system-packages --no-cache-dir ledgerwallet==0.5.3
 
 # Add cargo ledger
 RUN cargo install --version 1.9.0 cargo-ledger
