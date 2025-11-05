@@ -22,7 +22,8 @@ RUN apt install -y --no-install-recommends \
         protobuf-compiler \
         python3 \
         python3-pip \
-        curl
+        curl \
+        gosu
 
 # Python package to load app onto device
 RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.54" tomli-w ledgered semver "ledgerwallet==0.5.3"
@@ -70,7 +71,7 @@ WORKDIR /app
 # even if the container is not run with root UID/GID
 RUN git config --system --add safe.directory "*"
 
-# Create a custom user with UID 1234 and GID 1234
-RUN groupadd -g 1234 customgroup && \
-    useradd -m -u 1234 -g customgroup customuser
-USER customuser
+COPY ./lite/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["bash"]
