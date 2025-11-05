@@ -32,31 +32,31 @@ In the source folder of your application, you can compile with the following com
 
 * For Nano X
 ```bash
-$ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) --rm -ti -v "$(realpath .):/app" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+$ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -e USER_NAME=$USER --rm -ti -v "$(realpath .):/app" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 bash$ BOLOS_SDK=$NANOX_SDK make
 ```
 
 * For Nano S+
 ```bash
-$ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) --rm -ti -v "$(realpath .):/app" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+$ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -e USER_NAME=$USER --rm -ti -v "$(realpath .):/app" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 bash$ BOLOS_SDK=$NANOSP_SDK make
 ```
 
 * For Stax
 ```bash
-$ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) --rm -ti -v "$(realpath .):/app" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+$ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -e USER_NAME=$USER --rm -ti -v "$(realpath .):/app" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 bash$ BOLOS_SDK=$STAX_SDK make
 ```
 
 * For Flex
 ```bash
-$ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) --rm -ti -v "$(realpath .):/app" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+$ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -e USER_NAME=$USER --rm -ti -v "$(realpath .):/app" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 bash$ BOLOS_SDK=$FLEX_SDK make
 ```
 
 * For Apex P
 ```bash
-$ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) --rm -ti -v "$(realpath .):/app" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+$ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -e USER_NAME=$USER --rm -ti -v "$(realpath .):/app" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 bash$ BOLOS_SDK=$APEX_P_SDK make
 ```
 
@@ -65,7 +65,7 @@ bash$ BOLOS_SDK=$APEX_P_SDK make
 The Docker images include the [Clang Static Analyzer](https://clang-analyzer.llvm.org/), which can be invoked with:
 
 ```bash
-$ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) --rm -ti -v "$(realpath .):/app" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+$ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -e USER_NAME=$USER --rm -ti -v "$(realpath .):/app" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 bash$ BOLOS_SDK=$NANOS_SDK make scan-build
 ```
 
@@ -79,7 +79,7 @@ First, run the `ledger-app-dev-tools` docker image. Depending on your platform, 
 **Linux (Ubuntu)**
 
 ```bash
-docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) --rm -ti -v "$(realpath .):/app" -v "/tmp/.X11-unix:/tmp/.X11-unix" -e DISPLAY=$DISPLAY ghcr.io/ledgerhq/ledger-app-builder/ledger-app-dev-tools:latest
+docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -e USER_NAME=$USER --rm -ti -v "$(realpath .):/app" -v "/tmp/.X11-unix:/tmp/.X11-unix" -e DISPLAY=$DISPLAY ghcr.io/ledgerhq/ledger-app-builder/ledger-app-dev-tools:latest
 ```
 
 **Windows (with PowerShell)**
@@ -87,7 +87,7 @@ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) --rm -ti -v "$(realpath .):
 Assuming you already have a running X server like [VcXsrv](https://sourceforge.net/projects/vcxsrv/) configured to accept client connections.
 
 ```bash
-docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) --rm -ti -v "$(Get-Location):/app" -e DISPLAY="host.docker.internal:0" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-dev-tools:latest
+docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -e USER_NAME=$USER --rm -ti -v "$(Get-Location):/app" -e DISPLAY="host.docker.internal:0" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-dev-tools:latest
 ```
 
 **macOS**
@@ -95,7 +95,7 @@ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) --rm -ti -v "$(Get-Location
 Assuming you already have a running X server like [XQuartz](https://www.xquartz.org/) configured to accept client connections.
 
 ```bash
-docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) --rm -ti -v "$(pwd -P):/app" -v "/tmp/.X11-unix:/tmp/.X11-unix" -e DISPLAY="host.docker.internal:0" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-dev-tools:latest
+docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -e USER_NAME=$USER --rm -ti -v "$(pwd -P):/app" -v "/tmp/.X11-unix:/tmp/.X11-unix" -e DISPLAY="host.docker.internal:0" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-dev-tools:latest
 ```
 
 Then you can test your app either with the Speculos emulator :
@@ -121,11 +121,11 @@ bash$ source /opt/venv/bin/activate
 :warning: Only Nano S+, Stax, Flex and Apex P devices allow application side-loading. This section will not work with a Nano X.
 
 To load the app from the container, you will need additional docker arguments in order to allow Docker to access your USB port.
-Your physical device must be connected, unlocked and the screen showing the dashboard (not inside an application). Same as for compilation, `BOLOS_SDK` variable is used to specify the target device. Use the following docker command to load the app (here for Nano S device) :
+Your physical device must be connected, unlocked and the screen showing the dashboard (not inside an application). Same as for compilation, `BOLOS_SDK` variable is used to specify the target device. Use the following docker command to load the app (here for Nano S+ device) :
 
 ```bash
-$ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) --rm -ti  -v "$(realpath .):/app" --privileged -v "/dev/bus/usb:/dev/bus/usb" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
-bash$ BOLOS_SDK=$NANOS_SDK make load
+$ docker run -e HOST_UID=$(id -u) -e HOST_GID=$(id -g) -e USER_NAME=$USER --rm -ti  -v "$(realpath .):/app" --privileged -v "/dev/bus/usb:/dev/bus/usb" ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+bash$ BOLOS_SDK=$NANOSP_SDK make load
 ```
 
 ## Build the container image
