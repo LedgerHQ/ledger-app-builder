@@ -1,4 +1,5 @@
-FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+#FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+FROM test-lite:latest
 
 ENV RUST_STABLE=1.83.0
 ENV RUST_NIGHTLY=nightly-2024-12-01
@@ -35,3 +36,6 @@ RUN cargo install --version 1.9.0 cargo-ledger
 
 # Setup cargo ledger (install JSON target files and custom link script) for nightly
 RUN cargo ledger setup
+
+# Make Rust directories readable and writable for all users (X adds execute only on directories)
+RUN chmod -R a+rwX $RUSTUP_HOME $CARGO_HOME
