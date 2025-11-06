@@ -1,5 +1,4 @@
-#FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
-FROM test-lite:latest
+FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 
 ENV RUST_STABLE=1.83.0
 ENV RUST_NIGHTLY=nightly-2024-12-01

@@ -1,5 +1,4 @@
-#FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
-FROM test-full:latest
+FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 
 RUN apt install -y --no-install-recommends \
         imagemagick \
@@ -34,3 +33,7 @@ RUN python3 -m venv $VENV_PATH --system-site-packages && \
 # Set pip cache directory to a writable location
 ENV PIP_CACHE_DIR=/opt/venv/pip-cache
 RUN mkdir -p $PIP_CACHE_DIR && chmod -R a+rwX $PIP_CACHE_DIR
+
+# Automatically activate venv for all users
+RUN echo 'source /opt/venv/bin/activate' >> /etc/bash.bashrc
+
