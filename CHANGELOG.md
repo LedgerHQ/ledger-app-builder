@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [4.21.0] - 2025-11-6
 
 ### Changed
-    - Bump cargo-ledger version to 1.9.1
+    - Bump cargo-ledger version to 1.9.2
     - Build Rust apps when non root user
     - Create a Python virtual env writable by any user
 
