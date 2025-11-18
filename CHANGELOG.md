@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.25.0] - 2025-12-10
+
+### Changed
+    - Bump Rust stable to 1.92
+    - Bump Rust nightly to nightly-2025-12-05
+    - Bump cargo-ledger to 1.12.0
+
 ## [4.24.1] - 2025-12-09
 
 ### Fix
