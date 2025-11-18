@@ -1,7 +1,7 @@
 FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 
-ENV RUST_STABLE=1.83.0
-ENV RUST_NIGHTLY=nightly-2024-12-01
+ENV RUST_STABLE=1.91.1
+ENV RUST_NIGHTLY=nightly-2025-10-24
 
 # Add curl for Rust buildchain
 RUN apt install -y --no-install-recommends curl
@@ -17,7 +17,7 @@ ENV PATH=${PATH}:${CARGO_HOME}/bin
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain $RUST_STABLE -y
 
 # Installing nightly channel version RUST_NIGHTLY (for Rust applications).
-RUN rustup install $RUST_NIGHTLY
+RUN rustup toolchain install $RUST_NIGHTLY
 
 # Adding ARMV6M target to the installed stable and nightly toolchains
 RUN rustup target add thumbv6m-none-eabi --toolchain $RUST_STABLE
@@ -31,10 +31,10 @@ RUN rustup component add rust-src --toolchain $RUST_STABLE
 RUN pip3 install --break-system-packages --no-cache-dir ledgerwallet==0.5.3
 
 # Add cargo ledger
-RUN cargo install --version 1.9.2 cargo-ledger
+RUN cargo install --version 1.10.0 cargo-ledger
 
 # Setup cargo ledger (install JSON target files and custom link script) for nightly
-RUN cargo ledger setup
+RUN cargo +$RUST_NIGHTLY ledger setup
 
 # Make Rust directories readable and writable for all users (X adds execute only on directories)
 RUN chmod -R a+rwX $RUSTUP_HOME $CARGO_HOME
