@@ -7,8 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.22.0] - 2025-11-18
 
-### Fixed
-    - Bump Rust nightly toolchain
+### Changed
     - Bump cargo-ledger
 
 ## [4.21.1] - 2025-11-13
