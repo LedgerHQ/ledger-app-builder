@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.22.0] - 2025-11-19
+
+### Changed
+    - Bump API_LEVEL_25 to v25.8.0 and apply it for all devices
+    - Bump Speculos version to 0.25.9
+
 ## [4.21.1] - 2025-11-13
 
 ### Fixed
