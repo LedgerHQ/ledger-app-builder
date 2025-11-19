@@ -1,7 +1,7 @@
 FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 
-ENV RUST_STABLE=1.91.1
-ENV RUST_NIGHTLY=nightly-2025-10-24
+ENV RUST_STABLE=1.83.0
+ENV RUST_NIGHTLY=nightly-2024-12-01
 
 # Add curl for Rust buildchain
 RUN apt install -y --no-install-recommends curl
