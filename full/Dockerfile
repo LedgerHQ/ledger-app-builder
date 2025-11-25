@@ -28,13 +28,13 @@ RUN rustup component add rust-src --toolchain $RUST_NIGHTLY
 RUN rustup component add rust-src --toolchain $RUST_STABLE
 
 # Install ledgerctl, which is used by cargo ledger for loading or dumping an APDU app file.
-RUN pip3 install --break-system-packages --no-cache-dir ledgerwallet==0.5.3
+RUN pip3 install --break-system-packages --no-cache-dir ledgerwallet==0.5.4
 
 # Add cargo ledger
-RUN cargo install --version 1.9.2 cargo-ledger
+RUN cargo install --version 1.11.0 cargo-ledger
 
 # Setup cargo ledger (install JSON target files and custom link script) for nightly
-RUN cargo ledger setup
+RUN cargo +$RUST_NIGHTLY ledger setup
 
 # Make Rust directories readable and writable for all users (X adds execute only on directories)
 RUN chmod -R a+rwX $RUSTUP_HOME $CARGO_HOME
