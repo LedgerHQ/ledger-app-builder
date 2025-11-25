@@ -17,7 +17,7 @@ ENV PATH=${PATH}:${CARGO_HOME}/bin
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain $RUST_STABLE -y
 
 # Installing nightly channel version RUST_NIGHTLY (for Rust applications).
-RUN rustup install $RUST_NIGHTLY
+RUN rustup toolchain install $RUST_NIGHTLY
 
 # Adding ARMV6M target to the installed stable and nightly toolchains
 RUN rustup target add thumbv6m-none-eabi --toolchain $RUST_STABLE
