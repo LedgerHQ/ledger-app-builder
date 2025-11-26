@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
     - Bump cargo-ledger version to 1.11.0
     - Bump ledgerwallet version to 0.5.5
+    - Bump API_LEVEL_25 to v25.9.0 and apply it for all devices
 
 ## [4.22.0] - 2025-11-19
 
