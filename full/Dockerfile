@@ -1,7 +1,7 @@
 FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 
-ENV RUST_STABLE=1.83.0
-ENV RUST_NIGHTLY=nightly-2024-12-01
+ENV RUST_STABLE=1.91.1
+ENV RUST_NIGHTLY=nightly-2025-10-24
 
 # Add curl for Rust buildchain
 RUN apt install -y --no-install-recommends curl
@@ -31,7 +31,7 @@ RUN rustup component add rust-src --toolchain $RUST_STABLE
 RUN pip3 install --break-system-packages --no-cache-dir ledgerwallet==0.5.5
 
 # Add cargo ledger
-RUN cargo install --version 1.11.0 cargo-ledger
+RUN cargo install --git https://github.com/LedgerHQ/cargo-ledger.git --branch y333/bump_nightly cargo-ledger
 
 # Setup cargo ledger (install JSON target files and custom link script) for nightly
 RUN cargo +$RUST_NIGHTLY ledger setup
