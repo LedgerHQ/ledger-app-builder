@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
     - Bump speculos to 0.25.12
-    - Add libvncserver-dev in dev-tools container (needed for VNC) 
+    - Add libvncserver-dev in dev-tools container (needed for VNC)
+    - Bump API_LEVEL_25 to v25.10.0 and apply it for all devices 
 
 ## [4.23.0] - 2025-11-25
 
