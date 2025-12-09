@@ -26,7 +26,7 @@ RUN apt install -y --no-install-recommends \
         libc6-dev-armhf-cross
 
 # Build speculos from source
-RUN pip3 install --break-system-packages --no-cache-dir --no-binary speculos "speculos==0.25.12"
+RUN pip3 install --break-system-packages --no-cache-dir --no-binary speculos "speculos==0.25.13"
 
 # Add the enforcer script
 ADD ./dev-tools/enforcer.sh /opt/enforcer.sh

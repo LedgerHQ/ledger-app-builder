@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fix
     - Build speculos from sources
+    - Bump speculos to 0.25.13
 
 ## [4.24.0] - 2025-12-08
 
