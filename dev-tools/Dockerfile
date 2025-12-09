@@ -7,7 +7,8 @@ RUN apt install -y --no-install-recommends \
         pkg-config \
         python3-pyqt6 \
         python3-venv \
-        qemu-user-static
+        qemu-user-static \
+        libvncserver-dev
 
 RUN apt install -y --no-install-recommends \
         libxcb-icccm4 \
@@ -20,7 +21,7 @@ RUN apt install -y --no-install-recommends \
         libxkbcommon-x11-0
 
 # Install test tools (Ragger framework, Speculos emulator, Ledgerblue...)
-RUN pip3 install --break-system-packages --no-cache-dir "speculos==0.25.9"
+RUN pip3 install --break-system-packages --no-cache-dir "speculos==0.25.12"
 
 # Add the enforcer script
 ADD ./dev-tools/enforcer.sh /opt/enforcer.sh
