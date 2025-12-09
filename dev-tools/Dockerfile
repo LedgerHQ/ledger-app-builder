@@ -20,8 +20,13 @@ RUN apt install -y --no-install-recommends \
         libxcb-xkb1 \
         libxkbcommon-x11-0
 
-# Install test tools (Ragger framework, Speculos emulator, Ledgerblue...)
-RUN pip3 install --break-system-packages --no-cache-dir "speculos==0.25.12"
+# Install build dependencies for speculos
+RUN apt install -y --no-install-recommends \
+        gcc-arm-linux-gnueabihf \
+        libc6-dev-armhf-cross
+
+# Build speculos from source
+RUN pip3 install --break-system-packages --no-cache-dir --no-binary speculos "speculos==0.25.13"
 
 # Add the enforcer script
 ADD ./dev-tools/enforcer.sh /opt/enforcer.sh
