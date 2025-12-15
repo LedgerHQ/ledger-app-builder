@@ -1,5 +1,8 @@
 FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 
+# Switch to root to install packages
+USER root
+
 RUN apt install -y --no-install-recommends \
         imagemagick \
         libgl1 \
@@ -43,3 +46,6 @@ RUN mkdir -p $PIP_CACHE_DIR && chmod -R a+rwX $PIP_CACHE_DIR
 # Automatically activate venv for all users
 RUN echo 'source /opt/venv/bin/activate' >> /etc/bash.bashrc
 
+# Switch back to base_user (inherited from lite)
+USER base_user
+WORKDIR /home/base_user
