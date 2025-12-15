@@ -68,3 +68,16 @@ WORKDIR /app
 # Work around the git security to be able to get informations from repositories
 # even if the container is not run with root UID/GID
 RUN git config --system --add safe.directory "*"
+
+# Create a non-root user with UID/GID 1000 for DevContainer compatibility
+ARG USER_UID=1000
+ARG USER_GID=1000
+RUN apt install -y --no-install-recommends sudo && \
+    groupadd -g ${USER_GID} base_user && \
+    useradd -m -u ${USER_UID} -g ${USER_GID} -s /bin/bash base_user && \
+    echo "base_user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/base_user && \
+    chmod 0440 /etc/sudoers.d/base_user
+
+# Set the default user
+USER base_user
+WORKDIR /home/base_user

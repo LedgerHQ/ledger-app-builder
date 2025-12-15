@@ -1,5 +1,8 @@
 FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 
+# Switch to root to install packages
+USER root
+
 ENV RUST_STABLE=1.83.0
 ENV RUST_NIGHTLY=nightly-2024-12-01
 
@@ -38,3 +41,7 @@ RUN cargo +$RUST_NIGHTLY ledger setup
 
 # Make Rust directories readable and writable for all users (X adds execute only on directories)
 RUN chmod -R a+rwX $RUSTUP_HOME $CARGO_HOME
+
+# Switch back to base_user
+USER base_user
+WORKDIR /home/base_user
