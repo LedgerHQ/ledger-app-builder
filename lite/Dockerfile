@@ -1,8 +1,9 @@
 FROM debian:bookworm-slim
 
-RUN apt update && apt upgrade -y
+RUN apt update && apt upgrade -y && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN apt install -y --no-install-recommends \
+RUN apt update && apt install -y --no-install-recommends \
         clang \
         clang-format \
         clang-tools \
@@ -21,13 +22,16 @@ RUN apt install -y --no-install-recommends \
         ninja-build \
         protobuf-compiler \
         python3 \
-        python3-pip
+        python3-pip && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Python package to load app onto device
-RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.54" tomli-w ledgered semver
+RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.54" tomli-w ledgered semver && \
+    rm -rf ~/.cache/pip
 
 # Unified SDK
 ARG LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
+# ----- TBC -----
 RUN git clone "https://github.com/LedgerHQ/ledger-secure-sdk.git" "$LEDGER_SECURE_SDK"
 
 # Latest Nano S SDK (OS nanos_2.1.0 => based on API_LEVEL LNS)
@@ -59,6 +63,9 @@ RUN echo flex > $FLEX_SDK/.target
 ENV APEX_P_SDK=/opt/apex-secure-sdk
 RUN git -C "$LEDGER_SECURE_SDK" worktree add "$APEX_P_SDK" v25.10.0
 RUN echo apex_p > $APEX_P_SDK/.target
+
+# Clean up git objects to reduce image size
+RUN git -C "$LEDGER_SECURE_SDK" gc --aggressive --prune=all
 
 # Default SDK
 ENV BOLOS_SDK=$NANOSP_SDK

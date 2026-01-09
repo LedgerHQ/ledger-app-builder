@@ -1,6 +1,7 @@
 FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 
-RUN apt install -y --no-install-recommends \
+# Combine all apt installations to reduce layers and add cleanup
+RUN apt update && apt install -y --no-install-recommends \
         imagemagick \
         libgl1 \
         libpython3-dev \
@@ -8,9 +9,7 @@ RUN apt install -y --no-install-recommends \
         python3-pyqt6 \
         python3-venv \
         qemu-user-static \
-        libvncserver-dev
-
-RUN apt install -y --no-install-recommends \
+        libvncserver-dev \
         libxcb-icccm4 \
         libxcb-image0 \
         libxcb-keysyms1 \
@@ -18,15 +17,14 @@ RUN apt install -y --no-install-recommends \
         libxcb-shape0 \
         libxcb-xinerama0 \
         libxcb-xkb1 \
-        libxkbcommon-x11-0
-
-# Install build dependencies for speculos
-RUN apt install -y --no-install-recommends \
+        libxkbcommon-x11-0 \
         gcc-arm-linux-gnueabihf \
-        libc6-dev-armhf-cross
+        libc6-dev-armhf-cross && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Build speculos from source
-RUN pip3 install --break-system-packages --no-cache-dir --no-binary speculos "speculos==0.25.13"
+RUN pip3 install --break-system-packages --no-cache-dir --no-binary speculos "speculos==0.25.13" && \
+    rm -rf ~/.cache/pip
 
 # Add the enforcer script
 ADD ./dev-tools/enforcer.sh /opt/enforcer.sh
