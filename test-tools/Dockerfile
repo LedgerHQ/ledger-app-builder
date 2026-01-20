@@ -3,11 +3,10 @@
 #######################################################################
 FROM docker.io/library/python:3.10-slim AS dependencies
 
-ARG SPECULOS_VERSION
 ARG TARGETARCH
 ARG TARGETPLATFORM
 
-RUN echo "Building for architecture: $TARGETARCH on platform: $TARGETPLATFORM. Speculos version: $SPECULOS_VERSION"
+RUN echo "Building for architecture: $TARGETARCH on platform: $TARGETPLATFORM."
 
 ENV LANG=C.UTF-8
 
@@ -72,6 +71,9 @@ RUN tar xf d0bc304a132df43856d8302e15dabee97d3d8a95.tar.gz && \
 #######################################################################
 FROM dependencies AS builder
 
+ARG SPECULOS_VERSION
+RUN echo "Speculos version: $SPECULOS_VERSION"
+
 RUN git clone --branch v${SPECULOS_VERSION} --depth 1 https://github.com/LedgerHQ/speculos.git && \
     cd speculos && \
     cmake -Bbuild -H. -DPRECOMPILED_DEPENDENCIES_DIR=/install -DWITH_VNC=1 && \
@@ -82,20 +84,23 @@ RUN git clone --branch v${SPECULOS_VERSION} --depth 1 https://github.com/LedgerH
 #######################################################################
 FROM python:3.10-slim AS final
 
-RUN apt-get update && apt-get install -qy \
+ARG SPECULOS_VERSION
+RUN echo "Speculos version: $SPECULOS_VERSION"
+
+RUN apt-get update && apt-get install -q -y --no-install-recommends \
     qemu-user-static \
     libvncserver-dev \
     gdb-multiarch \
     binutils-arm-none-eabi \
-    git \
-    && apt-get clean \
+    git && \
+    apt-get clean && \
     git clone --branch v${SPECULOS_VERSION} --depth 1 https://github.com/LedgerHQ/speculos.git
 
 WORKDIR /speculos/speculos
 
 COPY --from=builder /speculos/speculos/resources/ /speculos/speculos/resources/
 
-RUN pip install --upgrade pip pipenv && \
+RUN pip install --no-cache-dir --upgrade pip pipenv && \
     pipenv install --system --deploy
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/

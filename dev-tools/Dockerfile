@@ -1,6 +1,8 @@
 FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 
-RUN apt install -y --no-install-recommends \
+ARG SPECULOS_VERSION
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
         imagemagick \
         libgl1 \
         libpython3-dev \
@@ -8,9 +10,7 @@ RUN apt install -y --no-install-recommends \
         python3-pyqt6 \
         python3-venv \
         qemu-user-static \
-        libvncserver-dev
-
-RUN apt install -y --no-install-recommends \
+        libvncserver-dev \
         libxcb-icccm4 \
         libxcb-image0 \
         libxcb-keysyms1 \
@@ -18,18 +18,15 @@ RUN apt install -y --no-install-recommends \
         libxcb-shape0 \
         libxcb-xinerama0 \
         libxcb-xkb1 \
-        libxkbcommon-x11-0
-
-# Install build dependencies for speculos
-RUN apt install -y --no-install-recommends \
-        gcc-arm-linux-gnueabihf \
-        libc6-dev-armhf-cross
-
-# Build speculos from source
-RUN pip3 install --break-system-packages --no-cache-dir --no-binary speculos "speculos==0.25.13"
+        libxkbcommon-x11-0 \
+        gcc-arm-linux-gnueabihf \ 
+        libc6-dev-armhf-cross && \
+     pip3 install --break-system-packages --no-cache-dir --no-binary speculos "speculos==${SPECULOS_VERSION}" && \
+     apt-get clean && \
+     rm -rf /var/lib/apt/lists/*
 
 # Add the enforcer script
-ADD ./dev-tools/enforcer.sh /opt/enforcer.sh
+COPY ./dev-tools/enforcer.sh /opt/enforcer.sh
 
 # Create a system-wide python venv writeable for all users
 ENV VENV_PATH=/opt/venv
