@@ -1,7 +1,7 @@
 # Build the docker images and push them to GitHub Packages
 
 ---
-name: Publish Docker images
+name: Build Docker images
 
 on:
   workflow_dispatch:
@@ -9,6 +9,10 @@ on:
     branches:
       - 'master'
   pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
 
 env:
   REGISTRY: ghcr.io
@@ -100,11 +104,13 @@ jobs:
       contents: write
       id-token: write
       packages: write
-    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@mbr/reusable-docker-build-push
+    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
     with:
       image_name: ledger-app-builder-lite
       dockerfile_path: lite/Dockerfile
       dry_run: true
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
 
   builder:
     name: App Builder
@@ -115,11 +121,13 @@ jobs:
       contents: write
       id-token: write
       packages: write
-    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@mbr/reusable-docker-build-push
+    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
     with:
       image_name: ledger-app-builder-full
       dockerfile_path: full/Dockerfile
       dry_run: true
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
 
 
   dev_tools:
@@ -131,26 +139,32 @@ jobs:
       contents: write
       id-token: write
       packages: write
-    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@mbr/reusable-docker-build-push
+    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
     with:
       image_name: ledger-app-builder-dev-tools
       dockerfile_path: dev-tools/Dockerfile
       build_args: SPECULOS_VERSION=${{ needs.get_speculos_version.outputs.speculos_version }}
       dry_run: true
+      runs_on: ubuntu-latest
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
 
 
   test_tools:
     name: Test Tools
-    needs: [mods_list, check_changelog, builder, get_speculos_version]
-    if: always() && needs.check_changelog.result == 'success' && (needs.builder.result == 'success' || (needs.builder.result == 'skipped' && contains(needs.mods_list.outputs.modified_files, 'dev-tools/Dockerfile')))
+    needs: [mods_list, check_changelog, get_speculos_version]
+    if: always() && needs.check_changelog.result == 'success' && contains(needs.mods_list.outputs.modified_files, 'test-tools/Dockerfile')
     permissions:
       attestations: write
       contents: write
       id-token: write
       packages: write
-    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@mbr/reusable-docker-build-push
+    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
     with:
-      image_name: ledger-app-builder-dev-tools
+      image_name: ledger-app-builder-test-tools
       dockerfile_path: test-tools/Dockerfile
       build_args: SPECULOS_VERSION=${{ needs.get_speculos_version.outputs.speculos_version }}
       dry_run: true
+      runs_on: ubuntu-latest
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
