@@ -10,6 +10,10 @@ on:
       - 'master'
   pull_request:
 
+permissions:
+  contents: read
+  packages: read
+
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: true
@@ -70,6 +74,8 @@ jobs:
   mods_list:
     name: Get modified files
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Clone
         uses: actions/checkout@v4
@@ -85,6 +91,7 @@ jobs:
   get_speculos_version:
     name: Get latest Speculos version
     runs-on: ubuntu-latest
+    permissions: {}
     outputs:
       speculos_version: ${{ steps.get-speculos-version.outputs.speculos_version }}
     steps:
