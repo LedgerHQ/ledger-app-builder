@@ -51,12 +51,11 @@ jobs:
           # Get tags of all images from GHCR
           TAGS_FULL=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}/tags/list)
           TAGS_LITE=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}-lite/tags/list)
-          TAGS_LEGACY=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}-legacy/tags/list)
           TAGS_DEV_TOOLS=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/ledger-app-dev-tools/tags/list)
           TAGS_TEST_TOOLS=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/ledger-app-test-tools/tags/list)
 
           # Concatenate all tags from json fields in one string without brackets
-          ALL_TAGS=$(echo $TAGS_FULL $TAGS_LITE $TAGS_LEGACY $TAGS_DEV_TOOLS $TAGS_TEST_TOOLS | jq -s '.[0].tags + .[1].tags + .[2].tags + .[3].tags' + .[4].tags | tr -d '[]')
+          ALL_TAGS=$(echo $TAGS_FULL $TAGS_LITE $TAGS_DEV_TOOLS $TAGS_TEST_TOOLS | jq -s '.[0].tags + .[1].tags + .[2].tags + .[3].tags' | tr -d '[]')
 
           # Get the tag to find
           TAG_TO_FIND=${{ steps.get-current-version.outputs.current_version }}
@@ -65,8 +64,6 @@ jobs:
           if [[ "$ALL_TAGS" == *"$TAG_TO_FIND"* ]]; then
             echo "An image tagged with the latest changelog version already exists on GHCR. Please update the changelog."
             exit 1
-          else
-            exit 0
           fi
     outputs:
       current_version: ${{ steps.get-current-version.outputs.current_version }}
@@ -120,7 +117,7 @@ jobs:
       token: ${{ secrets.GITHUB_TOKEN }}
 
   builder:
-    name: App Builder
+    name: App Builder Full
     needs: [mods_list, check_changelog, builder_lite]
     if: always() && needs.check_changelog.result == 'success' && (needs.builder_lite.result == 'success' || (needs.builder_lite.result == 'skipped' && contains(needs.mods_list.outputs.modified_files, 'full/Dockerfile')))
     permissions:
@@ -130,7 +127,7 @@ jobs:
       packages: write
     uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
     with:
-      image_name: ledger-app-builder-full
+      image_name: ledger-app-builder
       dockerfile_path: full/Dockerfile
       dry_run: true
     secrets:
@@ -148,7 +145,7 @@ jobs:
       packages: write
     uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
     with:
-      image_name: ledger-app-builder-dev-tools
+      image_name: ledger-app-dev-tools
       dockerfile_path: dev-tools/Dockerfile
       build_args: SPECULOS_VERSION=${{ needs.get_speculos_version.outputs.speculos_version }}
       dry_run: true
@@ -158,7 +155,7 @@ jobs:
 
 
   test_tools:
-    name: Test Tools
+    name: App Test Tools
     needs: [mods_list, check_changelog, get_speculos_version]
     if: always() && needs.check_changelog.result == 'success' && contains(needs.mods_list.outputs.modified_files, 'test-tools/Dockerfile')
     permissions:
@@ -168,7 +165,7 @@ jobs:
       packages: write
     uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
     with:
-      image_name: ledger-app-builder-test-tools
+      image_name: ledger-app-test-tools
       dockerfile_path: test-tools/Dockerfile
       build_args: SPECULOS_VERSION=${{ needs.get_speculos_version.outputs.speculos_version }}
       dry_run: true

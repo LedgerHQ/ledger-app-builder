@@ -64,6 +64,7 @@ RUN mkdir cmocka && \
   cd .. && \
   rm -r cmocka/ cmocka-1.1.5/ cmocka-1.1.5.tar.xz
 
+# Build blst library (BLS12-381 signature library)
 # hadolint ignore=DL3003
 RUN tar xf d0bc304a132df43856d8302e15dabee97d3d8a95.tar.gz && \
   cd blst-d0bc304a132df43856d8302e15dabee97d3d8a95 && \
