@@ -1,0 +1,174 @@
+# Build the docker images and push them to GitHub Packages
+
+---
+name: Build Docker images
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'master'
+  pull_request:
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  REPO_PATH: ${{ github.repository }}
+  REPO_NAME: ${{ github.event.repository.name }}
+  BUILD_PLATFORMS: linux/amd64,linux/arm64
+
+jobs:
+  check_changelog:
+    name: Check changelog versions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone
+        uses: actions/checkout@v4
+
+      - name: Get current version
+        id: get-current-version
+        run: |
+          echo "current_version=$(grep -Po '(?<=## \[)(\d+\.)+[^\]]' CHANGELOG.md | head -n 1)" >> "$GITHUB_OUTPUT"
+
+      - name: Login to registry
+        uses: docker/login-action@v3.6.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check already existing image
+        run: |
+          GHCR_TOKEN=$(echo ${{ secrets.GITHUB_TOKEN }} | base64)
+
+          # Get tags of all images from GHCR
+          TAGS_FULL=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}/tags/list)
+          TAGS_LITE=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}-lite/tags/list)
+          TAGS_DEV_TOOLS=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/ledger-app-dev-tools/tags/list)
+          TAGS_TEST_TOOLS=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/ledger-app-test-tools/tags/list)
+
+          # Concatenate all tags from json fields in one string without brackets
+          ALL_TAGS=$(echo $TAGS_FULL $TAGS_LITE $TAGS_DEV_TOOLS $TAGS_TEST_TOOLS | jq -s '.[0].tags + .[1].tags + .[2].tags + .[3].tags' | tr -d '[]')
+
+          # Get the tag to find
+          TAG_TO_FIND=${{ steps.get-current-version.outputs.current_version }}
+
+          # Check if the tag to find is already present in the list of tags
+          if [[ "$ALL_TAGS" == *"$TAG_TO_FIND"* ]]; then
+            echo "An image tagged with the latest changelog version already exists on GHCR. Please update the changelog."
+            exit 1
+          fi
+    outputs:
+      current_version: ${{ steps.get-current-version.outputs.current_version }}
+
+  mods_list:
+    name: Get modified files
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Clone
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changes
+        id: get-changes
+        uses: tj-actions/changed-files@v41
+    outputs:
+      modified_files: ${{ steps.get-changes.outputs.all_modified_files }}
+
+  get_speculos_version:
+    name: Get latest Speculos version
+    runs-on: ubuntu-latest
+    permissions: {}
+    outputs:
+      speculos_version: ${{ steps.get-speculos-version.outputs.speculos_version }}
+    steps:
+      - name: Get latest Speculos version
+        id: get-speculos-version
+        run: |
+          SPECULOS_VERSION=$(curl -s https://api.github.com/repos/LedgerHQ/speculos/releases/latest | grep -Po '"tag_name": "\K(.*)(?=")')
+          echo "Got speculos version ${SPECULOS_VERSION}"
+          echo "speculos_version=$SPECULOS_VERSION" >> "$GITHUB_OUTPUT"
+
+  builder_lite:
+    name: App Builder Lite
+    needs: [mods_list, check_changelog]
+    if: needs.check_changelog.result == 'success' && contains(needs.mods_list.outputs.modified_files, 'lite/Dockerfile')
+    permissions:
+      attestations: write
+      contents: write
+      id-token: write
+      packages: write
+    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
+    with:
+      image_name: ledger-app-builder-lite
+      dockerfile_path: lite/Dockerfile
+      dry_run: true
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+
+  builder:
+    name: App Builder Full
+    needs: [mods_list, check_changelog, builder_lite]
+    if: always() && needs.check_changelog.result == 'success' && (needs.builder_lite.result == 'success' || (needs.builder_lite.result == 'skipped' && contains(needs.mods_list.outputs.modified_files, 'full/Dockerfile')))
+    permissions:
+      attestations: write
+      contents: write
+      id-token: write
+      packages: write
+    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
+    with:
+      image_name: ledger-app-builder
+      dockerfile_path: full/Dockerfile
+      dry_run: true
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+
+
+  dev_tools:
+    name: App Developer Tools
+    needs: [mods_list, check_changelog, builder, get_speculos_version]
+    if: always() && needs.check_changelog.result == 'success' && (needs.builder.result == 'success' || (needs.builder.result == 'skipped' && contains(needs.mods_list.outputs.modified_files, 'dev-tools/Dockerfile')))
+    permissions:
+      attestations: write
+      contents: write
+      id-token: write
+      packages: write
+    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
+    with:
+      image_name: ledger-app-dev-tools
+      dockerfile_path: dev-tools/Dockerfile
+      build_args: SPECULOS_VERSION=${{ needs.get_speculos_version.outputs.speculos_version }}
+      dry_run: true
+      runs_on: ubuntu-latest
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+
+
+  test_tools:
+    name: App Test Tools
+    needs: [mods_list, check_changelog, get_speculos_version]
+    if: always() && needs.check_changelog.result == 'success' && contains(needs.mods_list.outputs.modified_files, 'test-tools/Dockerfile')
+    permissions:
+      attestations: write
+      contents: write
+      id-token: write
+      packages: write
+    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
+    with:
+      image_name: ledger-app-test-tools
+      dockerfile_path: test-tools/Dockerfile
+      build_args: SPECULOS_VERSION=${{ needs.get_speculos_version.outputs.speculos_version }}
+      dry_run: true
+      runs_on: ubuntu-latest
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
