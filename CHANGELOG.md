@@ -11,7 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Call reusable workflow for building and publishing images
 
 ### Added
-    - Add test-tools image in replacement of speculos image on speculos repo
     - pre-commit with actionlint and hadolint checks
 
 ## [4.26.2] - 2026-01-21
