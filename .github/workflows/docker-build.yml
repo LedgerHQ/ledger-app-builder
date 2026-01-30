@@ -52,10 +52,9 @@ jobs:
           TAGS_FULL=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}/tags/list)
           TAGS_LITE=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}-lite/tags/list)
           TAGS_DEV_TOOLS=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/ledger-app-dev-tools/tags/list)
-          TAGS_TEST_TOOLS=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/ledger-app-test-tools/tags/list)
 
           # Concatenate all tags from json fields in one string without brackets
-          ALL_TAGS=$(echo $TAGS_FULL $TAGS_LITE $TAGS_DEV_TOOLS $TAGS_TEST_TOOLS | jq -s '.[0].tags + .[1].tags + .[2].tags + .[3].tags' | tr -d '[]')
+          ALL_TAGS=$(echo $TAGS_FULL $TAGS_LITE $TAGS_DEV_TOOLS | jq -s '.[0].tags + .[1].tags + .[2].tags' | tr -d '[]')
 
           # Get the tag to find
           TAG_TO_FIND=${{ steps.get-current-version.outputs.current_version }}
@@ -147,26 +146,6 @@ jobs:
     with:
       image_name: ledger-app-dev-tools
       dockerfile_path: dev-tools/Dockerfile
-      build_args: SPECULOS_VERSION=${{ needs.get_speculos_version.outputs.speculos_version }}
-      dry_run: true
-      runs_on: ubuntu-latest
-    secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
-
-
-  test_tools:
-    name: App Test Tools
-    needs: [mods_list, check_changelog, get_speculos_version]
-    if: always() && needs.check_changelog.result == 'success' && contains(needs.mods_list.outputs.modified_files, 'test-tools/Dockerfile')
-    permissions:
-      attestations: write
-      contents: write
-      id-token: write
-      packages: write
-    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
-    with:
-      image_name: ledger-app-test-tools
-      dockerfile_path: test-tools/Dockerfile
       build_args: SPECULOS_VERSION=${{ needs.get_speculos_version.outputs.speculos_version }}
       dry_run: true
       runs_on: ubuntu-latest
