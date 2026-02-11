@@ -3,12 +3,13 @@ FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 ENV RUST_STABLE=1.92.0
 ENV RUST_NIGHTLY=nightly-2025-12-05
 
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
         python3-dev \
         python3-pkgconfig \
         python3-venv \
-        rsync
+        rsync && \
+    rm -rf /var/lib/apt/lists/*
 
 # Define rustup/cargo home directories
 ENV RUSTUP_HOME=/opt/rustup
