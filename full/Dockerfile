@@ -1,14 +1,14 @@
-FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+# FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+FROM ledger-app-builder-lite:latest
+#FROM trixie-lite-clang-21:latest
 
 ENV RUST_STABLE=1.92.0
 ENV RUST_NIGHTLY=nightly-2025-12-05
 
-RUN apt-get install -y --no-install-recommends \
-        curl \
-        python3-dev \
-        python3-pkgconfig \
-        python3-venv \
-        rsync
+# Add curl for Rust buildchain
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl python3-dev python3-pkgconfig python3-venv rsync && \
+    rm -rf /var/lib/apt/lists/*
 
 # Define rustup/cargo home directories
 ENV RUSTUP_HOME=/opt/rustup
@@ -39,3 +39,4 @@ RUN cargo +$RUST_NIGHTLY ledger setup -t custom_target_nightly
 
 # Make Rust directories readable and writable for all users (X adds execute only on directories)
 RUN chmod -R a+rwX $RUSTUP_HOME $CARGO_HOME
+
