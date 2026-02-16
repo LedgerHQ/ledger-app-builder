@@ -16,10 +16,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && apt upgrade -y && apt install -
         python3 \
         python3-pip \
         wget \
-        gnupg \
-        libnewlib-arm-none-eabi \
-        gcc-arm-none-eabi \
-        picolibc-arm-none-eabi
+        gnupg
 
 
 # Install clang 21 toolchain
