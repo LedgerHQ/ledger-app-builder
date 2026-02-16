@@ -112,6 +112,7 @@ jobs:
       image_name: ledger-app-builder-lite
       dockerfile_path: lite/Dockerfile
       dry_run: true
+      outputs: type=docker,dest=/tmp/ledger-app-builder-lite.tar
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -129,6 +130,7 @@ jobs:
       image_name: ledger-app-builder
       dockerfile_path: full/Dockerfile
       dry_run: true
+      outputs: type=docker,dest=/tmp/ledger-app-builder.tar
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -149,5 +151,150 @@ jobs:
       build_args: SPECULOS_VERSION=${{ needs.get_speculos_version.outputs.speculos_version }}
       dry_run: true
       runs_on: ubuntu-latest
+      outputs: type=docker,dest=/tmp/ledger-app-dev-tools.tar
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
+
+  test_builder_lite:
+    name: Test App Builder Lite
+    needs: builder_lite
+    if: needs.builder_lite.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download lite image
+        uses: actions/download-artifact@v4
+        with:
+          name: ledger-app-builder-lite
+          path: /tmp
+
+      - name: Load Docker image
+        id: load-image
+        run: |
+          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-builder-lite.tar | grep "Loaded image:" | sed 's/Loaded image: //')
+          echo "image=$LOADED_IMAGE" >> "$GITHUB_OUTPUT"
+
+      - name: Clone app-boilerplate
+        uses: actions/checkout@v4
+        with:
+          repository: LedgerHQ/app-boilerplate
+          path: app-boilerplate
+
+      - name: Build app-boilerplate
+        run: |
+          docker run --rm -v ${{ github.workspace }}/app-boilerplate:/app \
+            ${{ steps.load-image.outputs.image }} \
+            bash -c "make -j"
+
+      - name: Run unit tests
+        run: |
+          docker run --rm -v ${{ github.workspace }}/app-boilerplate:/app \
+            ${{ steps.load-image.outputs.image }} \
+            bash -c "cd unit-tests && cmake -Bbuild -H. && make -C build && CTEST_OUTPUT_ON_FAILURE=1 make -C build test"
+
+  test_dev_tools:
+    name: Test App Dev Tools
+    needs: dev_tools
+    if: needs.dev_tools.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download dev-tools image
+        uses: actions/download-artifact@v4
+        with:
+          name: ledger-app-dev-tools
+          path: /tmp
+
+      - name: Load Docker image
+        id: load-image
+        run: |
+          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-dev-tools.tar | grep "Loaded image:" | sed 's/Loaded image: //')
+          echo "image=$LOADED_IMAGE" >> "$GITHUB_OUTPUT"
+
+      - name: Clone app-boilerplate
+        uses: actions/checkout@v4
+        with:
+          repository: LedgerHQ/app-boilerplate
+          path: app-boilerplate
+
+      - name: Build app-boilerplate
+        run: |
+          docker run --rm -v ${{ github.workspace }}/app-boilerplate:/app \
+            ${{ steps.load-image.outputs.image }} \
+            bash -c "make -j"
+
+      - name: Run unit tests
+        run: |
+          docker run --rm -v ${{ github.workspace }}/app-boilerplate:/app \
+            ${{ steps.load-image.outputs.image }} \
+            bash -c "cd unit-tests && cmake -Bbuild -H. && make -C build && CTEST_OUTPUT_ON_FAILURE=1 make -C build test"
+
+      - name: Run functional tests
+        run: |
+          docker run --rm -v ${{ github.workspace }}/app-boilerplate:/app \
+            ${{ steps.load-image.outputs.image }} \
+            bash -c "source /opt/venv/bin/activate && pip install -r tests/standalone/requirements.txt && pytest tests/standalone/ --tb=short -v --device nanosp"
+
+  test_builder_rust:
+    name: Test App Builder Full (Rust)
+    needs: builder
+    if: needs.builder.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download full image
+        uses: actions/download-artifact@v4
+        with:
+          name: ledger-app-builder
+          path: /tmp
+
+      - name: Load Docker image
+        id: load-image
+        run: |
+          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-builder.tar | grep "Loaded image:" | sed 's/Loaded image: //')
+          echo "image=$LOADED_IMAGE" >> "$GITHUB_OUTPUT"
+
+      - name: Clone app-boilerplate-rust
+        uses: actions/checkout@v4
+        with:
+          repository: LedgerHQ/app-boilerplate-rust
+          path: app-boilerplate-rust
+
+      - name: Build app-boilerplate-rust
+        run: |
+          docker run --rm -v ${{ github.workspace }}/app-boilerplate-rust:/app \
+            ${{ steps.load-image.outputs.image }} \
+            bash -c "cargo ledger build nanosplus"
+
+  test_dev_tools_rust:
+    name: Test App Dev Tools (Rust)
+    needs: dev_tools
+    if: needs.dev_tools.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download dev-tools image
+        uses: actions/download-artifact@v4
+        with:
+          name: ledger-app-dev-tools
+          path: /tmp
+
+      - name: Load Docker image
+        id: load-image
+        run: |
+          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-dev-tools.tar | grep "Loaded image:" | sed 's/Loaded image: //')
+          echo "image=$LOADED_IMAGE" >> "$GITHUB_OUTPUT"
+
+      - name: Clone app-boilerplate-rust
+        uses: actions/checkout@v4
+        with:
+          repository: LedgerHQ/app-boilerplate-rust
+          path: app-boilerplate-rust
+
+      - name: Build app-boilerplate-rust
+        run: |
+          docker run --rm -v ${{ github.workspace }}/app-boilerplate-rust:/app \
+            ${{ steps.load-image.outputs.image }} \
+            bash -c "cargo ledger build nanosplus"
+
+      - name: Run functional tests
+        run: |
+          docker run --rm -v ${{ github.workspace }}/app-boilerplate-rust:/app \
+            ${{ steps.load-image.outputs.image }} \
+            bash -c "source /opt/venv/bin/activate && pip install -r tests/standalone/requirements.txt && pytest tests/standalone/ --tb=short -v --device nanosp"
