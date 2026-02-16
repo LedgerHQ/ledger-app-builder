@@ -107,11 +107,12 @@ jobs:
       contents: write
       id-token: write
       packages: write
-    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
+    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@mbr/reusable-docker-artifact
     with:
       image_name: ledger-app-builder-lite
       dockerfile_path: lite/Dockerfile
       dry_run: true
+      outputs: type=docker,dest=/tmp/ledger-app-builder-lite.tar
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -124,7 +125,7 @@ jobs:
       contents: write
       id-token: write
       packages: write
-    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
+    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@mbr/reusable-docker-artifact
     with:
       image_name: ledger-app-builder
       dockerfile_path: full/Dockerfile
@@ -142,12 +143,43 @@ jobs:
       contents: write
       id-token: write
       packages: write
-    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
+    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@mbr/reusable-docker-artifact
     with:
       image_name: ledger-app-dev-tools
       dockerfile_path: dev-tools/Dockerfile
       build_args: SPECULOS_VERSION=${{ needs.get_speculos_version.outputs.speculos_version }}
       dry_run: true
       runs_on: ubuntu-latest
+      outputs: type=docker,image=ledger-app-builder-lite:test
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
+
+  test_builder_lite:
+    name: Test App Builder Lite
+    needs: builder_lite
+    if: needs.builder_lite.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download lite image
+        uses: actions/download-artifact@v4
+        with:
+          name: ledger-app-builder-lite
+          path: /tmp
+
+      - name: Load Docker image
+        id: load-image
+        run: |
+          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-builder-lite.tar | grep "Loaded image:" | sed 's/Loaded image: //')
+          echo "image=$LOADED_IMAGE" >> "$GITHUB_OUTPUT"
+
+      - name: Clone app-boilerplate
+        uses: actions/checkout@v4
+        with:
+          repository: LedgerHQ/app-boilerplate
+          path: app-boilerplate
+
+      - name: Build app-boilerplate
+        run: |
+          docker run --rm -v ${{ github.workspace }}/app-boilerplate:/app \
+            ${{ steps.load-image.outputs.image }} \
+            bash -c "make -j"
