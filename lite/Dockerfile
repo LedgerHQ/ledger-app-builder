@@ -17,8 +17,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && apt upgrade -y && apt install -
         python3-pip \
         wget \
         gcc-arm-none-eabi \
+        libnewlib-arm-none-eabi \
+        picolibc-arm-none-eabi \
         gnupg
-
 
 # Install clang 21 toolchain
 # TODO : LLVM has not migrated away from SHA1 signatures yet, so we need to disable the signature verification for this repository.
