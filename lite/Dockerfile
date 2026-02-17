@@ -16,6 +16,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && apt upgrade -y && apt install -
         python3 \
         python3-pip \
         wget \
+        gcc-arm-none-eabi \
         gnupg
 
 
