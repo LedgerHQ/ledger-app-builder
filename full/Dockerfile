@@ -4,7 +4,9 @@ ENV RUST_STABLE=1.92.0
 ENV RUST_NIGHTLY=nightly-2025-12-05
 
 # Add curl for Rust buildchain
-RUN apt install -y --no-install-recommends curl
+RUN apt update && \
+    apt install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
 
 # Define rustup/cargo home directories
 ENV RUSTUP_HOME=/opt/rustup
