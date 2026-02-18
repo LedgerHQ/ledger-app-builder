@@ -134,7 +134,6 @@ jobs:
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
 
-
   dev_tools:
     name: App Developer Tools
     needs: [mods_list, check_changelog, builder, get_speculos_version]

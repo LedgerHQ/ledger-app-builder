@@ -35,6 +35,8 @@ RUN echo "deb [trusted=yes] http://apt.llvm.org/trixie/ llvm-toolchain-trixie-$C
     update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-$CLANG_VERSION 100 && \
     update-alternatives --install /usr/bin/lld lld /usr/bin/lld-$CLANG_VERSION 100 && \
     update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-$CLANG_VERSION 100 && \
+    update-alternatives --install /usr/bin/llvm-ar llvm-ar /usr/bin/llvm-ar-$CLANG_VERSION 100 && \
+    update-alternatives --install /usr/bin/llvm-ranlib llvm-ranlib /usr/bin/llvm-ranlib-$CLANG_VERSION 100 && \
     rm -rf /var/lib/apt/lists/*
 
 # Python package to load app onto device
