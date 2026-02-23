@@ -3,7 +3,7 @@ FROM debian:trixie-slim
 ARG SDK_VERSION=v25.11.3
 ARG CLANG_VERSION=21
 
-RUN DEBIAN_FRONTEND=noninteractive apt update && apt upgrade -y && apt install -y --no-install-recommends \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
         cmake \
         doxygen \
         git \
@@ -22,13 +22,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && apt upgrade -y && apt install -
         gnupg
 
 # Install clang 21 toolchain
-# TODO : LLVM has not migrated away from SHA1 signatures yet, so we need to disable the signature verification for this repository.
-#        We should re-enable it as soon as LLVM migrates to a more secure signature scheme.
-#        remove the [trusted=yes] option and the corresponding warning in apt update when that happens.
-RUN echo "deb [trusted=yes] http://apt.llvm.org/trixie/ llvm-toolchain-trixie-$CLANG_VERSION main" >> /etc/apt/sources.list && \
-    echo "deb-src [trusted=yes] http://apt.llvm.org/trixie/ llvm-toolchain-trixie-$CLANG_VERSION main" >> /etc/apt/sources.list && \
-    apt update && \
-    apt install -y --no-install-recommends clang-$CLANG_VERSION clang-format-$CLANG_VERSION clang-tools-$CLANG_VERSION \
+RUN wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr/share/keyrings/llvm-archive-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/trixie/ llvm-toolchain-trixie-$CLANG_VERSION main" >> /etc/apt/sources.list && \
+    echo "deb-src [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/trixie/ llvm-toolchain-trixie-$CLANG_VERSION main" >> /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends clang-$CLANG_VERSION clang-format-$CLANG_VERSION clang-tools-$CLANG_VERSION \
                                            lld-$CLANG_VERSION llvm-$CLANG_VERSION && \
     update-alternatives --install /usr/bin/clang clang /usr/bin/clang-$CLANG_VERSION 100 && \
     update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-$CLANG_VERSION 100 && \
@@ -48,33 +46,33 @@ RUN git clone "https://github.com/LedgerHQ/ledger-secure-sdk.git" "$LEDGER_SECUR
 
 # Latest Nano S SDK (OS nanos_2.1.0 => based on API_LEVEL LNS)
 ENV NANOS_SDK=/opt/nanos-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOS_SDK" lns-2.1.0-v24.0
-RUN echo nanos > $NANOS_SDK/.target
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOS_SDK" lns-2.1.0-v24.0 && \
+    echo nanos > $NANOS_SDK/.target
 
 # Latest Nano X SDK based on API_LEVEL 25
 ENV NANOX_SDK=/opt/nanox-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK" $SDK_VERSION
-RUN echo nanox > $NANOX_SDK/.target
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK" $SDK_VERSION && \
+    echo nanox > $NANOX_SDK/.target
 
 # Latest Nano S+ SDK based on API_LEVEL 25
 ENV NANOSP_SDK=/opt/nanosplus-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOSP_SDK" $SDK_VERSION
-RUN echo nanos2 > $NANOSP_SDK/.target
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOSP_SDK" $SDK_VERSION && \
+    echo nanos2 > $NANOSP_SDK/.target
 
 # Latest Stax SDK based on API_LEVEL 25
 ENV STAX_SDK=/opt/stax-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" $SDK_VERSION
-RUN echo stax > $STAX_SDK/.target
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK" $SDK_VERSION && \
+    echo stax > $STAX_SDK/.target
 
 # Latest Flex SDK based on API_LEVEL 25
 ENV FLEX_SDK=/opt/flex-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$FLEX_SDK" $SDK_VERSION
-RUN echo flex > $FLEX_SDK/.target
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$FLEX_SDK" $SDK_VERSION && \
+    echo flex > $FLEX_SDK/.target
 
 # Latest Apex P SDK based on API_LEVEL 25
 ENV APEX_P_SDK=/opt/apex-secure-sdk
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$APEX_P_SDK" $SDK_VERSION
-RUN echo apex_p > $APEX_P_SDK/.target
+RUN git -C "$LEDGER_SECURE_SDK" worktree add "$APEX_P_SDK" $SDK_VERSION && \
+    echo apex_p > $APEX_P_SDK/.target
 
 # Default SDK
 ENV BOLOS_SDK=$NANOSP_SDK
