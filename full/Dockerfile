@@ -1,12 +1,13 @@
 # FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 FROM ledger-app-builder-lite:latest
+FROM trixie-lite-clang-21:latest
 
 ENV RUST_STABLE=1.92.0
 ENV RUST_NIGHTLY=nightly-2025-12-05
 
 # Add curl for Rust buildchain
-RUN apt update && \
-    apt install -y --no-install-recommends curl && \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
     rm -rf /var/lib/apt/lists/*
 
 # Define rustup/cargo home directories
