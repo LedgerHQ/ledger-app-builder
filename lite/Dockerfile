@@ -44,7 +44,7 @@ RUN pip3 install --break-system-packages --no-cache-dir ledgerblue==0.1.54 tomli
 
 # Unified SDK
 ARG LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
-RUN git clone "https://github.com/LedgerHQ/ledger-secure-sdk.git" "$LEDGER_SECURE_SDK"
+RUN git clone -b mbr/clang-21 "https://github.com/LedgerHQ/ledger-secure-sdk.git" "$LEDGER_SECURE_SDK"
 
 # Latest Nano S SDK (OS nanos_2.1.0 => based on API_LEVEL LNS)
 ENV NANOS_SDK=/opt/nanos-secure-sdk
@@ -57,12 +57,12 @@ ENV APEX_P_SDK=/opt/apex-secure-sdk
 # Default SDK
 ENV BOLOS_SDK=$NANOSP_SDK
 
-RUN git -C "$LEDGER_SECURE_SDK" worktree add "$NANOS_SDK" lns-2.1.0-v24.0 && \
-    git -C "$LEDGER_SECURE_SDK" worktree add "$NANOX_SDK"  $SDK_VERSION && \
-    git -C "$LEDGER_SECURE_SDK" worktree add "$NANOSP_SDK" $SDK_VERSION && \
-    git -C "$LEDGER_SECURE_SDK" worktree add "$STAX_SDK"   $SDK_VERSION && \
-    git -C "$LEDGER_SECURE_SDK" worktree add "$FLEX_SDK"   $SDK_VERSION && \
-    git -C "$LEDGER_SECURE_SDK" worktree add "$APEX_P_SDK" $SDK_VERSION && \
+RUN git -C "$LEDGER_SECURE_SDK" worktree add -d "$NANOS_SDK" lns-2.1.0-v24.0 && \
+    git -C "$LEDGER_SECURE_SDK" worktree add -d "$NANOX_SDK"  $SDK_VERSION && \
+    git -C "$LEDGER_SECURE_SDK" worktree add -d "$NANOSP_SDK" $SDK_VERSION && \
+    git -C "$LEDGER_SECURE_SDK" worktree add -d "$STAX_SDK"   $SDK_VERSION && \
+    git -C "$LEDGER_SECURE_SDK" worktree add -d "$FLEX_SDK"   $SDK_VERSION && \
+    git -C "$LEDGER_SECURE_SDK" worktree add -d "$APEX_P_SDK" $SDK_VERSION && \
     echo nanos  > $NANOS_SDK/.target && \
     echo nanox  > $NANOX_SDK/.target && \
     echo nanos2 > $NANOSP_SDK/.target && \
