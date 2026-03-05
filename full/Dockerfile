@@ -1,4 +1,5 @@
-FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+#FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+FROM lite:latest
 
 ENV RUST_STABLE=1.92.0
 ENV RUST_NIGHTLY=nightly-2025-12-05
@@ -28,7 +29,7 @@ RUN rustup component add rust-src --toolchain $RUST_NIGHTLY
 RUN rustup component add rust-src --toolchain $RUST_STABLE
 
 # Install ledgerctl, which is used by cargo ledger for loading or dumping an APDU app file.
-RUN pip3 install --break-system-packages --no-cache-dir ledgerwallet==0.5.5
+RUN pip3 install --break-system-packages --no-cache-dir ledgerwallet==0.9.2
 
 # Add cargo ledger
 RUN cargo install --version 1.12.0 cargo-ledger
