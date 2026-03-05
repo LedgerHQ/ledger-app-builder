@@ -1,5 +1,4 @@
-#FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
-FROM full:latest
+FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 
 ARG SPECULOS_VERSION
 
