@@ -1,4 +1,5 @@
-FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+#FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+FROM trixie-full-clang-21:latest
 
 ARG SPECULOS_VERSION
 
@@ -21,6 +22,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libxkbcommon-x11-0 \
         gcc-arm-linux-gnueabihf \ 
         libc6-dev-armhf-cross && \
+        autoconf && \
+        libtool  && \
      pip3 install --break-system-packages --no-cache-dir --no-binary speculos "speculos==${SPECULOS_VERSION}" && \
      apt-get clean && \
      rm -rf /var/lib/apt/lists/*

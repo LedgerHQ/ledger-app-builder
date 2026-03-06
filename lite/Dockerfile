@@ -1,6 +1,6 @@
 FROM debian:trixie-slim
 
-ARG SDK_VERSION=mbr/clang-21
+ARG SDK_VERSION=4211d91290681e9eacabbfc6b7036b493602c14f
 ARG CLANG_VERSION=21
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
@@ -44,7 +44,7 @@ RUN pip3 install --break-system-packages --no-cache-dir ledgerblue==0.1.54 tomli
 
 # Unified SDK
 ARG LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
-RUN git clone -b mbr/clang-21 "https://github.com/LedgerHQ/ledger-secure-sdk.git" "$LEDGER_SECURE_SDK"
+RUN git clone -b mbr/clang-21 --no-single-branch "https://github.com/LedgerHQ/ledger-secure-sdk.git" "$LEDGER_SECURE_SDK"
 
 # Latest Nano S SDK (OS nanos_2.1.0 => based on API_LEVEL LNS)
 ENV NANOS_SDK=/opt/nanos-secure-sdk
