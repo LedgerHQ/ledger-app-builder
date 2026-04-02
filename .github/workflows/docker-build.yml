@@ -170,7 +170,7 @@ jobs:
       - name: Load Docker image
         id: load-image
         run: |
-          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-builder-lite.tar | grep "Loaded image:" | sed 's/Loaded image: //')
+          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-builder-lite.tar | grep "Loaded image:.*:latest" | sed 's/Loaded image: //')
           echo "image=$LOADED_IMAGE" >> "$GITHUB_OUTPUT"
 
       - name: Clone app-boilerplate
@@ -206,7 +206,7 @@ jobs:
       - name: Load Docker image
         id: load-image
         run: |
-          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-dev-tools.tar | grep "Loaded image:" | sed 's/Loaded image: //')
+          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-dev-tools.tar | grep "Loaded image:.*:latest" | sed 's/Loaded image: //')
           echo "image=$LOADED_IMAGE" >> "$GITHUB_OUTPUT"
 
       - name: Clone app-boilerplate
@@ -248,7 +248,7 @@ jobs:
       - name: Load Docker image
         id: load-image
         run: |
-          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-builder.tar | grep "Loaded image:" | sed 's/Loaded image: //')
+          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-builder.tar | grep "Loaded image:.*:latest" | sed 's/Loaded image: //')
           echo "image=$LOADED_IMAGE" >> "$GITHUB_OUTPUT"
 
       - name: Clone app-boilerplate-rust
@@ -278,7 +278,7 @@ jobs:
       - name: Load Docker image
         id: load-image
         run: |
-          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-dev-tools.tar | grep "Loaded image:" | sed 's/Loaded image: //')
+          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-dev-tools.tar | grep "Loaded image:.*:latest" | sed 's/Loaded image: //')
           echo "image=$LOADED_IMAGE" >> "$GITHUB_OUTPUT"
 
       - name: Clone app-boilerplate-rust
