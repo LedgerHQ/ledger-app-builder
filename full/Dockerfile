@@ -31,7 +31,7 @@ RUN rustup component add rust-src --toolchain $RUST_STABLE
 RUN pip3 install --break-system-packages --no-cache-dir ledgerwallet==0.10.0
 
 # Add cargo ledger
-RUN cargo install --version 1.12.0 cargo-ledger
+RUN cargo install --version 1.12.1 cargo-ledger
 
 # Setup cargo ledger (install JSON target files and custom link script) for nightly
 RUN cargo +$RUST_NIGHTLY ledger setup -t custom_target_nightly
