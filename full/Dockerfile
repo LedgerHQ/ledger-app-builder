@@ -3,8 +3,12 @@ FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 ENV RUST_STABLE=1.92.0
 ENV RUST_NIGHTLY=nightly-2025-12-05
 
-# Add curl for Rust buildchain
-RUN apt-get install -y --no-install-recommends curl python3-venv python3-dev python3-pkgconfig rsync
+RUN apt-get install -y --no-install-recommends \
+        curl \
+        python3-dev \
+        python3-pkgconfig \
+        python3-venv \
+        rsync
 
 # Define rustup/cargo home directories
 ENV RUSTUP_HOME=/opt/rustup

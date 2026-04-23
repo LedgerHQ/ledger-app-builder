@@ -3,13 +3,11 @@ FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 ARG SPECULOS_VERSION
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+        gcc-arm-linux-gnueabihf \
         imagemagick \
+        libc6-dev-armhf-cross \
         libgl1 \
         libpython3-dev \
-        pkg-config \
-        python3-pyqt6 \
-        python3-venv \
-        qemu-user-static \
         libvncserver-dev \
         libxcb-icccm4 \
         libxcb-image0 \
@@ -19,8 +17,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libxcb-xinerama0 \
         libxcb-xkb1 \
         libxkbcommon-x11-0 \
-        gcc-arm-linux-gnueabihf \ 
-        libc6-dev-armhf-cross && \
+        python3-pyqt6 \
+        qemu-user-static && \
      pip3 install --break-system-packages --no-cache-dir --no-binary speculos "speculos==${SPECULOS_VERSION}" && \
      apt-get clean && \
      rm -rf /var/lib/apt/lists/*
