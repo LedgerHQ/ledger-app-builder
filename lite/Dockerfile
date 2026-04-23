@@ -10,14 +10,14 @@ RUN apt update && \
         gcc-arm-none-eabi \
         git \
         jq \
-        libcmocka-dev \
         lcov \
+        libcmocka-dev \
         libnewlib-arm-none-eabi \
-        picolibc-arm-none-eabi \
         lld \
         llvm \
         make \
         ninja-build \
+        picolibc-arm-none-eabi \
         protobuf-compiler \
         python3 \
         python3-pip \
