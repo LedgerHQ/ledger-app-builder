@@ -17,9 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libxcb-xinerama0 \
         libxcb-xkb1 \
         libxkbcommon-x11-0 \
-        pkg-config \
         python3-pyqt6 \
-        python3-venv \
         qemu-user-static && \
      pip3 install --break-system-packages --no-cache-dir --no-binary speculos "speculos==${SPECULOS_VERSION}" && \
      apt-get clean && \
