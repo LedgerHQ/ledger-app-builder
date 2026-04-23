@@ -11,6 +11,7 @@ RUN apt update && \
         git \
         jq \
         lcov \
+        libbsd-dev \
         libcmocka-dev \
         libnewlib-arm-none-eabi \
         lld \
@@ -18,6 +19,7 @@ RUN apt update && \
         make \
         ninja-build \
         picolibc-arm-none-eabi \
+        pkg-config \
         protobuf-compiler \
         python3 \
         python3-pip \
