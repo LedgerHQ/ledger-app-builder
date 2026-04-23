@@ -1,8 +1,7 @@
 FROM debian:bookworm-slim
 
-RUN apt update && apt upgrade -y
-
-RUN apt install -y --no-install-recommends \
+RUN apt update && \
+    apt install -y --no-install-recommends \
         clang \
         clang-format \
         clang-tools \
