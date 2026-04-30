@@ -31,11 +31,8 @@ RUN rustup target add thumbv6m-none-eabi --toolchain $RUST_NIGHTLY
 RUN rustup component add rust-src --toolchain $RUST_NIGHTLY
 RUN rustup component add rust-src --toolchain $RUST_STABLE
 
-# Install ledgerctl, which is used by cargo ledger for loading or dumping an APDU app file.
-RUN pip3 install --break-system-packages --no-cache-dir ledgerwallet==0.10.0
-
 # Add cargo ledger
-RUN cargo install --version 1.12.2 cargo-ledger
+RUN cargo install --version 1.13.0 cargo-ledger
 
 # Setup cargo ledger (install JSON target files and custom link script) for nightly
 RUN cargo +$RUST_NIGHTLY ledger setup -t custom_target_nightly
