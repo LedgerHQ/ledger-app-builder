@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
     - Bump API_LEVEL_26 to v26.1.5 and apply it to all devices
+	- Includes last Speculos version 0.26.8
 
 ## [5.3.4] - 2026-04-30
 
