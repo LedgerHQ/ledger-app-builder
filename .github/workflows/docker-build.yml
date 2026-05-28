@@ -45,13 +45,13 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check already existing image
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          GHCR_TOKEN=$(echo ${{ secrets.GITHUB_TOKEN }} | base64)
-
           # Get tags of all images from GHCR
-          TAGS_FULL=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}/tags/list)
-          TAGS_LITE=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}-lite/tags/list)
-          TAGS_DEV_TOOLS=$(curl -H "Authorization: Bearer ${GHCR_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/ledger-app-dev-tools/tags/list)
+          TAGS_FULL=$(curl -H "Authorization: Bearer ${GH_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}/tags/list)
+          TAGS_LITE=$(curl -H "Authorization: Bearer ${GH_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/${REPO_NAME,,}-lite/tags/list)
+          TAGS_DEV_TOOLS=$(curl -H "Authorization: Bearer ${GH_TOKEN}" https://ghcr.io/v2/${REPO_PATH,,}/ledger-app-dev-tools/tags/list)
 
           # Concatenate all tags from json fields in one string without brackets
           ALL_TAGS=$(echo $TAGS_FULL $TAGS_LITE $TAGS_DEV_TOOLS | jq -s '.[0].tags + .[1].tags + .[2].tags' | tr -d '[]')
