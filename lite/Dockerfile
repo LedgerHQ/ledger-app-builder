@@ -1,10 +1,10 @@
 FROM debian:trixie-slim@sha256:b6e2a152f22a40ff69d92cb397223c906017e1391a73c952b588e51af8883bf8
 
-ARG NANOSP_SDK_VERSION=v26.1.8
-ARG NANOX_SDK_VERSION=v26.1.8
-ARG STAX_SDK_VERSION=v26.1.8
-ARG FLEX_SDK_VERSION=v26.1.8
-ARG APEX_P_SDK_VERSION=v26.1.8
+ARG NANOSP_SDK_VERSION=v26.1.9
+ARG NANOX_SDK_VERSION=v26.1.9
+ARG STAX_SDK_VERSION=v26.1.9
+ARG FLEX_SDK_VERSION=v26.1.9
+ARG APEX_P_SDK_VERSION=v26.1.9
 
 ARG CLANG_MAJOR=21
 ARG CLANG_NIGHTLY=1:21.1.8~++20251221033036+2078da43e25a-1~exp1~20251221153213.50
@@ -48,7 +48,10 @@ RUN wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /us
     update-alternatives --install /usr/bin/llvm-ar llvm-ar /usr/bin/llvm-ar-$CLANG_MAJOR 100 && \
     update-alternatives --install /usr/bin/llvm-ranlib llvm-ranlib /usr/bin/llvm-ranlib-$CLANG_MAJOR 100 && \
     update-alternatives --install /usr/bin/llvm-objcopy llvm-objcopy /usr/bin/llvm-objcopy-$CLANG_MAJOR 100 && \
+    update-alternatives --install /usr/bin/llvm-objdump llvm-objdump /usr/bin/llvm-objdump-$CLANG_MAJOR 100 && \
     update-alternatives --install /usr/bin/llvm-nm llvm-nm /usr/bin/llvm-nm-$CLANG_MAJOR 100 && \
+    update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-$CLANG_MAJOR 100 && \
+    update-alternatives --install /usr/bin/scan-view scan-view /usr/bin/scan-view-$CLANG_MAJOR 100 && \
     rm -rf /var/lib/apt/lists/*
 
 # Python package to load app onto device
