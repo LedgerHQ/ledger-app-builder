@@ -40,7 +40,7 @@ RUN wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /us
     echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] https://apt.llvm.org/trixie/ llvm-toolchain-trixie-$CLANG_MAJOR main" > /etc/apt/sources.list.d/llvm.list && \
     echo "deb-src [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] https://apt.llvm.org/trixie/ llvm-toolchain-trixie-$CLANG_MAJOR main" >> /etc/apt/sources.list.d/llvm.list && \
     apt-get update && \
-    apt-get install -y --no-install-recommends clang-$CLANG_MAJOR=${CLANG_NIGHTLY} clang-format-$CLANG_MAJOR=${CLANG_NIGHTLY} clang-tools-$CLANG_MAJOR=${CLANG_NIGHTLY} \
+    apt-get install -y --no-install-recommends clang-$CLANG_MAJOR=${CLANG_NIGHTLY} clang-format-$CLANG_MAJOR=${CLANG_NIGHTLY} clang-tools-$CLANG_MAJOR=${CLANG_NIGHTLY} libclang-rt-${CLANG_MAJOR}-dev \
                                            lld-$CLANG_MAJOR=${CLANG_NIGHTLY} llvm-$CLANG_MAJOR=${CLANG_NIGHTLY} && \
     update-alternatives --install /usr/bin/clang clang /usr/bin/clang-$CLANG_MAJOR 100 && \
     update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-$CLANG_MAJOR 100 && \
