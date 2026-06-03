@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         python3-dev \
         python3-pkgconfig \
         python3-venv \
-        rsync && \
+        rsync \
+        rustup && \
     rm -rf /var/lib/apt/lists/*
 
 # Define rustup/cargo home directories
@@ -18,8 +19,8 @@ ENV CARGO_HOME=/opt/.cargo
 # Adding cargo binaries to PATH
 ENV PATH=${PATH}:${CARGO_HOME}/bin
 
-# Installing rustup and setting the default toolchain to the RUST_STABLE channel.
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain $RUST_STABLE -y
+# Installing stable channel version RUST_STABLE
+RUN rustup toolchain install $RUST_STABLE
 
 # Installing nightly channel version RUST_NIGHTLY (for Rust applications).
 RUN rustup toolchain install $RUST_NIGHTLY
