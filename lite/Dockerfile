@@ -14,6 +14,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y && apt-g
         automake \
         build-essential \
         cmake \
+        curl \
         doxygen \
         gcc-arm-none-eabi \
         git \
