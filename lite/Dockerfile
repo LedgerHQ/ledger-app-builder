@@ -18,7 +18,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y && apt-g
         doxygen \
         gcc-arm-none-eabi \
         git \
-        gnupg \
+        gpg \
         jq \
         lcov \
         libbsd-dev \
