@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.3.10] - 2026-06-03
+
+### Changed
+    - Bump API_LEVEL_26 to v26.1.10 and apply it to all devices
+    - Move curl in lite image
+
 ## [5.3.9] - 2026-06-02
 
 ### Changed
