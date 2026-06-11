@@ -34,7 +34,7 @@ RUN rustup component add rust-src --toolchain $RUST_NIGHTLY
 RUN rustup component add rust-src --toolchain $RUST_STABLE
 
 # Add cargo ledger
-RUN cargo install --version 1.13.1 cargo-ledger
+RUN cargo install --version 1.14.0 cargo-ledger
 
 # Setup cargo ledger (install JSON target files and custom link script) for nightly
 RUN cargo +$RUST_NIGHTLY ledger setup -t custom_target_nightly
