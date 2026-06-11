@@ -1,10 +1,10 @@
 FROM debian:trixie-slim@sha256:b6e2a152f22a40ff69d92cb397223c906017e1391a73c952b588e51af8883bf8
 
-ARG NANOSP_SDK_VERSION=v26.1.10
-ARG NANOX_SDK_VERSION=v26.1.10
-ARG STAX_SDK_VERSION=v26.1.10
-ARG FLEX_SDK_VERSION=v26.1.10
-ARG APEX_P_SDK_VERSION=v26.1.10
+ARG NANOSP_SDK_VERSION=v26.2.0
+ARG NANOX_SDK_VERSION=v26.2.0
+ARG STAX_SDK_VERSION=v26.2.0
+ARG FLEX_SDK_VERSION=v26.2.0
+ARG APEX_P_SDK_VERSION=v26.2.0
 
 ARG CLANG_MAJOR=21
 ARG CLANG_NIGHTLY=1:21.1.8~++20251221033036+2078da43e25a-1~exp1~20251221153213.50
@@ -27,20 +27,18 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y && apt-g
         libtool \
         make \
         ninja-build \
-        picolibc-arm-none-eabi \
         pkg-config \
         protobuf-compiler \
         python-is-python3 \
         python3 \
-        python3-pip \
-        wget
+        python3-pip
 
 # Install clang 21 toolchain
-RUN wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr/share/keyrings/llvm-archive-keyring.gpg && \
+RUN curl https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr/share/keyrings/llvm-archive-keyring.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] https://apt.llvm.org/trixie/ llvm-toolchain-trixie-$CLANG_MAJOR main" > /etc/apt/sources.list.d/llvm.list && \
     echo "deb-src [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] https://apt.llvm.org/trixie/ llvm-toolchain-trixie-$CLANG_MAJOR main" >> /etc/apt/sources.list.d/llvm.list && \
     apt-get update && \
-    apt-get install -y --no-install-recommends clang-$CLANG_MAJOR=${CLANG_NIGHTLY} clang-format-$CLANG_MAJOR=${CLANG_NIGHTLY} clang-tools-$CLANG_MAJOR=${CLANG_NIGHTLY} libclang-rt-${CLANG_MAJOR}-dev \
+    apt-get install -y --no-install-recommends clang-$CLANG_MAJOR=${CLANG_NIGHTLY} clang-format-$CLANG_MAJOR=${CLANG_NIGHTLY} clang-tools-$CLANG_MAJOR=${CLANG_NIGHTLY} \
                                            lld-$CLANG_MAJOR=${CLANG_NIGHTLY} llvm-$CLANG_MAJOR=${CLANG_NIGHTLY} && \
     update-alternatives --install /usr/bin/clang clang /usr/bin/clang-$CLANG_MAJOR 100 && \
     update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-$CLANG_MAJOR 100 && \
