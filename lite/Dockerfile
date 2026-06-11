@@ -54,7 +54,7 @@ RUN curl https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr/shar
     rm -rf /var/lib/apt/lists/*
 
 # Python package to load app onto device
-RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.55" tomli-w ledgered semver
+RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.57" tomli-w ledgered semver
 
 # Unified SDK
 ARG LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
