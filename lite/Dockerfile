@@ -1,10 +1,10 @@
 FROM debian:trixie-slim@sha256:b6e2a152f22a40ff69d92cb397223c906017e1391a73c952b588e51af8883bf8
 
-ARG NANOSP_SDK_VERSION=v26.3.0
-ARG NANOX_SDK_VERSION=v26.3.0
-ARG STAX_SDK_VERSION=v26.3.0
-ARG FLEX_SDK_VERSION=v26.3.0
-ARG APEX_P_SDK_VERSION=v26.3.0
+ARG NANOSP_SDK_VERSION=v26.4.0
+ARG NANOX_SDK_VERSION=v26.4.0
+ARG STAX_SDK_VERSION=v26.4.0
+ARG FLEX_SDK_VERSION=v26.4.0
+ARG APEX_P_SDK_VERSION=v26.4.0
 
 ARG CLANG_MAJOR=21
 ARG CLANG_NIGHTLY=1:21.1.8~++20251221033036+2078da43e25a-1~exp1~20251221153213.50
@@ -54,7 +54,7 @@ RUN curl https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr/shar
     rm -rf /var/lib/apt/lists/*
 
 # Python package to load app onto device
-RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.57" tomli-w ledgered semver
+RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.58" tomli-w ledgered semver
 
 # Unified SDK
 ARG LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
