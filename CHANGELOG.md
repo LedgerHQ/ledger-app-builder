@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.3.17] - 2026-07-09
+
+### Added
+    - Pin scikit-build-core to 0.9.10 through a pip constraint applied to all images (B2CA-2754)
+
+### Changed
+    - Bump speculos to 0.26.10
+    - Bump API_LEVEL_26 to v26.5.0 and apply it to all devices
+
 ## [5.3.16] - 2026-06-24
 
 ### Changed
