@@ -23,6 +23,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y && apt-g
         lcov \
         libbsd-dev \
         libcmocka-dev \
+        libjson-xs-perl \
         libnewlib-arm-none-eabi \
         libtool \
         make \
@@ -31,7 +32,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y && apt-g
         protobuf-compiler \
         python-is-python3 \
         python3 \
-        python3-pip
+        python3-pip \
+        ruby
 
 # Install clang 21 toolchain
 RUN curl https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr/share/keyrings/llvm-archive-keyring.gpg && \
@@ -59,7 +61,7 @@ COPY ./lite/pip-constraints.txt /opt/pip-constraints.txt
 ENV PIP_CONSTRAINT=/opt/pip-constraints.txt
 
 # Python package to load app onto device
-RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.58" tomli-w ledgered semver
+RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.58" tomli-w ledgered semver lcov_cobertura
 
 # Unified SDK
 ARG LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
