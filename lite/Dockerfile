@@ -1,10 +1,10 @@
 FROM debian:trixie-slim@sha256:b6e2a152f22a40ff69d92cb397223c906017e1391a73c952b588e51af8883bf8
 
-ARG NANOSP_SDK_VERSION=v26.5.1
-ARG NANOX_SDK_VERSION=v26.5.1
-ARG STAX_SDK_VERSION=v26.5.1
-ARG FLEX_SDK_VERSION=v26.5.1
-ARG APEX_P_SDK_VERSION=v26.5.1
+ARG NANOSP_SDK_VERSION=v26.6.0
+ARG NANOX_SDK_VERSION=v26.6.0
+ARG STAX_SDK_VERSION=v26.6.0
+ARG FLEX_SDK_VERSION=v26.6.0
+ARG APEX_P_SDK_VERSION=v26.6.0
 
 ARG CLANG_MAJOR=21
 ARG CLANG_NIGHTLY=1:21.1.8~++20251221033036+2078da43e25a-1~exp1~20251221153213.50
@@ -23,6 +23,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y && apt-g
         lcov \
         libbsd-dev \
         libcmocka-dev \
+        libjson-xs-perl \
         libnewlib-arm-none-eabi \
         libtool \
         make \
@@ -31,7 +32,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get upgrade -y && apt-g
         protobuf-compiler \
         python-is-python3 \
         python3 \
-        python3-pip
+        python3-pip \
+        ruby
 
 # Install clang 21 toolchain
 RUN curl https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr/share/keyrings/llvm-archive-keyring.gpg && \
@@ -59,7 +61,7 @@ COPY ./lite/pip-constraints.txt /opt/pip-constraints.txt
 ENV PIP_CONSTRAINT=/opt/pip-constraints.txt
 
 # Python package to load app onto device
-RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.58" tomli-w ledgered semver
+RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.58" tomli-w ledgered semver lcov_cobertura
 
 # Unified SDK
 ARG LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
