@@ -23,6 +23,9 @@ env:
   REPO_PATH: ${{ github.repository }}
   REPO_NAME: ${{ github.event.repository.name }}
   BUILD_PLATFORMS: linux/amd64,linux/arm64
+  LITE_IMAGE: local/ledger-app-builder-lite:ci
+  FULL_IMAGE: local/ledger-app-builder:ci
+  DEV_TOOLS_IMAGE: local/ledger-app-dev-tools:ci
 
 jobs:
   check_changelog:
@@ -98,66 +101,104 @@ jobs:
           echo "Got speculos version ${SPECULOS_VERSION}"
           echo "speculos_version=$SPECULOS_VERSION" >> "$GITHUB_OUTPUT"
 
-  builder_lite:
-    name: App Builder Lite
-    needs: [mods_list, check_changelog]
-    if: needs.check_changelog.result == 'success' && contains(needs.mods_list.outputs.modified_files, 'lite/Dockerfile')
-    permissions:
-      attestations: write
-      contents: write
-      id-token: write
-      packages: write
-    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
-    with:
-      image_name: ledger-app-builder-lite
-      dockerfile_path: lite/Dockerfile
-      dry_run: true
-      outputs: type=docker,dest=/tmp/ledger-app-builder-lite.tar
-    secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+  build_images:
+    name: Build images (lite -> full -> dev-tools)
+    needs: [mods_list, check_changelog, get_speculos_version]
+    if: needs.check_changelog.result == 'success'
+    runs-on: ubuntu-latest
+    outputs:
+      build_lite: ${{ steps.plan.outputs.build_lite }}
+      build_full: ${{ steps.plan.outputs.build_full }}
+      build_dev_tools: ${{ steps.plan.outputs.build_dev_tools }}
+    steps:
+      - name: Clone
+        uses: actions/checkout@v6
 
-  builder:
-    name: App Builder Full
-    needs: [mods_list, check_changelog, builder_lite]
-    if: always() && needs.check_changelog.result == 'success' && (needs.builder_lite.result == 'success' || (needs.builder_lite.result == 'skipped' && contains(needs.mods_list.outputs.modified_files, 'full/Dockerfile')))
-    permissions:
-      attestations: write
-      contents: write
-      id-token: write
-      packages: write
-    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
-    with:
-      image_name: ledger-app-builder
-      dockerfile_path: full/Dockerfile
-      dry_run: true
-      outputs: type=docker,dest=/tmp/ledger-app-builder.tar
-    secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Plan builds
+        id: plan
+        env:
+          MODIFIED_FILES: ${{ needs.mods_list.outputs.modified_files }}
+        run: |
+          BUILD_LITE=false
+          BUILD_FULL=false
+          BUILD_DEV_TOOLS=false
 
-  dev_tools:
-    name: App Developer Tools
-    needs: [mods_list, check_changelog, builder, get_speculos_version]
-    if: always() && needs.check_changelog.result == 'success' && (needs.builder.result == 'success' || (needs.builder.result == 'skipped' && contains(needs.mods_list.outputs.modified_files, 'dev-tools/Dockerfile')))
-    permissions:
-      attestations: write
-      contents: write
-      id-token: write
-      packages: write
-    uses: LedgerHQ/ledger-app-workflows/.github/workflows/reusable_docker_deployment.yml@v1
-    with:
-      image_name: ledger-app-dev-tools
-      dockerfile_path: dev-tools/Dockerfile
-      build_args: SPECULOS_VERSION=${{ needs.get_speculos_version.outputs.speculos_version }}
-      dry_run: true
-      runs_on: ubuntu-latest
-      outputs: type=docker,dest=/tmp/ledger-app-dev-tools.tar
-    secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+          if [[ "$MODIFIED_FILES" == *"lite/Dockerfile"* ]]; then
+            BUILD_LITE=true
+          fi
+          if [[ "$BUILD_LITE" == "true" || "$MODIFIED_FILES" == *"full/Dockerfile"* ]]; then
+            BUILD_FULL=true
+          fi
+          if [[ "$BUILD_FULL" == "true" || "$MODIFIED_FILES" == *"dev-tools/Dockerfile"* ]]; then
+            BUILD_DEV_TOOLS=true
+          fi
+
+          echo "build_lite=$BUILD_LITE" >> "$GITHUB_OUTPUT"
+          echo "build_full=$BUILD_FULL" >> "$GITHUB_OUTPUT"
+          echo "build_dev_tools=$BUILD_DEV_TOOLS" >> "$GITHUB_OUTPUT"
+
+      - name: Build lite image
+        if: steps.plan.outputs.build_lite == 'true'
+        run: docker build -f lite/Dockerfile -t ${{ env.LITE_IMAGE }} .
+
+      - name: Build full image
+        if: steps.plan.outputs.build_full == 'true'
+        run: |
+          BUILD_ARGS=()
+          if [[ "${{ steps.plan.outputs.build_lite }}" == "true" ]]; then
+            BUILD_ARGS+=(--build-arg "BASE_IMAGE=${{ env.LITE_IMAGE }}")
+          fi
+          docker build -f full/Dockerfile "${BUILD_ARGS[@]}" -t ${{ env.FULL_IMAGE }} .
+
+      - name: Build dev-tools image
+        if: steps.plan.outputs.build_dev_tools == 'true'
+        run: |
+          BUILD_ARGS=(--build-arg "SPECULOS_VERSION=${{ needs.get_speculos_version.outputs.speculos_version }}")
+          if [[ "${{ steps.plan.outputs.build_full }}" == "true" ]]; then
+            BUILD_ARGS+=(--build-arg "BASE_IMAGE=${{ env.FULL_IMAGE }}")
+          fi
+          docker build -f dev-tools/Dockerfile "${BUILD_ARGS[@]}" -t ${{ env.DEV_TOOLS_IMAGE }} .
+
+      - name: Save lite image
+        if: steps.plan.outputs.build_lite == 'true'
+        run: docker save ${{ env.LITE_IMAGE }} -o /tmp/ledger-app-builder-lite.tar
+
+      - name: Upload lite artifact
+        if: steps.plan.outputs.build_lite == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ledger-app-builder-lite
+          path: /tmp/ledger-app-builder-lite.tar
+          retention-days: 1
+
+      - name: Save full image
+        if: steps.plan.outputs.build_full == 'true'
+        run: docker save ${{ env.FULL_IMAGE }} -o /tmp/ledger-app-builder.tar
+
+      - name: Upload full artifact
+        if: steps.plan.outputs.build_full == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ledger-app-builder
+          path: /tmp/ledger-app-builder.tar
+          retention-days: 1
+
+      - name: Save dev-tools image
+        if: steps.plan.outputs.build_dev_tools == 'true'
+        run: docker save ${{ env.DEV_TOOLS_IMAGE }} -o /tmp/ledger-app-dev-tools.tar
+
+      - name: Upload dev-tools artifact
+        if: steps.plan.outputs.build_dev_tools == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ledger-app-dev-tools
+          path: /tmp/ledger-app-dev-tools.tar
+          retention-days: 1
 
   test_builder_lite:
     name: Test App Builder Lite
-    needs: builder_lite
-    if: needs.builder_lite.result == 'success'
+    needs: build_images
+    if: needs.build_images.outputs.build_lite == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Download lite image
@@ -167,10 +208,7 @@ jobs:
           path: /tmp
 
       - name: Load Docker image
-        id: load-image
-        run: |
-          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-builder-lite.tar | grep "Loaded image:.*:latest" | sed 's/Loaded image: //')
-          echo "image=$LOADED_IMAGE" >> "$GITHUB_OUTPUT"
+        run: docker load --input /tmp/ledger-app-builder-lite.tar
 
       - name: Clone app-boilerplate
         uses: actions/checkout@v6
@@ -181,19 +219,19 @@ jobs:
       - name: Build app-boilerplate
         run: |
           docker run --rm -v ${{ github.workspace }}/app-boilerplate:/app \
-            ${{ steps.load-image.outputs.image }} \
+            ${{ env.LITE_IMAGE }} \
             bash -c "make -j"
 
       - name: Run unit tests
         run: |
           docker run --rm -v ${{ github.workspace }}/app-boilerplate:/app \
-            ${{ steps.load-image.outputs.image }} \
+            ${{ env.LITE_IMAGE }} \
             bash -c "cd unit-tests && cmake -Bbuild -H. && make -C build && CTEST_OUTPUT_ON_FAILURE=1 make -C build test"
 
   test_dev_tools:
     name: Test App Dev Tools
-    needs: dev_tools
-    if: needs.dev_tools.result == 'success'
+    needs: build_images
+    if: needs.build_images.outputs.build_dev_tools == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Download dev-tools image
@@ -203,10 +241,7 @@ jobs:
           path: /tmp
 
       - name: Load Docker image
-        id: load-image
-        run: |
-          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-dev-tools.tar | grep "Loaded image:.*:latest" | sed 's/Loaded image: //')
-          echo "image=$LOADED_IMAGE" >> "$GITHUB_OUTPUT"
+        run: docker load --input /tmp/ledger-app-dev-tools.tar
 
       - name: Clone app-boilerplate
         uses: actions/checkout@v6
@@ -217,25 +252,25 @@ jobs:
       - name: Build app-boilerplate
         run: |
           docker run --rm -v ${{ github.workspace }}/app-boilerplate:/app \
-            ${{ steps.load-image.outputs.image }} \
+            ${{ env.DEV_TOOLS_IMAGE }} \
             bash -c "make -j"
 
       - name: Run unit tests
         run: |
           docker run --rm -v ${{ github.workspace }}/app-boilerplate:/app \
-            ${{ steps.load-image.outputs.image }} \
+            ${{ env.DEV_TOOLS_IMAGE }} \
             bash -c "cd unit-tests && cmake -Bbuild -H. && make -C build && CTEST_OUTPUT_ON_FAILURE=1 make -C build test"
 
       - name: Run functional tests
         run: |
           docker run --rm -v ${{ github.workspace }}/app-boilerplate:/app \
-            ${{ steps.load-image.outputs.image }} \
+            ${{ env.DEV_TOOLS_IMAGE }} \
             bash -c "source /opt/venv/bin/activate && pip install -r tests/standalone/requirements.txt && pytest tests/standalone/ --tb=short -v --device nanosp"
 
   test_builder_rust:
     name: Test App Builder Full (Rust)
-    needs: builder
-    if: needs.builder.result == 'success'
+    needs: build_images
+    if: needs.build_images.outputs.build_full == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Download full image
@@ -245,10 +280,7 @@ jobs:
           path: /tmp
 
       - name: Load Docker image
-        id: load-image
-        run: |
-          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-builder.tar | grep "Loaded image:.*:latest" | sed 's/Loaded image: //')
-          echo "image=$LOADED_IMAGE" >> "$GITHUB_OUTPUT"
+        run: docker load --input /tmp/ledger-app-builder.tar
 
       - name: Clone app-boilerplate-rust
         uses: actions/checkout@v6
@@ -259,13 +291,13 @@ jobs:
       - name: Build app-boilerplate-rust
         run: |
           docker run --rm -v ${{ github.workspace }}/app-boilerplate-rust:/app \
-            ${{ steps.load-image.outputs.image }} \
+            ${{ env.FULL_IMAGE }} \
             bash -c "cargo ledger build nanosplus"
 
   test_dev_tools_rust:
     name: Test App Dev Tools (Rust)
-    needs: dev_tools
-    if: needs.dev_tools.result == 'success'
+    needs: build_images
+    if: needs.build_images.outputs.build_dev_tools == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Download dev-tools image
@@ -275,10 +307,7 @@ jobs:
           path: /tmp
 
       - name: Load Docker image
-        id: load-image
-        run: |
-          LOADED_IMAGE=$(docker load --input /tmp/ledger-app-dev-tools.tar | grep "Loaded image:.*:latest" | sed 's/Loaded image: //')
-          echo "image=$LOADED_IMAGE" >> "$GITHUB_OUTPUT"
+        run: docker load --input /tmp/ledger-app-dev-tools.tar
 
       - name: Clone app-boilerplate-rust
         uses: actions/checkout@v6
@@ -289,11 +318,11 @@ jobs:
       - name: Build app-boilerplate-rust
         run: |
           docker run --rm -v ${{ github.workspace }}/app-boilerplate-rust:/app \
-            ${{ steps.load-image.outputs.image }} \
+            ${{ env.DEV_TOOLS_IMAGE }} \
             bash -c "cargo ledger build nanosplus"
 
       - name: Run functional tests
         run: |
           docker run --rm -v ${{ github.workspace }}/app-boilerplate-rust:/app \
-            ${{ steps.load-image.outputs.image }} \
+            ${{ env.DEV_TOOLS_IMAGE }} \
             bash -c "source /opt/venv/bin/activate && pip install -r tests/standalone/requirements.txt && pytest tests/standalone/ --tb=short -v --device nanosp"
