@@ -1,4 +1,5 @@
-FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+ARG BASE_IMAGE=ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+FROM ${BASE_IMAGE}
 
 ARG SPECULOS_VERSION
 

@@ -1,4 +1,5 @@
-FROM ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+ARG BASE_IMAGE=ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
+FROM ${BASE_IMAGE}
 
 ARG CARGO_LEDGER_VERSION=1.14.0
 
