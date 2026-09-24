@@ -9,7 +9,7 @@ VERBOSE=false
 IS_RUST=false
 
 # All available checks (to be updated from the ledger-app-workflows repository)
-ALL_CHECKS="icons app_load_params makefile readme scan"
+ALL_CHECKS="icons app_load_params makefile readme changelog scan"
 
 APP_MANIFEST="ledger_app.toml"
 
