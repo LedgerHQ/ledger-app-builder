@@ -65,7 +65,14 @@ RUN pip3 install --break-system-packages --no-cache-dir "ledgerblue==0.1.58" tom
 
 # Unified SDK
 ARG LEDGER_SECURE_SDK=/opt/ledger-secure-sdk
-RUN git clone "https://github.com/LedgerHQ/ledger-secure-sdk.git" "$LEDGER_SECURE_SDK"
+ARG LEDGER_SECURE_SDK_REPO=https://github.com/LedgerHQ/ledger-secure-sdk.git
+
+# Optional token to clone
+RUN --mount=type=secret,id=github_token \
+    if [ -s /run/secrets/github_token ]; then \
+        set -- -c "http.extraHeader=Authorization: Basic $(printf 'x-access-token:%s' "$(cat /run/secrets/github_token)" | base64 -w0)"; \
+    fi && \
+    git "$@" clone "$LEDGER_SECURE_SDK_REPO" "$LEDGER_SECURE_SDK"
 
 # Latest Nano S SDK (OS nanos_2.1.0 => based on API_LEVEL LNS)
 ENV NANOS_SDK=/opt/nanos-secure-sdk
