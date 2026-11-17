@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [5.5.5] - 2026-11-17
+
+### Changed
+    - Bump cargo-ledger to 1.15.0
+    - Install the Rust target specs and link_wrap.sh from the ledger_secure_sdk_sys 1.18.1 crate (LEDGER_SDK_SYS_VERSION) instead of the custom_target_nightly tag
+    - update c sdk to v27.2.0
+
 ## [5.5.4] - 2026-11-04
 
 ### Changed
