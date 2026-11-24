@@ -1,0 +1,25 @@
+#!/bin/sh
+# Cargo rustc wrapper (build.rustc-wrapper): Cargo runs `<this> <rustc> <args>`.
+#
+# From nightly-2026-09-15, rustc refuses custom target specs, even installed in
+# the sysroot and selected by name, unless -Zunstable-options is passed. Add it
+# when building for one of the Ledger devices, without touching RUSTFLAGS or the
+# rustflags of the apps' Cargo config (which a RUSTFLAGS variable would replace).
+custom=
+prev=
+for arg in "$@"; do
+    case "$arg" in
+        --target=nanox | --target=nanosplus | --target=stax | --target=flex | --target=apex_p)
+            custom=1 ;;
+    esac
+    if [ "$prev" = --target ]; then
+        case "$arg" in
+            nanox | nanosplus | stax | flex | apex_p) custom=1 ;;
+        esac
+    fi
+    prev=$arg
+done
+if [ -n "$custom" ]; then
+    exec "$@" -Zunstable-options
+fi
+exec "$@"
