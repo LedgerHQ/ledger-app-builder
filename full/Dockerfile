@@ -3,7 +3,7 @@ FROM ${BASE_IMAGE}
 
 ARG CARGO_LEDGER_VERSION=1.15.0
 
-ENV RUSTUP_TOOLCHAIN=nightly-2025-12-05
+ENV RUSTUP_TOOLCHAIN=nightly-2026-09-15
 
 # Release of the ledger_secure_sdk_sys crate whose target specs and link_wrap.sh
 # are installed by `cargo ledger setup`. Bump it together with RUSTUP_TOOLCHAIN:

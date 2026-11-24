@@ -5,10 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [5.6.0] - 2026-11-24
 
 ### Added
     - Rust: rustc wrapper passing -Zunstable-options when building for a Ledger device, required by rustc from nightly-2026-09-15 to load the custom target specs
+
+### Changed
+    - Bump Rust nightly to nightly-2026-09-15 (Rust apps need ledger_device_sdk 1.45.0 or later)
+    - update c sdk to v27.2.1
 
 ## [5.5.5] - 2026-11-17
 
