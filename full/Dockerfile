@@ -8,7 +8,7 @@ ENV RUSTUP_TOOLCHAIN=nightly-2026-09-15
 # Release of the ledger_secure_sdk_sys crate whose target specs and link_wrap.sh
 # are installed by `cargo ledger setup`. Bump it together with RUSTUP_TOOLCHAIN:
 # the specs must be accepted by that nightly.
-ARG LEDGER_SDK_SYS_VERSION=1.18.1
+ARG LEDGER_SDK_SYS_VERSION=1.18.3
 
 # Define rustup/cargo home directories
 ENV RUSTUP_HOME=/opt/rustup
