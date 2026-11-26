@@ -1,14 +1,14 @@
 ARG BASE_IMAGE=ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 FROM ${BASE_IMAGE}
 
-ARG CARGO_LEDGER_VERSION=1.15.0
+ARG CARGO_LEDGER_VERSION=1.16.0
 
 ENV RUSTUP_TOOLCHAIN=nightly-2026-09-15
 
 # Release of the ledger_secure_sdk_sys crate whose target specs and link_wrap.sh
 # are installed by `cargo ledger setup`. Bump it together with RUSTUP_TOOLCHAIN:
 # the specs must be accepted by that nightly.
-ARG LEDGER_SDK_SYS_VERSION=1.18.3
+ARG LEDGER_SDK_SYS_VERSION=1.19.0
 
 # Define rustup/cargo home directories
 ENV RUSTUP_HOME=/opt/rustup
