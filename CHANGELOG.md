@@ -5,10 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [5.7.1] - 2026-11-27
+## [5.8.0] - 2026-11-27
 
 ### Changed
     - update c sdk to v27.3.0
+    - Rust: bump cargo-ledger to 1.17.0: `cargo ledger clippy <device>` and `cargo ledger check <device>` run cargo clippy / cargo check with the target and flags of `cargo ledger build` (custom target spec, or built-in triple for apps with `builtin_target = true`)
 
 ## [5.7.0] - 2026-11-26
 
