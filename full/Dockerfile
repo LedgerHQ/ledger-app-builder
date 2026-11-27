@@ -1,7 +1,7 @@
 ARG BASE_IMAGE=ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder-lite:latest
 FROM ${BASE_IMAGE}
 
-ARG CARGO_LEDGER_VERSION=1.16.0
+ARG CARGO_LEDGER_VERSION=1.17.0
 
 ENV RUSTUP_TOOLCHAIN=nightly-2026-09-15
 
